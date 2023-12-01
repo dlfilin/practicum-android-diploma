@@ -10,12 +10,13 @@ import ru.practicum.android.diploma.databinding.ActivityRootBinding
 
 class RootActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivityRootBinding
+    private var _binding: ActivityRootBinding? = null
+    private val binding get() = _binding!!
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        binding = ActivityRootBinding.inflate(layoutInflater).also { setContentView(it.root) }
+        _binding = ActivityRootBinding.inflate(layoutInflater).also { setContentView(it.root) }
         setSupportActionBar(binding.toolbar)
 
         val navHostFragment =
@@ -30,6 +31,12 @@ class RootActivity : AppCompatActivity() {
 
     private fun networkRequestExample(accessToken: String) {
         // ...
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+
+        _binding = null
     }
 
 }
