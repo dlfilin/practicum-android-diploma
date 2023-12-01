@@ -11,9 +11,9 @@
         <item name="colorPrimaryVariant">@color/gray</item>
         <item name="colorOnPrimary">@color/white_universal</item>
         <!-- Secondary brand color. -->
-        <item name="colorSecondary">@color/white_universal</item>
+        <item name="colorSecondary">@color/black_day_night</item>
         <item name="colorSecondaryVariant">@color/white_day_night</item>
-        <item name="colorOnSecondary">@color/red</item>
+        <item name="colorOnSecondary">@color/light_gray</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor">?attr/colorSecondaryVariant</item>
     </style>
