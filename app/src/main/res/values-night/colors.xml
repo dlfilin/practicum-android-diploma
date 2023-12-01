@@ -2,8 +2,9 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="black_day_night">#1A1B22</color>
-    <color name="white_day_night">#FDFDFD</color>
+
+    <color name="black_day_night">#FDFDFD</color>
+    <color name="white_day_night">#1A1B22</color>
     <color name="black_universal">#1A1B22</color>
     <color name="white_universal">#FDFDFD</color>
     <color name="blue">#3772E7</color>
