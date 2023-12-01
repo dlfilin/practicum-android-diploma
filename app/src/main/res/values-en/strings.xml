@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">New Job Search</string>
-    <string name="search_title">Job search</string>
+    <string name="app_name">Job Search</string>
+    <string name="search_title">Job Search</string>
+    <string name="main">Main</string>
+    <string name="favorites_title">Favorites</string>
+    <string name="about_title">About</string>
 </resources>
