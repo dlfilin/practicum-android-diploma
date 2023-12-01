@@ -8,13 +8,20 @@ import ru.practicum.android.diploma.databinding.FragmentFavoritesBinding
 
 class FavoritesFragment : Fragment(R.layout.fragment_favorites) {
 
-    private lateinit var binding: FragmentFavoritesBinding
+    private var _binding: FragmentFavoritesBinding? = null
+    private val binding get() = _binding!!
 
 //    private val viewModel by viewModel<FavoritesViewModel>()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding = FragmentFavoritesBinding.bind(view)
+        _binding = FragmentFavoritesBinding.bind(view)
 
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+
+        _binding = null
     }
 }

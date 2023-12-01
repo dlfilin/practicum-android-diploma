@@ -8,11 +8,18 @@ import ru.practicum.android.diploma.databinding.FragmentAboutBinding
 
 class AboutFragment : Fragment(R.layout.fragment_about) {
 
-    private lateinit var binding: FragmentAboutBinding
+    private var _binding: FragmentAboutBinding? = null
+    private val binding get() = _binding!!
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding = FragmentAboutBinding.bind(view)
+        _binding = FragmentAboutBinding.bind(view)
 
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+
+        _binding = null
     }
 }
