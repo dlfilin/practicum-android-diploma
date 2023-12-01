@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">Поиск работы</string>
     <string name="search_title">Поиск вакансий</string>
+    <string name="main">Главная</string>
+    <string name="favorites_title">Избранное</string>
+    <string name="about_title">Команда</string>
 </resources>
