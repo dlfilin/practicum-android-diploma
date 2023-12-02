@@ -11,9 +11,9 @@ data class FavoriteEntity(
     @ColumnInfo("name_vacancies")
     val nameVacancies: String,
     @ColumnInfo("logo_url")
-    val logoUrl: String,
+    val logoUrl: String?,
     @ColumnInfo("salary")
-    val salary: String,
+    val salary: String?,
     @ColumnInfo("name_company")
     val nameCompany: String,
     @ColumnInfo("city")
@@ -24,12 +24,8 @@ data class FavoriteEntity(
     val schedule: String,
     @ColumnInfo("employment")
     val employment: String,
-    @ColumnInfo("responsibilities")
-    val responsibilities: String,
-    @ColumnInfo("requirements")
-    val requirements: String,
-    @ColumnInfo("conditions")
-    val conditions: String,
+    @ColumnInfo("description")
+    val description: String?,
     @ColumnInfo("key_skills")
     val keySkills: String?,
     @ColumnInfo("contact_person")
