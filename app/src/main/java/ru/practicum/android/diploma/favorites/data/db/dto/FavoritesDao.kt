@@ -2,7 +2,6 @@ package ru.practicum.android.diploma.favorites.data.db.dto
 
 import androidx.room.Dao
 
-
 @Dao
 interface FavoritesDao {
 
