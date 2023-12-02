@@ -7,6 +7,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import ru.practicum.android.diploma.common.data.network.dto.Response
 import ru.practicum.android.diploma.search.data.dto.VacancySearchRequest
+import java.io.IOException
 
 class RetrofitNetworkClient(
     private val context: Context,
@@ -23,8 +24,11 @@ class RetrofitNetworkClient(
                     else -> Response().apply { resultCode = BAD_REQUEST }
                 }
                 response.apply { resultCode = CONTENT }
-            } catch (e: Exception) {
-                Response().apply { resultCode = SERVER_THROWABLE }
+            } catch (e: IOException) {
+                Response().apply {
+                    resultCode = SERVER_THROWABLE
+                    message = e.message
+                }
             }
         }
     }
