@@ -23,7 +23,7 @@ data class FavoriteEntity(
     @ColumnInfo("employment")
     val employment: String,
     @ColumnInfo("playsOfWork")
-    val playsOfWork: String,
+    val placeOfWork: String,
     @ColumnInfo("responsibilities")
     val responsibilities: String,
     @ColumnInfo("requirements")
