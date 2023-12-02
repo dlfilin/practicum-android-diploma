@@ -4,36 +4,26 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".search.ui.SearchFragment">
+    tools:context=".vacancy.ui.VacancyFragment">
 
     <TextView
         android:id="@+id/name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/search_title_tv"
+        android:text="@string/vacancy_detail_title_tv"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/gotoFilterFragmentBtn"
+        android:id="@+id/gotoSimilarJobsFragmentBtn"
         style="@style/bigBlueButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="фильтр"
+        android:text="@string/similar_jobs_tv"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
-    <Button
-        android:id="@+id/gotoVacancyFragmentBtn"
-        style="@style/bigBlueButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/vacancy_detail_title_tv"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/gotoFilterFragmentBtn"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
