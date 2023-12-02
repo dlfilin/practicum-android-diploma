@@ -9,9 +9,9 @@ data class FavoriteEntity(
     @PrimaryKey
     val id: String,
     @ColumnInfo("name_vacancies")
-    val nameVacancies : String,
+    val nameVacancies: String,
     @ColumnInfo("logo_url")
-    val logoUrl : String,
+    val logoUrl: String,
     @ColumnInfo("salary")
     val salary: String,
     @ColumnInfo("nameCompany")
@@ -19,27 +19,27 @@ data class FavoriteEntity(
     @ColumnInfo("city")
     val city: String,
     @ColumnInfo("experience")
-    val experience : String,
-    @ColumnInfo("employment") //Занятость(Полная занятость)
-    val employment : String,
-    @ColumnInfo("playsOfWork") //Место работы(Удаленная работа)
-    val playsOfWork : String,
-    @ColumnInfo("responsibilities") //Обязанности
-    val responsibilities : String,
+    val experience: String,
+    @ColumnInfo("employment")
+    val employment: String,
+    @ColumnInfo("playsOfWork")
+    val playsOfWork: String,
+    @ColumnInfo("responsibilities")
+    val responsibilities: String,
     @ColumnInfo("requirements")
-    val requirements : String,
+    val requirements: String,
     @ColumnInfo("conditions")
-    val conditions : String,
+    val conditions: String,
     @ColumnInfo("key_skills")
-    val keySkills : String?,
+    val keySkills: String?,
     @ColumnInfo("contact_person")
-    val contactPerson : String?,
+    val contactPerson: String?,
     @ColumnInfo("contact_email")
-    val contactEmail : String?,
+    val contactEmail: String?,
     @ColumnInfo("contact_phone")
-    val contactPhone : String?,
+    val contactPhone: String?,
     @ColumnInfo("comment")
-    val comment : String?,
+    val comment: String?,
 )
 
 
