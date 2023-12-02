@@ -14,17 +14,17 @@ class RetrofitNetworkClient(
 ) : NetworkClient {
 
     override suspend fun doRequest(dto: Any): Response {
-        if (!isConnected()) return Response().apply { resultCode = -1 }
+        if (!isConnected()) return Response().apply { resultCode = NO_INTERNET }
 
         return withContext(Dispatchers.IO) {
             try {
                 val response = when (dto) {
                     is VacancySearchRequest -> hhApiService.searchVacancy(dto.expression)
-                    else -> Response().apply { resultCode = 400 }
+                    else -> Response().apply { resultCode = BAD_REQUEST }
                 }
-                response.apply { resultCode = 200 }
-            } catch (e: Throwable) {
-                Response().apply { resultCode = 500 }
+                response.apply { resultCode = CONTENT }
+            } catch (e: Exception) {
+                Response().apply { resultCode = SERVER_THROWABLE }
             }
         }
     }
@@ -36,10 +36,11 @@ class RetrofitNetworkClient(
         val capabilities =
             connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
         if (capabilities != null) {
-            when {
-                capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> return true
-                capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> return true
-                capabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET) -> return true
+            return when {
+                capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> true
+                capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> true
+                capabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET) -> true
+                else -> false
             }
         }
         return false
@@ -47,5 +48,9 @@ class RetrofitNetworkClient(
 
     companion object {
         const val HH_BASE_URL = "https://api.hh.ru/"
+        const val NO_INTERNET = -1
+        const val CONTENT = 200
+        const val BAD_REQUEST = 400
+        const val SERVER_THROWABLE = 500
     }
 }
