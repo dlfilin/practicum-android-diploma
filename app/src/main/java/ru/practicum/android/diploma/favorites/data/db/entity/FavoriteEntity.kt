@@ -14,16 +14,16 @@ data class FavoriteEntity(
     val logoUrl: String,
     @ColumnInfo("salary")
     val salary: String,
-    @ColumnInfo("nameCompany")
+    @ColumnInfo("name_company")
     val nameCompany: String,
     @ColumnInfo("city")
     val city: String,
     @ColumnInfo("experience")
     val experience: String,
+    @ColumnInfo("schedule")
+    val schedule: String,
     @ColumnInfo("employment")
     val employment: String,
-    @ColumnInfo("playsOfWork")
-    val placeOfWork: String,
     @ColumnInfo("responsibilities")
     val responsibilities: String,
     @ColumnInfo("requirements")
