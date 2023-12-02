@@ -6,7 +6,10 @@ import android.net.NetworkCapabilities
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import ru.practicum.android.diploma.common.data.network.dto.Response
+import ru.practicum.android.diploma.filter.data.dto.AreaRequest
+import ru.practicum.android.diploma.filter.data.dto.IndustryRequest
 import ru.practicum.android.diploma.search.data.dto.VacancySearchRequest
+import ru.practicum.android.diploma.vacancy.data.dto.VacancyDetailRequest
 import java.io.IOException
 
 class RetrofitNetworkClient(
@@ -21,6 +24,9 @@ class RetrofitNetworkClient(
             try {
                 val response = when (dto) {
                     is VacancySearchRequest -> hhApiService.searchVacancy(dto.expression)
+                    is VacancyDetailRequest -> hhApiService.getVacancyDetail(dto.vacancyId)
+                    is AreaRequest -> hhApiService.getAllArea()
+                    is IndustryRequest -> hhApiService.getAllIndustry()
                     else -> Response().apply { resultCode = BAD_REQUEST }
                 }
                 response.apply { resultCode = CONTENT }
