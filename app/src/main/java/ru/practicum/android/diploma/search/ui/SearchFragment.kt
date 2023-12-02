@@ -3,6 +3,7 @@ package ru.practicum.android.diploma.search.ui
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentSearchBinding
 
@@ -18,6 +19,12 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentSearchBinding.bind(view)
 
+        binding.gotoFilterFragmentBtn.setOnClickListener {
+            findNavController().navigate(R.id.action_searchFragment_to_filter_graph)
+        }
+        binding.gotoVacancyFragmentBtn.setOnClickListener {
+            findNavController().navigate(R.id.action_searchFragment_to_vacancy_graph)
+        }
     }
 
     override fun onDestroyView() {

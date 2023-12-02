@@ -3,6 +3,7 @@ package ru.practicum.android.diploma.root
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import ru.practicum.android.diploma.BuildConfig
 import ru.practicum.android.diploma.R
@@ -24,6 +25,14 @@ class RootActivity : AppCompatActivity() {
         val navController = navHostFragment.navController
 
         binding.bottomNavigationView.setupWithNavController(navController)
+
+        val appBarConfiguration =
+            AppBarConfiguration(
+                setOf(R.id.searchFragment, R.id.favoritesFragment, R.id.aboutFragment),
+                fallbackOnNavigateUpListener = ::onSupportNavigateUp
+            )
+
+        binding.toolbar.setupWithNavController(navController, appBarConfiguration)
 
         // Пример использования access token для HeadHunter API
         networkRequestExample(accessToken = BuildConfig.HH_ACCESS_TOKEN)

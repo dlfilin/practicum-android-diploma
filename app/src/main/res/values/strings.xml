@@ -1,9 +1,5 @@
 <resources>
     <string name="app_name">Поиск работы</string>
-    <string name="search_title">Поиск вакансий</string>
-    <string name="main">Главная</string>
-    <string name="favorites_title">Избранное</string>
-    <string name="about_title">Команда</string>
 
     <!--    common-->
     <string name="internet_throwable_tv">Нет интернета</string>
@@ -25,19 +21,19 @@
     <string name="hide_without_salary_tv">Не показывать без зарплаты</string>
     <string name="apply_btn">Применить</string>
     <string name="reset_btn">Сбросить</string>
-    <!--    choosing a place of work fragment-->
+    <!--    choosing place of work fragment-->
     <string name="choosing_place_of_work_title_tv">Выбор места работы</string>
     <string name="country_btn">Страна</string>
-    <string name="area_btn">Регион</string>
+    <string name="region_btn">Регион</string>
     <string name="accept_btn">Выбрать</string>
     <!--    choosing country fragment-->
     <string name="choosing_country_title_tv">Выбор страны</string>
-    <!--    choosing area fragment-->
-    <string name="choosing_area_title_tv">Выбор региона</string>
-    <string name="nothing_found_choosing_area_tv">Такого региона нет</string>
-    <string name="search_throwable_choosing_area_tv">Не удалось получить\nсписок</string>
-    <!--    choosing an industry fragment-->
-    <string name="choosing_industry_title_tv">Выбор региона</string>
+    <!--    choosing region fragment-->
+    <string name="choosing_region_title_tv">Выбор региона</string>
+    <string name="nothing_found_choosing_region_tv">Такого региона нет</string>
+    <string name="search_throwable_choosing_region_tv">Не удалось получить\nсписок</string>
+    <!--    choosing industry fragment-->
+    <string name="choosing_industry_title_tv">Выбор отрасли</string>
     <string name="choosing_industry_hint_tet">Введите отрасль</string>
     <!--    vacancy detail fragment-->
     <string name="vacancy_detail_title_tv">Вакансия</string>

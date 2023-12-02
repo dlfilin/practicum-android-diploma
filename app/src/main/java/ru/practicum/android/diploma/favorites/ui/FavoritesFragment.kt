@@ -3,6 +3,7 @@ package ru.practicum.android.diploma.favorites.ui
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentFavoritesBinding
 
@@ -17,6 +18,9 @@ class FavoritesFragment : Fragment(R.layout.fragment_favorites) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentFavoritesBinding.bind(view)
 
+        binding.gotoVacancyFragmentBtn.setOnClickListener {
+            findNavController().navigate(R.id.action_favoritesFragment_to_vacancy_graph)
+        }
     }
 
     override fun onDestroyView() {
