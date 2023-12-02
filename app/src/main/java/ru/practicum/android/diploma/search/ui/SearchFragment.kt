@@ -20,10 +20,10 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         _binding = FragmentSearchBinding.bind(view)
 
         binding.gotoFilterFragmentBtn.setOnClickListener {
-            findNavController().navigate(R.id.action_searchFragment_to_filterFragment)
+            findNavController().navigate(R.id.action_searchFragment_to_filter_graph)
         }
         binding.gotoVacancyFragmentBtn.setOnClickListener {
-            findNavController().navigate(R.id.action_searchFragment_to_vacancyFragment)
+            findNavController().navigate(R.id.action_searchFragment_to_vacancy_graph)
         }
     }
 
