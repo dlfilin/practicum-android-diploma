@@ -32,17 +32,17 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
 
         val simpleTextWatcher = object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+                //before text change watcher
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 if (s.isNullOrEmpty()) {
                     binding.searchEditText.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_search, 0)
-                }
-                else {
+                } else {
                     binding.searchEditText.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_clear, 0)
-                    binding.searchEditText.setOnTouchListener {view, motionEvent ->
-                        if ((motionEvent.action == MotionEvent.ACTION_UP) &&
-                            (motionEvent.rawX >= (binding.searchEditText.right - binding.searchEditText.compoundDrawables[2].bounds.width() * 2))
+                    binding.searchEditText.setOnTouchListener { view, motionEvent ->
+                        if (motionEvent.action == MotionEvent.ACTION_UP &&
+                            motionEvent.rawX >= binding.searchEditText.right - binding.searchEditText.compoundDrawables[2].bounds.width() * 2
                         ) {
                             binding.searchEditText.setText("")
                         }
@@ -53,6 +53,7 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
             }
 
             override fun afterTextChanged(s: Editable?) {
+                // looking for the solution to delete underline decoration when typing the words
             }
         }
 
