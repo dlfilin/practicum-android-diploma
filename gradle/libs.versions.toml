@@ -1,6 +1,6 @@
 [versions]
 koinAndroid = "3.3.0"
-navigationFragmentKtx = "2.7.5"
+navigation = "2.7.5"
 retrofit = "2.9.0"
 glide = "4.16.0"
 gson = "2.10.1"
@@ -48,8 +48,9 @@ gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
 koin-android = { module = "io.insert-koin:koin-android", version.ref = "koinAndroid" }
 
 #Navigation
-navigation-fragment-ktx = { module = "androidx.navigation:navigation-fragment-ktx", version.ref = "navigationFragmentKtx" }
-navigation-ui-ktx = { module = "androidx.navigation:navigation-ui-ktx", version.ref = "navigationFragmentKtx" }
+navigation-fragment-ktx = { module = "androidx.navigation:navigation-fragment-ktx", version.ref = "navigation" }
+navigation-ui-ktx = { module = "androidx.navigation:navigation-ui-ktx", version.ref = "navigation" }
+androidx-navigation-safe-args-gradle-plugin = { module = "androidx.navigation:navigation-safe-args-gradle-plugin", version.ref = "navigation" }
 
 #Room
 androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "roomRuntime" }
