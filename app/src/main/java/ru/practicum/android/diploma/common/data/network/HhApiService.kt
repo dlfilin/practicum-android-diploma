@@ -37,6 +37,13 @@ interface HhApiService {
         "Authorization: Bearer ${BuildConfig.HH_ACCESS_TOKEN}",
         "HH-User-Agent: Application Мои_hh_вакансии (danila.filin@gmail.com)"
     )
+    @GET("/vacancies/{vacancy_id}/similar_vacancies")
+    suspend fun searchSimilarVacancy(@Path("vacancy_id") id: String): VacancySearchResponse
+
+    @Headers(
+        "Authorization: Bearer ${BuildConfig.HH_ACCESS_TOKEN}",
+        "HH-User-Agent: Application Мои_hh_вакансии (danila.filin@gmail.com)"
+    )
     @GET("/areas")
     suspend fun getAllArea(): AreaResponse
 
