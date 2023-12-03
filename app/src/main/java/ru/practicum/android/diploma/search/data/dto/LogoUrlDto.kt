@@ -1,5 +1,8 @@
 package ru.practicum.android.diploma.search.data.dto
 
+import com.google.gson.annotations.SerializedName
+
 data class LogoUrlDto(
-    val url90: String,
+    @SerializedName("240")
+    val logoUrl: String
 )
