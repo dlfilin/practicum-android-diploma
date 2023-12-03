@@ -22,6 +22,7 @@
     <string name="hide_without_salary_tv">Не показывать без зарплаты</string>
     <string name="apply_btn">Применить</string>
     <string name="reset_btn">Сбросить</string>
+    <string name="filter">Filter</string>
     <!--    choosing a place of work fragment-->
     <string name="choosing_place_of_work_title_tv">Выбор места работы</string>
     <string name="country_btn">Страна</string>
