@@ -26,7 +26,7 @@ class RetrofitNetworkClient(
                 val response = when (dto) {
                     is VacancySearchRequest -> hhApiService.searchVacancy(dto.expression)
                     is VacancyDetailRequest -> hhApiService.getVacancyDetail(dto.vacancyId)
-                    is SimilarVacancyRequest -> hhApiService.searchSimilarVacancy((dto.vacancyId))
+                    is SimilarVacancyRequest -> hhApiService.searchSimilarVacancy(dto.vacancyId)
                     is AreaRequest -> hhApiService.getAllArea()
                     is IndustryRequest -> hhApiService.getAllIndustry()
                     else -> Response().apply { resultCode = BAD_REQUEST }
