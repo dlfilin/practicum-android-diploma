@@ -16,8 +16,8 @@
         <item name="colorOnSecondary">@color/gray</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor">?attr/colorSecondaryVariant</item>
-        <item name="android:windowBackground">@color/black_universal</item>
+        <item name="android:windowLightStatusBar">false</item>
         <!-- Customize your theme here. -->
-
+        <item name="android:windowBackground">@color/black_universal</item>
     </style>
 </resources>
