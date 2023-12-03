@@ -32,19 +32,21 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
 
         val simpleTextWatcher = object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-                //before text change watcher
+                // before text change watcher
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                val searchEditText = binding.searchEditText
                 if (s.isNullOrEmpty()) {
-                    binding.searchEditText.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_search, 0)
+                    searchEditText.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_search, 0)
                 } else {
-                    binding.searchEditText.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_clear, 0)
-                    binding.searchEditText.setOnTouchListener { view, motionEvent ->
+                    searchEditText.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_clear, 0)
+                    searchEditText.setOnTouchListener { view, motionEvent ->
+                        val iconBoundries = searchEditText.compoundDrawables[2].bounds.width()
                         if (motionEvent.action == MotionEvent.ACTION_UP &&
-                            motionEvent.rawX >= binding.searchEditText.right - binding.searchEditText.compoundDrawables[2].bounds.width() * 2
+                            motionEvent.rawX >= searchEditText.right - iconBoundries * 2
                         ) {
-                            binding.searchEditText.setText("")
+                            searchEditText.setText("")
                         }
                         view.performClick()
                         false
