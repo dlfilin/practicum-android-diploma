@@ -15,12 +15,12 @@
         <item name="android:titleTextColor">?attr/colorSecondary</item>
     </style>
 
+    <!-- common -->
     <style name="progressBar">
         <item name="android:layout_width">@dimen/size_48</item>
         <item name="android:layout_height">@dimen/size_48</item>
         <item name="android:indeterminateTint">?attr/colorPrimary</item>
     </style>
-
     <style name="blueElements">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
@@ -29,17 +29,14 @@
         <item name="android:gravity">center</item>
         <item name="android:textColor">?attr/colorOnPrimary</item>
     </style>
-
     <style name="blueNotifications" parent="blueElements">
         <item name="android:fontFamily">@font/ys_display_regular</item>
         <item name="android:paddingVertical">@dimen/space_4</item>
     </style>
-
     <style name="bigBlueButton" parent="blueElements">
         <item name="android:fontFamily">@font/ys_display_medium</item>
         <item name="android:paddingVertical">@dimen/space_20</item>
     </style>
-
     <style name="resetTextView">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
@@ -49,7 +46,27 @@
         <item name="android:textColor">@color/red</item>
         <item name="android:textSize">@dimen/font_16</item>
     </style>
+    <style name="editText">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginHorizontal">@dimen/space_16</item>
+        <item name="android:layout_marginVertical">@dimen/space_8</item>
+        <item name="android:paddingVertical">@dimen/space_16</item>
+        <item name="android:paddingHorizontal">@dimen/space_16</item>
+        <item name="android:textSize">@dimen/font_16</item>
+        <item name="android:textColor">@color/black_universal</item>
+        <item name="android:fontFamily">@font/ys_display_regular</item>
+        <item name="android:background">@drawable/background_light_gray_rounded</item>
+        <item name="android:drawableEnd">@drawable/ic_search</item>
+        <item name="android:textColorHint">@color/gray</item>
+        <item name="android:textCursorDrawable">?attr/colorPrimary</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:imeOptions">actionDone</item>
+        <item name="android:inputType">text</item>
+        <item name="android:singleLine">true</item>
+    </style>
 
+    <!-- bottom navigation -->
     <style name="divider">
         <item name="android:background">@color/light_gray</item>
         <item name="android:layout_width">match_parent</item>
@@ -68,15 +85,45 @@
         <item name="enforceTextAppearance">true</item>
         <item name="enforceMaterialTheme">true</item>
     </style>
-  
-    <style name="BottomNavigationView" parent="@style/TextAppearance.AppCompat.Caption">
+		<style name="BottomNavigationView" parent="@style/TextAppearance.AppCompat.Caption">
         <item name="android:textSize">@dimen/font_12</item>
     </style>
 
     <style name="BottomNavigationView.Active" parent="@style/TextAppearance.AppCompat.Caption">
         <item name="android:textSize">@dimen/font_12</item>
     </style>
-  
+
+    <!--filter fragment -->
+    <style name="textInputLayout">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginHorizontal">@dimen/space_16</item>
+        <item name="android:layout_marginVertical">@dimen/space_8</item>
+        <item name="boxStrokeWidth">0dp</item>
+        <item name="boxStrokeWidthFocused">0dp</item>
+        <item name="android:textColorHint">@color/gray</item>
+    </style>
+    <style name="hintStyleForTextInputLayout">
+        <item name="android:textSize">@dimen/font_12</item>
+    </style>
+    <style name="hintStyleForTextInputEditText">
+        <item name="android:textSize">@dimen/font_16</item>
+    </style>
+    <style name="textInputEditText">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:backgroundTint">?attr/colorOnSecondary</item>
+        <item name="android:textColorHint">@color/gray</item>
+        <item name="android:inputType">text</item>
+        <item name="android:fontFamily">@font/ys_display_regular</item>
+        <item name="android:textSize">@dimen/font_16</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:imeOptions">actionDone</item>
+        <item name="android:textColor">@color/black_universal</item>
+    </style>
+
+
+  	<!-- team fragment -->
     <style name="team_textview">
         <item name="android:layout_marginStart">@dimen/space_16</item>
         <item name="android:layout_marginEnd">@dimen/space_16</item>
