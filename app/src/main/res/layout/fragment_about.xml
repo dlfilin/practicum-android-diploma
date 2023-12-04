@@ -21,7 +21,7 @@
 
     <TextView
         android:id="@+id/oneProgrammer"
-        style="@style/team_textview"
+        style="@style/teamTextview"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
@@ -32,7 +32,7 @@
 
     <TextView
         android:id="@+id/twoProgrammer"
-        style="@style/team_textview"
+        style="@style/teamTextview"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/space_16"
@@ -43,7 +43,7 @@
 
     <TextView
         android:id="@+id/threeProgrammer"
-        style="@style/team_textview"
+        style="@style/teamTextview"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/space_16"
@@ -54,7 +54,7 @@
 
     <TextView
         android:id="@+id/fourProgrammer"
-        style="@style/team_textview"
+        style="@style/teamTextview"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/space_16"

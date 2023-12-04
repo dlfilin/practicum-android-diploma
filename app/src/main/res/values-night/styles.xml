@@ -43,5 +43,4 @@
         <item name="android:textColor">@color/black_universal</item>
         <item name="android:background">@drawable/background_gray_rounded</item>
     </style>
-
 </resources>
