@@ -120,8 +120,8 @@
         <item name="android:singleLine">true</item>
         <item name="android:imeOptions">actionDone</item>
         <item name="android:textColor">@color/black_universal</item>
+        <item name="android:background">@drawable/background_light_gray_rounded</item>
     </style>
-
 
   	<!-- team fragment -->
     <style name="team_textview">
