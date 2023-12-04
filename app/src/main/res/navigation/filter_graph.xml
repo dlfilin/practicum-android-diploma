@@ -19,9 +19,9 @@
     </fragment>
     <fragment
         android:id="@+id/regionChooserFragment"
-        android:name="ru.practicum.android.diploma.filter.ui.RegionChooserFragment"
-        tools:layout="@layout/fragment_region_chooser"
-        android:label="@string/choosing_region_title_tv" />
+        android:name="ru.practicum.android.diploma.filter.ui.AreaChooserFragment"
+        tools:layout="@layout/fragment_area_chooser"
+        android:label="@string/choosing_area_title_tv" />
     <fragment
         android:id="@+id/filterFragment"
         android:name="ru.practicum.android.diploma.filter.ui.FilterFragment"

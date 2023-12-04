@@ -7,9 +7,9 @@
 
     <fragment
         android:id="@+id/similarJobsFragment"
-        android:name="ru.practicum.android.diploma.vacancy.ui.SimilarJobsFragment"
-        tools:layout="@layout/fragment_similar_jobs"
-        android:label="@string/similar_jobs_title_tv" />
+        android:name="ru.practicum.android.diploma.vacancy.ui.SimilarVacanciesFragment"
+        tools:layout="@layout/fragment_similar_vacancies"
+        android:label="@string/similar_vacancies_title_tv" />
     <fragment
         android:id="@+id/vacancyFragment"
         android:name="ru.practicum.android.diploma.vacancy.ui.VacancyFragment"

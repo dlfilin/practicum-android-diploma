@@ -8,7 +8,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 import ru.practicum.android.diploma.common.data.network.HhApiService
 import ru.practicum.android.diploma.common.data.network.NetworkClient
 import ru.practicum.android.diploma.common.data.network.RetrofitNetworkClient
-import ru.practicum.android.diploma.favorites.data.db.AppDataBase
+import ru.practicum.android.diploma.common.data.db.AppDataBase
 
 val dataModule = module {
 
@@ -16,7 +16,7 @@ val dataModule = module {
         Room.databaseBuilder(androidContext(), AppDataBase::class.java, "dataBase.db").build()
     }
 
-    single<HhApiService> {
+    single {
         Retrofit.Builder()
             .baseUrl(RetrofitNetworkClient.HH_BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
