@@ -17,17 +17,13 @@ val dataModule = module {
     }
 
     single {
-        Retrofit.Builder()
-            .baseUrl(RetrofitNetworkClient.HH_BASE_URL)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-            .create(HhApiService::class.java)
+        Retrofit.Builder().baseUrl(RetrofitNetworkClient.HH_BASE_URL).addConverterFactory(GsonConverterFactory.create())
+            .build().create(HhApiService::class.java)
     }
 
     single<NetworkClient> {
         RetrofitNetworkClient(
-            context = androidContext(),
-            hhApiService = get()
+            context = androidContext(), hhApiService = get()
         )
     }
 }
