@@ -25,14 +25,14 @@
     <!--    choosing a place of work fragment-->
     <string name="choosing_place_of_work_title_tv">Выбор места работы</string>
     <string name="country_btn">Страна</string>
-    <string name="region_btn">Регион</string>
+    <string name="area_btn">Регион</string>
     <string name="accept_btn">Выбрать</string>
     <!--    choosing country fragment-->
     <string name="choosing_country_title_tv">Выбор страны</string>
     <!--    choosing area fragment-->
-    <string name="choosing_region_title_tv">Выбор региона</string>
-    <string name="nothing_found_choosing_region_tv">Такого региона нет</string>
-    <string name="search_throwable_choosing_region_tv">Не удалось получить\nсписок</string>
+    <string name="choosing_area_title_tv">Выбор региона</string>
+    <string name="nothing_found_choosing_area_tv">Такого региона нет</string>
+    <string name="search_throwable_choosing_area_tv">Не удалось получить\nсписок</string>
     <!--    choosing an industry fragment-->
     <string name="choosing_industry_title_tv">Выбор отрасли</string>
     <string name="choosing_industry_hint_tet">Введите отрасль</string>
@@ -42,19 +42,19 @@
     <string name="job_description_tv">Описание вакансии</string>
     <string name="responsibilities_tv">Обязанности</string>
     <string name="requirements_tv">Требования</string>
-    <string name="working_conditions_tv">Условия</string>
+    <string name="work_conditions_tv">Условия</string>
     <string name="key_skills_tv">Ключевые навыки</string>
     <string name="contacts_tv">Контакты</string>
     <string name="contact_person_tv">Контактное лицо</string>
     <string name="email_tv">E-mail</string>
     <string name="phone_number_tv">Телефон</string>
     <string name="comment_tv">Комментарий</string>
-    <string name="similar_jobs_tv">Похожие вакансии</string>
+    <string name="similar_vacancies_tv">Похожие вакансии</string>
     <!--    similar vacancy fragment-->
-    <string name="similar_jobs_title_tv">Похожие вакансии</string>
+    <string name="similar_vacancies_title_tv">Похожие вакансии</string>
     <!--    favorite vacancy fragment-->
     <string name="favorite_vacancy_title_tv">Избранное</string>
-    <string name="nothing_show_vacancy_tv">Список пуст</string>
+    <string name="nothing_shown_vacancy_tv">Список пуст</string>
     <!--    about fragment-->
     <string name="about_title_tv">Команда</string>
     <string name="workers_title_tv">Над приложением\nработали</string>

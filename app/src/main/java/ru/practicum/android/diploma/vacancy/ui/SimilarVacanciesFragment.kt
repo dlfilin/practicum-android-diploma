@@ -4,11 +4,11 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
 import ru.practicum.android.diploma.R
-import ru.practicum.android.diploma.databinding.FragmentSimilarJobsBinding
+import ru.practicum.android.diploma.databinding.FragmentSimilarVacanciesBinding
 
-class SimilarJobsFragment : Fragment(R.layout.fragment_similar_jobs) {
+class SimilarVacanciesFragment : Fragment(R.layout.fragment_similar_vacancies) {
 
-    private var _binding: FragmentSimilarJobsBinding? = null
+    private var _binding: FragmentSimilarVacanciesBinding? = null
     private val binding get() = _binding!!
 
 
@@ -16,7 +16,7 @@ class SimilarJobsFragment : Fragment(R.layout.fragment_similar_jobs) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        _binding = FragmentSimilarJobsBinding.bind(view)
+        _binding = FragmentSimilarVacanciesBinding.bind(view)
 
 //        binding.gotoFilterFragmentBtn.setOnClickListener {
 //            findNavController().navigate(R.id.action_searchFragment_to_filterFragment)

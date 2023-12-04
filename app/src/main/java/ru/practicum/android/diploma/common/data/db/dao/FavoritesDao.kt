@@ -1,4 +1,4 @@
-package ru.practicum.android.diploma.favorites.data.db.dto
+package ru.practicum.android.diploma.common.data.db.dao
 
 import androidx.room.Dao
 

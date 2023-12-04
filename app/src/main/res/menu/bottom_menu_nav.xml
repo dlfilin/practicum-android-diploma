@@ -10,7 +10,7 @@
     <item
         android:id="@+id/favorites_graph"
         android:contentDescription="@string/favorite_bottom_nav"
-        android:icon="@drawable/ic_favorite_activ"
+        android:icon="@drawable/ic_favorite_active"
         android:title="@string/favorite_bottom_nav" />
 
     <item

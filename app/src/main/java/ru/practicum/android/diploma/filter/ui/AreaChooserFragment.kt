@@ -4,18 +4,18 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
 import ru.practicum.android.diploma.R
-import ru.practicum.android.diploma.databinding.FragmentRegionChooserBinding
+import ru.practicum.android.diploma.databinding.FragmentAreaChooserBinding
 
-class RegionChooserFragment : Fragment(R.layout.fragment_region_chooser) {
+class AreaChooserFragment : Fragment(R.layout.fragment_area_chooser) {
 
-    private var _binding: FragmentRegionChooserBinding? = null
+    private var _binding: FragmentAreaChooserBinding? = null
     private val binding get() = _binding!!
 
 //    private val viewModel by viewModel<FilterViewModel>()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        _binding = FragmentRegionChooserBinding.bind(view)
+        _binding = FragmentAreaChooserBinding.bind(view)
 
     }
 
