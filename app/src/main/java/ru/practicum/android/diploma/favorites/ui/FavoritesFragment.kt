@@ -19,7 +19,7 @@ class FavoritesFragment : Fragment(R.layout.fragment_favorites) {
         _binding = FragmentFavoritesBinding.bind(view)
 
         binding.gotoVacancyFragmentBtn.setOnClickListener {
-            findNavController().navigate(R.id.action_favoritesFragment_to_vacancy_graph)
+            findNavController().navigate(R.id.action_favoritesFragment_to_vacancyFragment)
         }
     }
 

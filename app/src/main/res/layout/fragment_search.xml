@@ -18,24 +18,13 @@
 
     <EditText
         android:id="@+id/searchEditText"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:hint="@string/hint_search_vacancy_et"
+        style="@style/editText"
         android:autofillHints="@string/hint_search_vacancy_et"
+        android:hint="@string/hint_search_vacancy_et"
         android:textCursorDrawable="@drawable/custom_cursor"
-        style="@style/editText" />
-
-    <Button
-        android:id="@+id/gotoFilterFragmentBtn"
-        style="@style/bigBlueButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="фильтр"
-        android:layout_marginVertical="@dimen/space_16"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/searchEditText" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/gotoVacancyFragmentBtn"
@@ -45,6 +34,6 @@
         android:text="@string/vacancy_detail_title_tv"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/gotoFilterFragmentBtn"/>
+        app:layout_constraintTop_toBottomOf="@id/searchEditText" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

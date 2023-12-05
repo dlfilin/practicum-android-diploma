@@ -22,7 +22,7 @@ class WorkPlaceFragment : Fragment(R.layout.fragment_work_place) {
             findNavController().navigate(R.id.action_workPlaceFragment_to_countryChooserFragment)
         }
         binding.gotoRegionChooserFragmentBtn.setOnClickListener {
-            findNavController().navigate(R.id.action_workPlaceFragment_to_regionChooserFragment)
+            findNavController().navigate(R.id.action_workPlaceFragment_to_areaChooserFragment)
         }
 
     }
