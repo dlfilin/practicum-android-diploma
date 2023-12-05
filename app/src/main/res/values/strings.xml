@@ -49,6 +49,8 @@
     <string name="phone_number_tv">Телефон</string>
     <string name="comment_tv">Комментарий</string>
     <string name="similar_vacancies_tv">Похожие вакансии</string>
+    <string name="share_vacancy">Поделиться вакансией</string>
+    <string name="add_favorite_vacancy">Добавить в избранное</string>
     <!--    similar vacancy fragment-->
     <string name="similar_vacancies_title_tv">Похожие вакансии</string>
     <!--    favorite vacancy fragment-->
