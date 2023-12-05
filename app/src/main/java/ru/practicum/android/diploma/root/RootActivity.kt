@@ -26,20 +26,18 @@ class RootActivity : AppCompatActivity() {
 
         setSupportActionBar(binding.toolbar)
         binding.toolbar.setupWithNavController(navController, appBarConfiguration)
+
         binding.bottomNavigationView.setupWithNavController(navController)
 
         navController.addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {
-                R.id.filterFragment,
-                R.id.areaChooserFragment,
-                R.id.countryChooserFragment,
-                R.id.industryChooserFragment,
-                R.id.workPlaceFragment,
-                R.id.vacancyFragment,
-                R.id.similarVacanciesFragment -> {
-                    binding.bottomNavigationView.isVisible = false
+                R.id.searchFragment,
+                R.id.favoritesFragment,
+                R.id.aboutFragment -> {
+                    binding.bottomNavigationView.isVisible = true
                 }
                 else -> {
+//                    binding.toolbar.setNavigationIcon(R.drawable.ic_clear)
                     binding.bottomNavigationView.isVisible = true
                 }
             }
