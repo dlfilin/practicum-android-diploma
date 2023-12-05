@@ -47,8 +47,11 @@ class VacancyFragment : Fragment(R.layout.fragment_vacancy) {
             override fun onPrepareMenu(menu: Menu) {
                 super.onPrepareMenu(menu)
                 val item = menu.findItem(R.id.action_toggle_favorite)
-                val icon = if (viewmodel.isVacancyFavorite()) R.drawable.ic_favorite_active
-                else R.drawable.ic_favorite_inactive
+                val icon = if (viewmodel.isVacancyFavorite()) {
+                    R.drawable.ic_favorite_active
+                } else {
+                    R.drawable.ic_favorite_inactive
+                }
                 item.setIcon(icon)
             }
 
