@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- common -->
+    <style name="editText">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginHorizontal">@dimen/space_16</item>
+        <item name="android:layout_marginVertical">@dimen/space_8</item>
+        <item name="android:paddingVertical">@dimen/space_16</item>
+        <item name="android:paddingHorizontal">@dimen/space_16</item>
+        <item name="android:textSize">@dimen/font_16</item>
+        <item name="android:textColor">@color/black_universal</item>
+        <item name="android:fontFamily">@font/ys_display_regular</item>
+        <item name="android:background">@drawable/background_gray_rounded</item>
+        <item name="android:drawableEnd">@drawable/ic_search</item>
+        <item name="android:textColorHint">?attr/colorSecondary</item>
+        <item name="android:textCursorDrawable">?attr/colorPrimary</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:imeOptions">actionDone</item>
+        <item name="android:inputType">text</item>
+        <item name="android:singleLine">true</item>
+    </style>
+    <!--filter fragment -->
+    <style name="textInputLayout">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginHorizontal">@dimen/space_16</item>
+        <item name="android:layout_marginVertical">@dimen/space_8</item>
+        <item name="boxStrokeWidth">0dp</item>
+        <item name="boxStrokeWidthFocused">0dp</item>
+        <item name="android:textColorHint">?attr/colorSecondary</item>
+    </style>
+    <style name="textInputEditText">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:backgroundTint">?attr/colorOnSecondary</item>
+        <item name="android:textColorHint">?attr/colorSecondary</item>
+        <item name="android:inputType">text</item>
+        <item name="android:fontFamily">@font/ys_display_regular</item>
+        <item name="android:textSize">@dimen/font_16</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:imeOptions">actionDone</item>
+        <item name="android:textColor">@color/black_universal</item>
+    </style>
+
+</resources>

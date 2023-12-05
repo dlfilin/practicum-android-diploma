@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".filter.ui.FilterFragment">
+
+    <TextView
+        android:id="@+id/name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/filter_settings_title_tv"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/gotoWorkPlaceFragmentBtn"
+        style="@style/bigBlueButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/place_of_work_btn"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/gotoIndustryFragmentBtn"
+        style="@style/bigBlueButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/industry_btn"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/gotoWorkPlaceFragmentBtn" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/textInputLayout"
+        style="@style/textInputLayout"
+        android:hint="@string/expected_salary_hint_et"
+        app:hintTextAppearance="@style/hintStyleForTextInputLayout"
+        app:hintTextColor="?attr/colorPrimary"
+        android:gravity="center_vertical"
+        android:layout_marginVertical="@dimen/space_16"
+        android:layout_marginHorizontal="@dimen/space_16"
+
+        app:endIconMode="clear_text"
+        app:endIconDrawable="@drawable/ic_clear"
+        app:endIconTint="@color/black_universal"
+        app:expandedHintEnabled="false"
+
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/gotoIndustryFragmentBtn">
+
+        <EditText
+            android:id="@+id/textInputEditText"
+            style="@style/textInputEditText"
+            app:hintTextAppearance="@style/hintStyleForTextInputEditText"
+            android:hint="@string/amount_hint_et"
+            android:autofillHints="@string/amount_hint_et"
+            />
+    </com.google.android.material.textfield.TextInputLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
