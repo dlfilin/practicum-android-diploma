@@ -64,4 +64,6 @@
     <string name="worker_2">Светлана Тимченко</string>
     <string name="worker_3">Ярослав Исмаев</string>
     <string name="worker_4">Влад Вострокнутов</string>
+    <!--    bottom navigation-->
+    <string name="employer_logo">Логотип компании</string>
 </resources>
