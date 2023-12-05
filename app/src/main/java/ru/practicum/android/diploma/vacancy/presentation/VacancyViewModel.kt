@@ -13,7 +13,7 @@ class VacancyViewModel : ViewModel() {
     fun isVacancyFavorite() = state.value?.vacancy?.isFavorite ?: false
 
     fun toggleFavorite() {
-        //пока просто для наглядности
+        // пока просто для наглядности
         val update = state.value?.vacancy?.let {
             it.copy(isFavorite = !it.isFavorite)
         } ?: Vacancy()
