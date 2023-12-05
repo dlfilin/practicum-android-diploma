@@ -5,6 +5,8 @@ import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import ru.practicum.android.diploma.common.data.network.dto.ErrorType
+import ru.practicum.android.diploma.common.data.network.dto.Resource
 import ru.practicum.android.diploma.common.data.network.dto.Response
 import ru.practicum.android.diploma.filter.data.dto.AreaRequest
 import ru.practicum.android.diploma.filter.data.dto.IndustryRequest
@@ -19,7 +21,11 @@ class RetrofitNetworkClient(
 ) : NetworkClient {
 
     override suspend fun doRequest(dto: Any): Response {
-        if (!isConnected()) return Response().apply { resultCode = NO_INTERNET }
+        if (!isConnected()) {
+            return Response().apply {
+                resultCode = Resource.Error(type = ErrorType.NO_INTERNET, data = null)
+            }
+        }
 
         return withContext(Dispatchers.IO) {
             try {
@@ -29,12 +35,12 @@ class RetrofitNetworkClient(
                     is SimilarVacancyRequest -> hhApiService.searchSimilarVacancy(dto.vacancyId)
                     is AreaRequest -> hhApiService.getAllArea()
                     is IndustryRequest -> hhApiService.getAllIndustry()
-                    else -> Response().apply { resultCode = BAD_REQUEST }
+                    else -> Response().apply { resultCode = Resource.Error(type = ErrorType.SERVER_ERROR, data = null) }
                 }
-                response.apply { resultCode = CONTENT }
+                response.apply { resultCode = Resource.Success(data = response) }
             } catch (e: IOException) {
                 Response().apply {
-                    resultCode = SERVER_THROWABLE
+                    resultCode = Resource.Error(type = ErrorType.SERVER_ERROR, data = null)
                     message = e.message
                 }
             }
@@ -60,9 +66,5 @@ class RetrofitNetworkClient(
 
     companion object {
         const val HH_BASE_URL = "https://api.hh.ru/"
-        const val NO_INTERNET = -1
-        const val CONTENT = 200
-        const val BAD_REQUEST = 400
-        const val SERVER_THROWABLE = 500
     }
 }
