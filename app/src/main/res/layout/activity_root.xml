@@ -8,14 +8,10 @@
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/toolbar"
         style="@style/topToolbar"
-        android:minHeight="@dimen/size_48"
-        app:contentInsetStartWithNavigation="0dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:navigationIconTint="@color/test1"
-        app:titleMargin="0dp"
-        android:transitionName=""
+        app:title="search_title_tv"
         app:titleTextAppearance="@style/topToolbarTitleText" />
 
     <androidx.fragment.app.FragmentContainerView

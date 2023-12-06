@@ -26,7 +26,6 @@ class RootActivity : AppCompatActivity() {
 
         setSupportActionBar(binding.toolbar)
         binding.toolbar.setupWithNavController(navController, appBarConfiguration)
-
         binding.bottomNavigationView.setupWithNavController(navController)
 
         navController.addOnDestinationChangedListener { _, destination, _ ->
@@ -37,8 +36,8 @@ class RootActivity : AppCompatActivity() {
                     binding.bottomNavigationView.isVisible = true
                 }
                 else -> {
-//                    binding.toolbar.setNavigationIcon(R.drawable.ic_clear)
-                    binding.bottomNavigationView.isVisible = true
+                    binding.toolbar.setNavigationIcon(R.drawable.ic_arrow_back)
+                    binding.bottomNavigationView.isVisible = false
                 }
             }
         }

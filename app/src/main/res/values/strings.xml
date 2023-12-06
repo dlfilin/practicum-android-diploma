@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Поиск работы</string>
+    <string name="app_name">Мои hh вакансии</string>
 
     <!--    common-->
     <string name="internet_throwable_tv">Нет интернета</string>
