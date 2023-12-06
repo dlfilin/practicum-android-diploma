@@ -6,17 +6,14 @@ import androidx.lifecycle.ViewModel
 
 class VacancyViewModel : ViewModel() {
 
-    private val _state = MutableLiveData(VacancyScreenState())
+    private var isFavorite = false
+
+    private val _state = MutableLiveData(VacancyScreenState(false))
     val state: LiveData<VacancyScreenState> get() = _state
 
-//    fun isVacancyFavorite() = state.value?.vacancy?.isFavorite ?: false
-//
-//    fun toggleFavorite() {
-//        // пока просто для наглядности
-//        val update = state.value?.vacancy?.let {
-//            it.copy(isFavorite = !it.isFavorite)
-//        } ?: VacancyDetail()
-//        _state.postValue(VacancyScreenState(update))
-//    }
-
+    fun toggleFavorite() {
+        // пока просто для наглядности
+        isFavorite = !isFavorite
+        _state.postValue(VacancyScreenState(isFavorite))
+    }
 }
