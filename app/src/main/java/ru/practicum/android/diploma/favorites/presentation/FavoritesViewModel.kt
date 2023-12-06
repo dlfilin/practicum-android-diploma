@@ -28,7 +28,7 @@ class FavoritesViewModel(
                         renderState(FavoriteState.Content(vacancies))
                     }
                 }
-            } catch (e: IOException) {
+            } catch (e: Throwable) {
                 renderState(FavoriteState.Error)
             }
         }
