@@ -11,7 +11,7 @@
         style="@style/recycleView"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         android:visibility="visible"
-        tools:listitem="@layout/vacancy_item"
+        tools:listitem="@layout/vacancy_view_item"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -40,7 +40,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/favoritesPlaceholder" />
 
-    <Button
+    <!--Button
         android:id="@+id/gotoVacancyFragmentBtn"
         style="@style/bigBlueButton"
         android:visibility="visible"
@@ -49,6 +49,6 @@
         android:text="@string/vacancy_detail_title_tv"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent"/-->
 
 </androidx.constraintlayout.widget.ConstraintLayout>

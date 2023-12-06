@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <plurals name="vacancy_number">
+        <item quantity="one">%d vacancy found</item>
+        <item quantity="other">%d vacancies found</item>
+    </plurals>
+</resources>

@@ -6,7 +6,7 @@ import androidx.room.PrimaryKey
 
 @Entity("favorites_vacancies")
 data class FavoriteEntity(
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = false)
     val id: String,
     @ColumnInfo("name_vacancies")
     val nameVacancies: String,
@@ -17,7 +17,7 @@ data class FavoriteEntity(
     @ColumnInfo("name_company")
     val nameCompany: String,
     @ColumnInfo("city")
-    val city: String,
+    val city: String?,
     @ColumnInfo("experience")
     val experience: String,
     @ColumnInfo("schedule")

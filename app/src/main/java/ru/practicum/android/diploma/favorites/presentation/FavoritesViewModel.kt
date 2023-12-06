@@ -5,8 +5,11 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
+import ru.practicum.android.diploma.favorites.domain.FavoriteInteractor
 
-class FavoritesViewModel : ViewModel() {
+class FavoritesViewModel(
+    private val favoriteInteractor: FavoriteInteractor
+) : ViewModel() {
     private val favoriteState = MutableLiveData<FavoriteState>(FavoriteState.Empty)
     fun observeFavoriteState(): LiveData<FavoriteState> = favoriteState
 
@@ -16,13 +19,18 @@ class FavoritesViewModel : ViewModel() {
 
     fun getVacancies() {
         viewModelScope.launch {
-            //TODO implement interactor usage to get all records
-            processResults()
+            try{
+                favoriteInteractor.getAll().collect {vacancies ->
+                    if (vacancies.isEmpty()) {
+                        renderState(FavoriteState.Empty)
+                    } else {
+                        renderState(FavoriteState.Content(vacancies))
+                    }
+                }
+            } catch (e: Exception)  {
+                renderState(FavoriteState.Error)
+            }
         }
-    }
-
-    private fun processResults() {
-        renderState(FavoriteState.Empty)
     }
 
     private fun renderState(state: FavoriteState) {
