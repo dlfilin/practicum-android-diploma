@@ -30,6 +30,8 @@ class FavoritesViewModel(
                 }
             } catch (e: TimeoutCancellationException) {
                 renderState(FavoriteState.Error)
+            } finally {
+                renderState(FavoriteState.Error)
             }
         }
     }
