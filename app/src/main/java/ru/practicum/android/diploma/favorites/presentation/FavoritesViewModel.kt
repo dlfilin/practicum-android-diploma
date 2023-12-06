@@ -1,12 +1,12 @@
 package ru.practicum.android.diploma.favorites.presentation
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import ru.practicum.android.diploma.favorites.domain.FavoriteInteractor
-import java.io.IOException
 
 class FavoritesViewModel(
     private val favoriteInteractor: FavoriteInteractor
@@ -28,7 +28,8 @@ class FavoritesViewModel(
                         renderState(FavoriteState.Content(vacancies))
                     }
                 }
-            } catch (e: Throwable) {
+            } catch (e: Exception) {
+                Log.e("VACANCIES", e.message.toString())
                 renderState(FavoriteState.Error)
             }
         }

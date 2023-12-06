@@ -20,7 +20,8 @@ class FavoriteMapper {
             contactPerson = favorite.contactPerson,
             contactEmail = favorite.contactEmail,
             contactPhone = favorite.contactPhone,
-            comment = favorite.comment
+            comment = favorite.comment,
+            addTime = favorite.addTime
         )
     }
 
@@ -40,7 +41,8 @@ class FavoriteMapper {
             contactPerson = favorite.contactPerson,
             contactEmail = favorite.contactEmail,
             contactPhone = favorite.contactPhone,
-            comment = favorite.comment
+            comment = favorite.comment,
+            addTime = favorite.addTime
         )
     }
 }

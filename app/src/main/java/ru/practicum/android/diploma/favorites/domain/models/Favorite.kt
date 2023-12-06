@@ -16,4 +16,5 @@ data class Favorite(
     val contactEmail: String? = null,
     val contactPhone: String? = null,
     val comment: String? = null,
+    val addTime: Long
 )
