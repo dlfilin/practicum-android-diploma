@@ -31,10 +31,9 @@ class VacancyAdapter(
         isPagination: Boolean = false
     ) {
         if (isPagination) {
-            //TODO
-        }
-        else {
-            //TODO рефакторинг с difutil
+            // TODO: для полной версии с пейджингом
+        } else {
+            // TODO: рефакторинг с diffutil
             vacancies.clear()
             vacancies.addAll(newVacancyList)
             notifyDataSetChanged()

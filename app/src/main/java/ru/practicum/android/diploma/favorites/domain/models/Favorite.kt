@@ -10,7 +10,7 @@ data class Favorite(
     val experience: String,
     val schedule: String,
     val employment: String,
-    val description: String?  = null,
+    val description: String? = null,
     val keySkills: String? = null,
     val contactPerson: String? = null,
     val contactEmail: String? = null,

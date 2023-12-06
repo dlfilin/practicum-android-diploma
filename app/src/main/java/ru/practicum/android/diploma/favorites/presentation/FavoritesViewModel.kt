@@ -19,15 +19,15 @@ class FavoritesViewModel(
 
     fun getVacancies() {
         viewModelScope.launch {
-            try{
-                favoriteInteractor.getAll().collect {vacancies ->
+            try {
+                favoriteInteractor.getAll().collect { vacancies ->
                     if (vacancies.isEmpty()) {
                         renderState(FavoriteState.Empty)
                     } else {
                         renderState(FavoriteState.Content(vacancies))
                     }
                 }
-            } catch (e: Exception)  {
+            } catch (e: Exception) {
                 renderState(FavoriteState.Error)
             }
         }

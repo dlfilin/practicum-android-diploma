@@ -11,7 +11,7 @@ class FavoriteRepositoryImpl(
     private val appDataBase: AppDataBase,
     private val favoriteMapper: FavoriteMapper
 ) : FavoriteRepository {
-    override  fun getAll(): Flow<List<Favorite>> {
+    override fun getAll(): Flow<List<Favorite>> {
         return appDataBase.favoriteDao().getFavoriteVacancies().map { favorites ->
             favorites.map { favoriteMapper.map(it) }
         }

@@ -29,7 +29,7 @@ class VacancyViewHolder(
                 }
             }
 
-            companyName.text =vacancy.nameCompany
+            companyName.text = vacancy.nameCompany
             salary.text = "TODO после рзработки утилиты"
         }
 

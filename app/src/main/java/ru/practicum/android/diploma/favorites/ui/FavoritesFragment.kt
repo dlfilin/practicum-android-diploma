@@ -38,7 +38,7 @@ class FavoritesFragment : Fragment(R.layout.fragment_favorites) {
     }
 
     private fun render(state: FavoriteState) {
-        when(state) {
+        when (state) {
             is FavoriteState.Empty -> showEmpty()
             is FavoriteState.Error -> showError()
             is FavoriteState.Content -> showContent(state.vacancies)
@@ -68,9 +68,9 @@ class FavoritesFragment : Fragment(R.layout.fragment_favorites) {
     private fun showContent(vacancies: List<Favorite>) {
         with(binding) {
             favoritesPlaceholder.visibility = View.GONE
-            favoritesPlaceholderText.visibility= View.GONE
+            favoritesPlaceholderText.visibility = View.GONE
             adapter.updateRecycleView(vacancies)
-            favoritesRecyclerView.visibility= View.VISIBLE
+            favoritesRecyclerView.visibility = View.VISIBLE
         }
     }
 

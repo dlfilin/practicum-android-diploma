@@ -18,6 +18,6 @@ interface FavoritesDao {
     suspend fun deleteFavoriteVacancy(favorite: FavoriteEntity)
 
     @Query("SELECT * FROM favorites_vacancies")
-    fun getFavoriteVacancies() : Flow<List<FavoriteEntity>>
+    fun getFavoriteVacancies(): Flow<List<FavoriteEntity>>
 
 }
