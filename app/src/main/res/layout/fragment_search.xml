@@ -16,14 +16,136 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="@dimen/space_54"
+        android:paddingBottom="@dimen/space_80"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/searchEditText"
+        tools:visibility="visible" />
+
+    <Button
+        android:id="@+id/vacanciesFound"
+        style="@style/blueNotifications"
+        android:layout_marginTop="@dimen/space_12"
+        android:clickable="false"
+        android:textAllCaps="false"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/searchEditText"
+        tools:text="Найдено 286 вакансий"
+        tools:visibility="visible" />
+
+    <ProgressBar
+        android:id="@+id/newSearchProgressBar"
+        style="@style/progressBar"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.501"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/searchEditText"
+        tools:visibility="visible" />
+
+    <ImageView
+        android:id="@+id/searchVacancyPlaceholder"
+        style="@style/placeholderImage"
+        android:contentDescription="@string/nothing_shown_vacancy_tv"
+        android:src="@drawable/search_vacancy_placeholder"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/searchEditText"
+        tools:visibility="gone" />
+
+    <ImageView
+        android:id="@+id/internetThrowablePlaceholder"
+        style="@style/placeholderImage"
+        android:contentDescription="@string/internet_throwable_tv"
+        android:src="@drawable/internet_throwable_placeholder"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/searchEditText"
+        tools:visibility="gone" />
+
+    <TextView
+        android:id="@+id/internetThrowablePlaceHolderText"
+        style="@style/placeholderText"
+        android:text="@string/internet_throwable_tv"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/internetThrowablePlaceholder"
+        tools:visibility="gone" />
+
+    <ImageView
+        android:id="@+id/serverThrowablePlaceholder"
+        style="@style/placeholderImage"
+        android:contentDescription="@string/server_throwable_tv"
+        android:src="@drawable/server_throwable_placeholder"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/searchEditText"
+        tools:visibility="gone" />
+
+    <TextView
+        android:id="@+id/serverThrowablePlaceholderText"
+        style="@style/placeholderText"
+        android:text="@string/server_throwable_tv"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/serverThrowablePlaceholder"
+        tools:visibility="gone" />
+
+    <ImageView
+        android:id="@+id/searchFailPlaceholder"
+        style="@style/placeholderImage"
+        android:contentDescription="@string/load_vacancy_throwable_tv"
+        android:src="@drawable/search_fail_placeholder"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/searchEditText"
+        tools:visibility="gone" />
+
+    <TextView
+        android:id="@+id/searchFailPlaceholderText"
+        style="@style/placeholderText"
+        android:text="@string/load_vacancy_throwable_tv"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/serverThrowablePlaceholder"
+        tools:visibility="gone" />
+
+    <ProgressBar
+        android:id="@+id/recyclerViewProgressBar"
+        style="@style/progressBar"
+        android:layout_marginBottom="@dimen/space_16"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:visibility="visible" />
+
     <Button
         android:id="@+id/gotoVacancyFragmentBtn"
         style="@style/bigBlueButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/vacancy_detail_title_tv"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/searchEditText" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
