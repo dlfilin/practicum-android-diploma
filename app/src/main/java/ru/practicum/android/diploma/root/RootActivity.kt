@@ -30,11 +30,10 @@ class RootActivity : AppCompatActivity() {
 
         navController.addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {
-                R.id.searchFragment,
-                R.id.favoritesFragment,
-                R.id.aboutFragment -> {
+                R.id.searchFragment, R.id.favoritesFragment, R.id.aboutFragment -> {
                     binding.bottomNavigationView.isVisible = true
                 }
+
                 else -> {
                     binding.toolbar.setNavigationIcon(R.drawable.ic_arrow_back)
                     binding.bottomNavigationView.isVisible = false
