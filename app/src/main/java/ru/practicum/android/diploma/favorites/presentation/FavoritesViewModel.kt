@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import ru.practicum.android.diploma.favorites.domain.FavoriteInteractor
+import java.io.IOException
 
 class FavoritesViewModel(
     private val favoriteInteractor: FavoriteInteractor
@@ -27,7 +28,7 @@ class FavoritesViewModel(
                         renderState(FavoriteState.Content(vacancies))
                     }
                 }
-            } catch (e: Exception) {
+            } catch (e: IOException) {
                 renderState(FavoriteState.Error)
             }
         }
