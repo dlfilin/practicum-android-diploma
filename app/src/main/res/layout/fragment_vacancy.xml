@@ -6,16 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".vacancy.ui.VacancyFragment">
 
-    <TextView
-        android:id="@+id/name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/vacancy_detail_title_tv"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <Button
         android:id="@+id/gotoSimilarJobsFragmentBtn"
         style="@style/bigBlueButton"
