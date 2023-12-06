@@ -3,21 +3,17 @@ package ru.practicum.android.diploma.vacancy.presentation
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import ru.practicum.android.diploma.vacancy.domain.models.Vacancy
 
 class VacancyViewModel : ViewModel() {
 
-    private val _state = MutableLiveData(VacancyScreenState())
-    val state: LiveData<VacancyScreenState> get() = _state
+    private var isFavorite = false
 
-    fun isVacancyFavorite() = state.value?.vacancy?.isFavorite ?: false
+    private val _state = MutableLiveData(VacancyScreenState(false))
+    val state: LiveData<VacancyScreenState> get() = _state
 
     fun toggleFavorite() {
         // пока просто для наглядности
-        val update = state.value?.vacancy?.let {
-            it.copy(isFavorite = !it.isFavorite)
-        } ?: Vacancy()
-        _state.postValue(VacancyScreenState(update))
+        isFavorite = !isFavorite
+        _state.postValue(VacancyScreenState(isFavorite))
     }
-
 }
