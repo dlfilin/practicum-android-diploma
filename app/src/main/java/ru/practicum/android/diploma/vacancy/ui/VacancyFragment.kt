@@ -20,6 +20,8 @@ class VacancyFragment : Fragment(R.layout.fragment_vacancy) {
     private var _binding: FragmentVacancyBinding? = null
     private val binding get() = _binding!!
 
+    private var isFavorite = false
+
     private val menuHost: MenuHost get() = requireActivity()
 
     private val viewmodel by viewModel<VacancyViewModel>()
@@ -47,7 +49,7 @@ class VacancyFragment : Fragment(R.layout.fragment_vacancy) {
             override fun onPrepareMenu(menu: Menu) {
                 super.onPrepareMenu(menu)
                 val item = menu.findItem(R.id.action_toggle_favorite)
-                val icon = if (viewmodel.isVacancyFavorite()) {
+                val icon = if (isFavorite) {
                     R.drawable.ic_favorite_active
                 } else {
                     R.drawable.ic_favorite_inactive
@@ -79,7 +81,7 @@ class VacancyFragment : Fragment(R.layout.fragment_vacancy) {
 
     private fun setObservables() {
         viewmodel.state.observe(viewLifecycleOwner) { state ->
-
+            isFavorite = state.vacancy
             // нужно дернуть тулбар в Activity, чтобы он перерисовался
             requireActivity().invalidateOptionsMenu()
 

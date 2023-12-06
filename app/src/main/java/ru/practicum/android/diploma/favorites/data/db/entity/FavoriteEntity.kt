@@ -36,7 +36,8 @@ data class FavoriteEntity(
     val contactPhone: String?,
     @ColumnInfo("comment")
     val comment: String?,
+    @ColumnInfo("add_time")
+    val addTime: Long
 )
-
 
 
