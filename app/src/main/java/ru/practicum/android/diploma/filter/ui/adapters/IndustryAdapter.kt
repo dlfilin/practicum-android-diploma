@@ -1,6 +1,5 @@
 package ru.practicum.android.diploma.filter.ui.adapters
 
-
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -59,7 +58,8 @@ class IndustryAdapter(
     }
 
     private class MyDiffCallback(
-        private val oldList: List<Industry>, private val newList: List<Industry>
+        private val oldList: List<Industry>,
+        private val newList: List<Industry>
     ) : DiffUtil.Callback() {
         override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
             return oldList[oldItemPosition].id == newList[newItemPosition].id

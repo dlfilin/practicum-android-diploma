@@ -3,6 +3,7 @@ package ru.practicum.android.diploma.filter.ui
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import androidx.fragment.app.Fragment
@@ -22,8 +23,8 @@ class IndustryChooserFragment : Fragment(R.layout.fragment_industry_chooser) {
     private val adapter = IndustryAdapter(onItemCheckedListener = { item ->
         if (item.isChecked) {
             binding.btAdd.visibility = View.VISIBLE
-            binding.btAdd.setOnClickListener {
-            }
+//            binding.btAdd.setOnClickListener {
+//            }
         }
 
     })
@@ -41,7 +42,7 @@ class IndustryChooserFragment : Fragment(R.layout.fragment_industry_chooser) {
 
         val textWatcher = object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-                //empty
+               Log.d("testTextWatcher" , "$s" )
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
@@ -67,7 +68,7 @@ class IndustryChooserFragment : Fragment(R.layout.fragment_industry_chooser) {
             }
 
             override fun afterTextChanged(s: Editable?) {
-                //empty
+                Log.d("testTextWatcher" , "$s" )
             }
         }
         binding.searchEditText.addTextChangedListener(textWatcher)
