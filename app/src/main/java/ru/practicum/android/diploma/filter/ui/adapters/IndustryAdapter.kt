@@ -52,7 +52,8 @@ class IndustryAdapter(
     }
 
     private class MyDiffCallback(
-        private val oldList: List<Industry>, private val newList: List<Industry>
+        private val oldList: List<Industry>,
+        private val newList: List<Industry>
     ) : DiffUtil.Callback() {
         override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
             return when {

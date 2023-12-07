@@ -40,7 +40,9 @@ class IndustryChooserFragment : Fragment(R.layout.fragment_industry_chooser) {
         binding.rvIndustry.adapter = adapter
 
         val textWatcher = object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+
+            }
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 adapter.filter(s?.toString() ?: " ")
                 visibleBtAdd(adapter.listItem)
@@ -63,7 +65,9 @@ class IndustryChooserFragment : Fragment(R.layout.fragment_industry_chooser) {
                 }
             }
 
-            override fun afterTextChanged(s: Editable?) {}
+            override fun afterTextChanged(s: Editable?) {
+
+            }
         }
         binding.searchEditText.addTextChangedListener(textWatcher)
     }
