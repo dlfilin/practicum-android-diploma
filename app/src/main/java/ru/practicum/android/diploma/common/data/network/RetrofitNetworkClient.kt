@@ -32,9 +32,9 @@ class RetrofitNetworkClient(
                 val response = when (dto) {
                     is VacancySearchRequest -> hhApiService.searchVacancies(dto.expression)
                     is VacancyDetailRequest -> hhApiService.getVacancyDetails(dto.vacancyId)
-                    is SimilarVacancyRequest -> hhApiService.searchSimilarVacancy(dto.vacancyId)
+                    is SimilarVacancyRequest -> hhApiService.searchSimilarVacancies(dto.vacancyId)
                     is AreaRequest -> hhApiService.getAllAreas()
-                    is IndustryRequest -> hhApiService.getAllIndustry()
+                    is IndustryRequest -> hhApiService.getAllIndustries()
                     else -> Response().apply { resultCode = Resource.Error(type = ErrorType.SERVER_ERROR, data = null) }
                 }
                 response.apply { resultCode = Resource.Success(data = response) }
