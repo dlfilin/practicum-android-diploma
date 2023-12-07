@@ -30,7 +30,6 @@ class IndustryAdapter(
 
         holder.radioButton.isChecked = listItem[position].isChecked
         holder.radioButton.setOnClickListener {
-
             mSelectedItem = holder.adapterPosition
             val listNew = listItem.mapIndexed { index, industry ->
                 if (index == mSelectedItem) {
