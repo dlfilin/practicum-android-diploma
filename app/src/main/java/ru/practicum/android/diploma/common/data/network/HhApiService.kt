@@ -8,38 +8,42 @@ import ru.practicum.android.diploma.BuildConfig
 import ru.practicum.android.diploma.filter.data.dto.AreaResponse
 import ru.practicum.android.diploma.filter.data.dto.IndustryResponse
 import ru.practicum.android.diploma.search.data.dto.VacancySearchResponse
-import ru.practicum.android.diploma.vacancy.data.dto.VacancyDetailResponse
+import ru.practicum.android.diploma.vacancy.data.dto.VacancyDetailsResponse
 
 interface HhApiService {
+    @Headers(
+        "Authorization: Bearer ${BuildConfig.HH_ACCESS_TOKEN}",
+        "HH-User-Agent: my_hh_vacancies (danila.filin@gmail.com)"
+    )
     @GET("/vacancies")
-    suspend fun searchVacancy(@Query("text") text: String): VacancySearchResponse
+    suspend fun searchVacancies(@Query("text") text: String): VacancySearchResponse
 
     @Headers(
         "Authorization: Bearer ${BuildConfig.HH_ACCESS_TOKEN}",
-        "HH-User-Agent: Application Мои_hh_вакансии (danila.filin@gmail.com)"
+        "HH-User-Agent: my_hh_vacancies (danila.filin@gmail.com)"
     )
     @GET("/vacancies/{vacancy_id}")
-    suspend fun getVacancyDetail(@Path("vacancy_id") id: String): VacancyDetailResponse
+    suspend fun getVacancyDetails(@Path("vacancy_id") id: String): VacancyDetailsResponse
 
     @Headers(
         "Authorization: Bearer ${BuildConfig.HH_ACCESS_TOKEN}",
-        "HH-User-Agent: Application Мои_hh_вакансии (danila.filin@gmail.com)"
+        "HH-User-Agent: my_hh_vacancies (danila.filin@gmail.com)"
     )
     @GET("/vacancies/{vacancy_id}/similar_vacancies")
-    suspend fun searchSimilarVacancy(@Path("vacancy_id") id: String): VacancySearchResponse
+    suspend fun searchSimilarVacancies(@Path("vacancy_id") id: String): VacancySearchResponse
 
     @Headers(
         "Authorization: Bearer ${BuildConfig.HH_ACCESS_TOKEN}",
-        "HH-User-Agent: Application Мои_hh_вакансии (danila.filin@gmail.com)"
+        "HH-User-Agent: my_hh_vacancies (danila.filin@gmail.com)"
     )
     @GET("/areas")
-    suspend fun getAllArea(): AreaResponse
+    suspend fun getAllAreas(): AreaResponse
 
     @Headers(
         "Authorization: Bearer ${BuildConfig.HH_ACCESS_TOKEN}",
-        "HH-User-Agent: Application Мои_hh_вакансии (danila.filin@gmail.com)"
+        "HH-User-Agent: my_hh_vacancies (danila.filin@gmail.com)"
     )
     @GET("/industries")
-    suspend fun getAllIndustry(): IndustryResponse
+    suspend fun getAllIndustries(): IndustryResponse
 }
 

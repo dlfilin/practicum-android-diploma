@@ -48,3 +48,4 @@ google-services.json
 .DS_Store
 *.log
 /.idea/deploymentTargetDropDown.xml
+/.idea/migrations.xml
