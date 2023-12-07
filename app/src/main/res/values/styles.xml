@@ -158,4 +158,8 @@
         <item name="android:layout_height">0dp</item>
         <item name="android:layout_marginTop">@dimen/space_8</item>
     </style>
+    <!-- industry item -->
+    <style name="Widget.App.RadioButton" parent="Widget.Material3.CompoundButton.RadioButton">
+        <item name="buttonTint">@color/blue</item>
+    </style>
 </resources>
