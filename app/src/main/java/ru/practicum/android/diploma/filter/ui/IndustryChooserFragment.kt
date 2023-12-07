@@ -23,7 +23,6 @@ class IndustryChooserFragment : Fragment(R.layout.fragment_industry_chooser) {
         if (item.isChecked) {
             binding.btAdd.visibility = View.VISIBLE
             binding.btAdd.setOnClickListener {
-
             }
         }
 
@@ -38,11 +37,13 @@ class IndustryChooserFragment : Fragment(R.layout.fragment_industry_chooser) {
         binding.rvIndustry.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         binding.rvIndustry.adapter = adapter
+        binding.rvIndustry.itemAnimator = null
 
         val textWatcher = object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-
+                //empty
             }
+
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 adapter.filter(s?.toString() ?: " ")
                 visibleBtAdd(adapter.listItem)
@@ -66,7 +67,7 @@ class IndustryChooserFragment : Fragment(R.layout.fragment_industry_chooser) {
             }
 
             override fun afterTextChanged(s: Editable?) {
-
+                //empty
             }
         }
         binding.searchEditText.addTextChangedListener(textWatcher)
