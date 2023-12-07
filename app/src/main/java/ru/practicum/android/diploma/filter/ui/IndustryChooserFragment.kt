@@ -42,7 +42,7 @@ class IndustryChooserFragment : Fragment(R.layout.fragment_industry_chooser) {
 
         val textWatcher = object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-                Log.d("testTextWatcher","$s")
+                Log.d("testTextWatcher", "$s")
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
@@ -68,7 +68,7 @@ class IndustryChooserFragment : Fragment(R.layout.fragment_industry_chooser) {
             }
 
             override fun afterTextChanged(s: Editable?) {
-                Log.d("testTextWatcher","$s")
+                Log.d("testTextWatcher", "$s")
             }
         }
         binding.searchEditText.addTextChangedListener(textWatcher)
