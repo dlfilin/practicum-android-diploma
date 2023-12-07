@@ -20,28 +20,28 @@ interface HhApiService {
 
     @Headers(
         "Authorization: Bearer ${BuildConfig.HH_ACCESS_TOKEN}",
-        "HH-User-Agent: Application Мои_hh_вакансии (danila.filin@gmail.com)"
+        "HH-User-Agent: my_hh_vacancies (danila.filin@gmail.com)"
     )
     @GET("/vacancies/{vacancy_id}")
     suspend fun getVacancyDetails(@Path("vacancy_id") id: String): VacancyDetailsResponse
 
     @Headers(
         "Authorization: Bearer ${BuildConfig.HH_ACCESS_TOKEN}",
-        "HH-User-Agent: Application Мои_hh_вакансии (danila.filin@gmail.com)"
+        "HH-User-Agent: my_hh_vacancies (danila.filin@gmail.com)"
     )
     @GET("/vacancies/{vacancy_id}/similar_vacancies")
     suspend fun searchSimilarVacancies(@Path("vacancy_id") id: String): VacancySearchResponse
 
     @Headers(
         "Authorization: Bearer ${BuildConfig.HH_ACCESS_TOKEN}",
-        "HH-User-Agent: Application Мои_hh_вакансии (danila.filin@gmail.com)"
+        "HH-User-Agent: my_hh_vacancies (danila.filin@gmail.com)"
     )
     @GET("/areas")
     suspend fun getAllAreas(): AreaResponse
 
     @Headers(
         "Authorization: Bearer ${BuildConfig.HH_ACCESS_TOKEN}",
-        "HH-User-Agent: Application Мои_hh_вакансии (danila.filin@gmail.com)"
+        "HH-User-Agent: my_hh_vacancies (danila.filin@gmail.com)"
     )
     @GET("/industries")
     suspend fun getAllIndustries(): IndustryResponse
