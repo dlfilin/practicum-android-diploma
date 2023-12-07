@@ -9,6 +9,7 @@ import ru.practicum.android.diploma.common.data.db.AppDataBase
 import ru.practicum.android.diploma.common.data.network.HhApiService
 import ru.practicum.android.diploma.common.data.network.NetworkClient
 import ru.practicum.android.diploma.common.data.network.RetrofitNetworkClient
+import ru.practicum.android.diploma.search.data.mapper.VacancyResponseMapper
 
 val dataModule = module {
 
@@ -16,7 +17,7 @@ val dataModule = module {
         Room.databaseBuilder(androidContext(), AppDataBase::class.java, "dataBase.db").build()
     }
 
-    single {
+    single<HhApiService> {
         Retrofit.Builder()
             .baseUrl(RetrofitNetworkClient.HH_BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
@@ -24,10 +25,22 @@ val dataModule = module {
             .create(HhApiService::class.java)
     }
 
+//    single<HhApiService> {
+//        Retrofit.Builder()
+//            .baseUrl("https://itunes.apple.com")
+//            .addConverterFactory(GsonConverterFactory.create())
+//            .build()
+//            .create(HhApiService::class.java)
+//    }
+
     single<NetworkClient> {
         RetrofitNetworkClient(
             context = androidContext(),
             hhApiService = get()
         )
+    }
+
+    factory {
+        VacancyResponseMapper()
     }
 }

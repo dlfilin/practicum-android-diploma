@@ -5,8 +5,6 @@ import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import ru.practicum.android.diploma.common.data.network.dto.ErrorType
-import ru.practicum.android.diploma.common.data.network.dto.Resource
 import ru.practicum.android.diploma.common.data.network.dto.Response
 import ru.practicum.android.diploma.filter.data.dto.AreaRequest
 import ru.practicum.android.diploma.filter.data.dto.IndustryRequest
@@ -21,26 +19,22 @@ class RetrofitNetworkClient(
 ) : NetworkClient {
 
     override suspend fun doRequest(dto: Any): Response {
-        if (!isConnected()) {
-            return Response().apply {
-                resultCode = Resource.Error(type = ErrorType.NO_INTERNET, data = null)
-            }
-        }
+        if (!isConnected()) return Response().apply { resultCode = NO_INTERNET }
 
         return withContext(Dispatchers.IO) {
             try {
                 val response = when (dto) {
-                    is VacancySearchRequest -> hhApiService.searchVacancy(dto.expression)
+                    is VacancySearchRequest -> hhApiService.searchVacancy(dto.text)
                     is VacancyDetailRequest -> hhApiService.getVacancyDetail(dto.vacancyId)
                     is SimilarVacancyRequest -> hhApiService.searchSimilarVacancy(dto.vacancyId)
                     is AreaRequest -> hhApiService.getAllArea()
                     is IndustryRequest -> hhApiService.getAllIndustry()
-                    else -> Response().apply { resultCode = Resource.Error(type = ErrorType.SERVER_ERROR, data = null) }
+                    else -> Response().apply { resultCode = BAD_REQUEST }
                 }
-                response.apply { resultCode = Resource.Success(data = response) }
+                response.apply { resultCode = CONTENT }
             } catch (e: IOException) {
                 Response().apply {
-                    resultCode = Resource.Error(type = ErrorType.SERVER_ERROR, data = null)
+                    resultCode = SERVER_THROWABLE
                     message = e.message
                 }
             }
@@ -66,5 +60,9 @@ class RetrofitNetworkClient(
 
     companion object {
         const val HH_BASE_URL = "https://api.hh.ru/"
+        const val NO_INTERNET = -1
+        const val CONTENT = 200
+        const val BAD_REQUEST = 400
+        const val SERVER_THROWABLE = 500
     }
 }
