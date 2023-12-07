@@ -57,7 +57,7 @@ class SearchViewModel(
                 }
             }
 
-            (foundVacancyData?.items.isNullOrEmpty()) -> {
+            foundVacancyData?.items.isNullOrEmpty() -> {
                 renderState(
                     SearchScreenState.Empty
                 )
