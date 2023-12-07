@@ -6,7 +6,11 @@ import ru.practicum.android.diploma.search.domain.impl.SearchInteractorImpl
 
 
 val domainModule = module {
+  val domainModule = module {
     single<SearchInteractor> {
         SearchInteractorImpl(repository = get())
+        
+    single<FavoriteInteractor> {
+        FavoriteInteractorImp(get())
     }
 }
