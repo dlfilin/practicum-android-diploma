@@ -36,7 +36,7 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
             override fun onVacancyClick(vacancy: VacancyItem) {
                 if (clickDebounce()) {
                     findNavController().navigate(R.id.action_searchFragment_to_vacancyFragment)
-                    //передать id вакансии на экран информац3ии о вакансии
+                    // передать id вакансии на экран информац3ии о вакансии
                 }
             }
         }

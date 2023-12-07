@@ -25,14 +25,6 @@ val dataModule = module {
             .create(HhApiService::class.java)
     }
 
-//    single<HhApiService> {
-//        Retrofit.Builder()
-//            .baseUrl("https://itunes.apple.com")
-//            .addConverterFactory(GsonConverterFactory.create())
-//            .build()
-//            .create(HhApiService::class.java)
-//    }
-
     single<NetworkClient> {
         RetrofitNetworkClient(
             context = androidContext(),

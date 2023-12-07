@@ -1,11 +1,9 @@
 package ru.practicum.android.diploma.search.ui.adapter
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.CenterInside
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import ru.practicum.android.diploma.R
@@ -19,7 +17,6 @@ class SearchAdapter(private val clickListener: VacancyClickListener) :
 
     fun setVacancyList(newList: List<VacancyItem>) {
         vacancyList = newList
-        Log.d("xxx", vacancyList.size.toString())
         notifyDataSetChanged()
     }
 
