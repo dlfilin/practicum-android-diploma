@@ -17,7 +17,7 @@ data class FavoriteEntity(
     @ColumnInfo("name_company")
     val nameCompany: String,
     @ColumnInfo("city")
-    val city: String,
+    val city: String?,
     @ColumnInfo("experience")
     val experience: String,
     @ColumnInfo("schedule")
