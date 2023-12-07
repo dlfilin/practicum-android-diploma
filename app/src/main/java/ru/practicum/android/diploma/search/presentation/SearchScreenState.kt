@@ -1,6 +1,14 @@
 package ru.practicum.android.diploma.search.presentation
 
-data class SearchScreenState(
-    val isFilterActive: Boolean = true,
-    val isLoading: Boolean = false
-)
+import ru.practicum.android.diploma.search.domain.model.VacancyListData
+
+sealed interface SearchScreenState {
+    data class Content(
+        val vacancyData: VacancyListData
+    ) : SearchScreenState
+
+    data object Loading : SearchScreenState
+    data object Error : SearchScreenState
+    data object InternetThrowable : SearchScreenState
+    data object Empty : SearchScreenState
+}
