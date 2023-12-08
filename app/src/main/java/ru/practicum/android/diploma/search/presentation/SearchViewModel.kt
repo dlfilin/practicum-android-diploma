@@ -57,7 +57,6 @@ class SearchViewModel(
 
     private fun processResult(result: Result<VacancyListData>) {
         when (result) {
-
             is Result.Success -> {
                 if (result.data?.items.isNullOrEmpty()) {
                     renderState(SearchScreenState.Empty)

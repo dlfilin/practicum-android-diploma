@@ -84,7 +84,8 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
                     searchEditText.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_clear, 0)
                     searchEditText.setOnTouchListener { view, motionEvent ->
                         val iconBoundries = searchEditText.compoundDrawables[2].bounds.width()
-                        if (motionEvent.action == MotionEvent.ACTION_UP && motionEvent.rawX >= searchEditText.right - iconBoundries * 2) {
+                        if (motionEvent.action == MotionEvent.ACTION_UP &&
+                            motionEvent.rawX >= searchEditText.right - iconBoundries * 2) {
                             searchEditText.setText("")
                         }
                         view.performClick()

@@ -21,7 +21,9 @@ class SearchAdapter(private val clickListener: VacancyClickListener) : RecyclerV
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SearchViewHolder {
         val binding = VacancyViewItemBinding.inflate(
-            LayoutInflater.from(parent.context), parent, false
+            LayoutInflater.from(parent.context),
+            parent,
+            false
         )
         return SearchViewHolder(binding)
     }
