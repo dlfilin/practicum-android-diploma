@@ -15,8 +15,7 @@ import ru.practicum.android.diploma.vacancy.data.dto.VacancyDetailRequest
 import java.io.IOException
 
 class RetrofitNetworkClient(
-    private val context: Context,
-    private val hhApiService: HhApiService
+    private val context: Context, private val hhApiService: HhApiService
 ) : NetworkClient {
 
     override suspend fun doRequest(dto: Any): Response {
@@ -47,8 +46,7 @@ class RetrofitNetworkClient(
         val connectivityManager = context.getSystemService(
             Context.CONNECTIVITY_SERVICE
         ) as ConnectivityManager
-        val capabilities =
-            connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
+        val capabilities = connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
         if (capabilities != null) {
             return when {
                 capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> true
@@ -61,7 +59,6 @@ class RetrofitNetworkClient(
     }
 
     companion object {
-        const val HH_BASE_URL = "https://api.hh.ru/"
         const val NO_INTERNET = -1
         const val CONTENT = 200
         const val BAD_REQUEST = 400

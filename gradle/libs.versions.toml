@@ -1,5 +1,6 @@
 [versions]
 koinAndroid = "3.3.0"
+loggingInterceptor = "4.11.0"
 navigation = "2.7.5"
 retrofit = "2.9.0"
 glide = "4.16.0"
@@ -43,6 +44,7 @@ glide = { module = "com.github.bumptech.glide:glide", version.ref = "glide" }
 retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
 converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "retrofit" }
 gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
+logging-interceptor = { module = "com.squareup.okhttp3:logging-interceptor", version.ref = "loggingInterceptor" }
 
 #DI
 koin-android = { module = "io.insert-koin:koin-android", version.ref = "koinAndroid" }

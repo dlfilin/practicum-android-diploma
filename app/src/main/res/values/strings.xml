@@ -12,6 +12,7 @@
     <!--    search vacancy fragment-->
     <string name="search_title_tv">Поиск вакансий</string>
     <string name="hint_search_vacancy_et">Введите запрос</string>
+    <string name="vacancy_item_title" translatable="false">%1$s, %2$s</string>
     <!--    filter fragment-->
     <string name="filter_settings_title_tv">Настройки фильтрации</string>
     <string name="place_of_work_btn">Место работы</string>

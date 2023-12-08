@@ -28,23 +28,20 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
     private var _binding: FragmentSearchBinding? = null
     private val binding get() = _binding!!
     private val menuHost: MenuHost get() = requireActivity()
-    private var isClickAllowed = true
     private val viewmodel by viewModel<SearchViewModel>()
 
-    private val adapter = SearchAdapter(
-        object : SearchAdapter.VacancyClickListener {
-            override fun onVacancyClick(vacancy: VacancyItem) {
-                if (clickDebounce()) {
-                    findNavController().navigate(R.id.action_searchFragment_to_vacancyFragment)
-                    // передать id вакансии на экран информац3ии о вакансии
-                }
+    private var isClickAllowed = true
+
+    private val adapter = SearchAdapter(object : SearchAdapter.VacancyClickListener {
+        override fun onVacancyClick(vacancy: VacancyItem) {
+            if (clickDebounce()) {
+                findNavController().navigate(R.id.action_searchFragment_to_vacancyFragment)
+                // передать id вакансии на экран информац3ии о вакансии
             }
         }
-    )
+    })
     private val onTrackClickDebounce = debounce<Boolean>(
-        CLICK_DEBOUNCE_DELAY,
-        lifecycleScope,
-        false
+        CLICK_DEBOUNCE_DELAY, lifecycleScope, false
     ) { param ->
         isClickAllowed = param
     }
@@ -65,6 +62,12 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         _binding = null
     }
 
+    override fun onResume() {
+        super.onResume()
+
+        viewmodel.checkIfFilterWasUpdated()
+    }
+
     private fun setTextWatcher() {
         val simpleTextWatcher = object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
@@ -79,9 +82,7 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
                     searchEditText.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_clear, 0)
                     searchEditText.setOnTouchListener { view, motionEvent ->
                         val iconBoundries = searchEditText.compoundDrawables[2].bounds.width()
-                        if (motionEvent.action == MotionEvent.ACTION_UP &&
-                            motionEvent.rawX >= searchEditText.right - iconBoundries * 2
-                        ) {
+                        if (motionEvent.action == MotionEvent.ACTION_UP && motionEvent.rawX >= searchEditText.right - iconBoundries * 2) {
                             searchEditText.setText("")
                         }
                         view.performClick()
@@ -113,7 +114,7 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
                 super.onPrepareMenu(menu)
                 val item = menu.findItem(R.id.open_filter)
                 val icon =
-                    if (true) R.drawable.ic_filter_active else R.drawable.ic_filter_inactive
+                    if (viewmodel.isFilterActive()) R.drawable.ic_filter_active else R.drawable.ic_filter_inactive
                 item.setIcon(icon)
             }
 
@@ -137,9 +138,11 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
     private fun setObservables() {
         viewmodel.state.observe(viewLifecycleOwner) { state ->
             renderState(state)
+        }
+
+        viewmodel.filterState.observe(viewLifecycleOwner) { filterState ->
             // нужно дернуть тулбар в Activity, чтобы он перерисовался
             requireActivity().invalidateOptionsMenu()
-
         }
     }
 
@@ -174,9 +177,7 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
     private fun showFoundVacancy(foundVacancyData: VacancyListData) {
         hideAllView()
         val numOfVacancy = resources.getQuantityString(
-            R.plurals.vacancy_number,
-            foundVacancyData.found,
-            foundVacancyData.found
+            R.plurals.vacancy_number, foundVacancyData.found, foundVacancyData.found
         )
         binding.vacanciesFound.text = numOfVacancy
         binding.vacanciesFound.visibility = View.VISIBLE

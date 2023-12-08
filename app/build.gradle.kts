@@ -19,6 +19,7 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
         buildConfigField(type = "String", name = "HH_ACCESS_TOKEN", value = "\"${developProperties.hhAccessToken}\"")
+        buildConfigField(type = "String", name = "HH_API_BASE_URL", value = "\"https://api.hh.ru/\"")
     }
 
     buildTypes {
@@ -56,6 +57,8 @@ dependencies {
     implementation(libs.retrofit)
     implementation(libs.converter.gson)
     implementation(libs.gson)
+    implementation(libs.logging.interceptor)
+
 
     // DI
     implementation(libs.koin.android)
