@@ -15,10 +15,10 @@ import ru.practicum.android.diploma.search.domain.model.VacancyListData
 
 class SearchRepositoryImpl(
     private val networkClient: NetworkClient,
-    private val convertor: VacancyResponseMapper
+    private val converter: VacancyResponseMapper
 ) : SearchRepository {
 
-    override fun searchVacancy(text: String): Flow<Resource<VacancyListData>> = flow {
+    override fun searchVacancies(text: String, options: FilterOp): Flow<Resource<VacancyListData>> = flow {
         val response = networkClient.doRequest(VacancySearchRequest(text))
         when (response.resultCode) {
             NO_INTERNET -> {
@@ -28,7 +28,7 @@ class SearchRepositoryImpl(
             CONTENT -> {
                 emit(
                     Resource.Success(
-                        data = convertor.mapDtoToModel(response as VacancySearchResponse)
+                        data = converter.mapDtoToModel(response as VacancySearchResponse)
                     )
                 )
             }

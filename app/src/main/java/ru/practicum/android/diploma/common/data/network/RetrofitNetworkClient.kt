@@ -7,6 +7,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import ru.practicum.android.diploma.common.data.network.dto.Response
 import ru.practicum.android.diploma.filter.data.dto.AreaRequest
+import ru.practicum.android.diploma.filter.data.dto.CountryRequest
 import ru.practicum.android.diploma.filter.data.dto.IndustryRequest
 import ru.practicum.android.diploma.search.data.dto.VacancySearchRequest
 import ru.practicum.android.diploma.vacancy.data.dto.SimilarVacancyRequest
@@ -24,10 +25,11 @@ class RetrofitNetworkClient(
         return withContext(Dispatchers.IO) {
             try {
                 val response = when (dto) {
-                    is VacancySearchRequest -> hhApiService.searchVacancies(dto.text)
+                    is VacancySearchRequest -> hhApiService.searchVacancies(dto.options)
                     is VacancyDetailRequest -> hhApiService.getVacancyDetails(dto.vacancyId)
                     is SimilarVacancyRequest -> hhApiService.searchSimilarVacancies(dto.vacancyId)
                     is AreaRequest -> hhApiService.getAllAreas()
+                    is CountryRequest -> hhApiService.getCountries()
                     is IndustryRequest -> hhApiService.getAllIndustries()
                     else -> Response().apply { resultCode = BAD_REQUEST }
                 }
