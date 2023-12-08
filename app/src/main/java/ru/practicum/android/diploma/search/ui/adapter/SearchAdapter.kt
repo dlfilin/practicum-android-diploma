@@ -7,6 +7,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterInside
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import ru.practicum.android.diploma.R
+import ru.practicum.android.diploma.common.util.Formatter
 import ru.practicum.android.diploma.databinding.VacancyViewItemBinding
 import ru.practicum.android.diploma.search.domain.model.VacancyItem
 
@@ -47,8 +48,15 @@ class SearchViewHolder(
             vacancyNameAndCity.text =
                 itemView.resources.getString(R.string.vacancy_item_title, vacancy.vacancyName, vacancy.area)
             companyName.text = vacancy.employerName
-            salary.text = "от ${vacancy.salaryFrom} до ${vacancy.salaryTo} ${vacancy.salaryCurrency}"
-            Glide.with(itemView).load(vacancy.employerLogoUrl).placeholder(R.drawable.vacancy_item_placeholder)
+            salary.text = Formatter.formatSalary(
+                itemView.context,
+                vacancy.salaryFrom,
+                vacancy.salaryTo,
+                vacancy.salaryCurrency
+            )
+            Glide.with(itemView)
+                .load(vacancy.employerLogoUrl)
+                .placeholder(R.drawable.vacancy_item_placeholder)
                 .transform(
                     CenterInside(),
                     RoundedCorners(
