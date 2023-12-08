@@ -10,6 +10,7 @@ import android.view.MotionEvent
 import android.view.View
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -161,20 +162,19 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
 
     private fun showInternetThrowable() {
         hideAllView()
-        binding.internetThrowablePlaceholder.visibility = View.VISIBLE
-        binding.internetThrowablePlaceHolderText.visibility = View.VISIBLE
+        binding.internetThrowablePlaceholder.isVisible = true
+        binding.internetThrowablePlaceHolderText.isVisible = true
     }
 
     private fun showError() {
         hideAllView()
-        binding.serverThrowablePlaceholder.visibility = View.VISIBLE
-        binding.serverThrowablePlaceholderText.visibility = View.VISIBLE
+        binding.serverThrowablePlaceholder.isVisible = true
+        binding.serverThrowablePlaceholderText.isVisible = true
     }
 
     private fun showEmpty() {
         hideAllView()
-        binding.searchFailPlaceholder.visibility = View.VISIBLE
-        binding.searchFailPlaceholderText.visibility = View.VISIBLE
+        binding.searchVacancyPlaceholder.isVisible = true
     }
 
     private fun showFoundVacancy(foundVacancyData: VacancyListData) {
@@ -185,29 +185,29 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
             foundVacancyData.found
         )
         binding.vacanciesFound.text = numOfVacancy
-        binding.vacanciesFound.visibility = View.VISIBLE
+        binding.vacanciesFound.isVisible = true
         adapter.setVacancyList(foundVacancyData.items)
-        binding.nestedScrollRv.visibility = View.VISIBLE
-        binding.vacanciesFound.visibility = View.VISIBLE
+        binding.nestedScrollRv.isVisible = true
+        binding.vacanciesFound.isVisible = true
     }
 
     private fun showLoading() {
         hideAllView()
-        binding.newSearchProgressBar.visibility = View.VISIBLE
+        binding.newSearchProgressBar.isVisible = true
     }
 
     private fun hideAllView() {
-        binding.vacanciesFound.visibility = View.GONE
-        binding.newSearchProgressBar.visibility = View.GONE
-        binding.searchVacancyPlaceholder.visibility = View.GONE
-        binding.internetThrowablePlaceholder.visibility = View.GONE
-        binding.internetThrowablePlaceHolderText.visibility = View.GONE
-        binding.serverThrowablePlaceholder.visibility = View.GONE
-        binding.serverThrowablePlaceholderText.visibility = View.GONE
-        binding.searchFailPlaceholder.visibility = View.GONE
-        binding.searchFailPlaceholderText.visibility = View.GONE
-        binding.nestedScrollRv.visibility = View.GONE
-        binding.recyclerViewProgressBar.visibility = View.GONE
+        binding.vacanciesFound.isVisible = false
+        binding.newSearchProgressBar.isVisible = false
+        binding.searchVacancyPlaceholder.isVisible = false
+        binding.internetThrowablePlaceholder.isVisible = false
+        binding.internetThrowablePlaceHolderText.isVisible = false
+        binding.serverThrowablePlaceholder.isVisible = false
+        binding.serverThrowablePlaceholderText.isVisible = false
+        binding.searchFailPlaceholder.isVisible = false
+        binding.searchFailPlaceholderText.isVisible = false
+        binding.nestedScrollRv.isVisible = false
+        binding.recyclerViewProgressBar.isVisible = false
     }
 
     private fun clickDebounce(): Boolean {
