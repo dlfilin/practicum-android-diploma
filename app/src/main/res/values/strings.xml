@@ -51,6 +51,10 @@
     <string name="similar_vacancies_tv">Похожие вакансии</string>
     <string name="share_vacancy">Поделиться вакансией</string>
     <string name="add_favorite_vacancy">Добавить в избранное</string>
+    <string name="salary_not_found">Зарплата не указана</string>
+    <string name="salary_from">от %1$s %2$s</string>
+    <string name="salary_to">до %1$s %2$s</string>
+    <string name="salary_from_to">от %1$s до %2$s %3$s</string>
     <!--    similar vacancy fragment-->
     <string name="similar_vacancies_title_tv">Похожие вакансии</string>
     <!--    favorite vacancy fragment-->
@@ -65,4 +69,16 @@
     <string name="worker_4">Владислав Вострокнутов</string>
     <!--    bottom navigation-->
     <string name="employer_logo">Логотип компании</string>
+    <!--  currency symbols-->
+    <string name="currency_symbol_azn">₼</string>
+    <string name="currency_symbol_byr">Br</string>
+    <string name="currency_symbol_eur">€</string>
+    <string name="currency_symbol_gel">₾</string>
+    <string name="currency_symbol_kgs">c</string>
+    <string name="currency_symbol_kzt">₸</string>
+    <string name="currency_symbol_rub">₽</string>
+    <string name="currency_symbol_uah">₴</string>
+    <string name="currency_symbol_usd">$</string>
+    <string name="currency_symbol_uzs">сум</string>
+
 </resources>

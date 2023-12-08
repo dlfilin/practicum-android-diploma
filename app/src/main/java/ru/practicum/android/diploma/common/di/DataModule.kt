@@ -10,6 +10,7 @@ import ru.practicum.android.diploma.common.data.network.HhApiService
 import ru.practicum.android.diploma.common.data.network.NetworkClient
 import ru.practicum.android.diploma.common.data.network.RetrofitNetworkClient
 import ru.practicum.android.diploma.search.data.mapper.VacancyResponseMapper
+import ru.practicum.android.diploma.vacancy.data.mapper.VacancyMapper
 
 val dataModule = module {
 
@@ -34,5 +35,9 @@ val dataModule = module {
 
     factory {
         VacancyResponseMapper()
+    }
+
+    factory {
+        VacancyMapper()
     }
 }

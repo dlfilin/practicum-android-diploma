@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/phoneValue"
+        style="@style/phoneItemText"
+        android:layout_marginTop="@dimen/space_4"
+        android:textColor="@color/blue"
+        tools:text="+7 (904) 329-27-71" />
+
+    <TextView
+        android:id="@+id/phoneComment"
+        style="@style/phoneItemText"
+        tools:text="звонить с 10 до 14 по Пн, Вт" />
+</LinearLayout>
