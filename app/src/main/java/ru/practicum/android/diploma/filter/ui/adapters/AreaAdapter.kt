@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import ru.practicum.android.diploma.R
-import ru.practicum.android.diploma.databinding.ItemAreaChooserBinding
+import ru.practicum.android.diploma.databinding.ItemAreaCountryChooserBinding
 import ru.practicum.android.diploma.filter.domain.models.Area
 
 class AreaAdapter(private val itemClickListener: ItemClickListener) : RecyclerView.Adapter<AreaAdapter.AreaHolder>() {
@@ -16,7 +16,7 @@ class AreaAdapter(private val itemClickListener: ItemClickListener) : RecyclerVi
     private val filterListItem: MutableList<Area> = ArrayList()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AreaHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_area_chooser, parent, false)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_area_country_chooser, parent, false)
         return AreaHolder(view)
     }
 
@@ -29,9 +29,9 @@ class AreaAdapter(private val itemClickListener: ItemClickListener) : RecyclerVi
 
 
     class AreaHolder(item: View) : RecyclerView.ViewHolder(item) {
-        private val binding = ItemAreaChooserBinding.bind(item)
+        private val binding = ItemAreaCountryChooserBinding.bind(item)
         fun bind(area: Area) = with(binding) {
-            areaName.text = area.name
+            name.text = area.name
         }
     }
 
