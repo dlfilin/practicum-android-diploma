@@ -11,4 +11,8 @@ class SearchInteractorImpl(private val repository: SearchRepository) : SearchInt
     override fun searchVacancies(text: String, options: FilterParameters): Flow<Result<VacancyListData>> {
         return repository.searchVacancies(text, options)
     }
+
+    override fun getSimilarVacancies(vacancyId: String): Flow<Result<VacancyListData>> {
+        return repository.getSimilarVacancies(vacancyId)
+    }
 }

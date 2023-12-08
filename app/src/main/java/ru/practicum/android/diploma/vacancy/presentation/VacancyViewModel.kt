@@ -4,7 +4,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
-class VacancyViewModel : ViewModel() {
+class VacancyViewModel(
+    private val vacancyId: String
+) : ViewModel() {
 
     private var isFavorite = false
 
@@ -16,4 +18,6 @@ class VacancyViewModel : ViewModel() {
         isFavorite = !isFavorite
         _state.postValue(VacancyScreenState(isFavorite))
     }
+
+    fun getVacancyId(): String = vacancyId
 }

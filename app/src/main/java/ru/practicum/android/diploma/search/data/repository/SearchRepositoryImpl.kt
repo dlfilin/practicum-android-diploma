@@ -13,6 +13,7 @@ import ru.practicum.android.diploma.search.data.dto.VacancySearchResponse
 import ru.practicum.android.diploma.search.data.mapper.VacancyResponseMapper
 import ru.practicum.android.diploma.search.domain.api.SearchRepository
 import ru.practicum.android.diploma.search.domain.model.VacancyListData
+import ru.practicum.android.diploma.vacancy.data.dto.SimilarVacancyRequest
 
 class SearchRepositoryImpl(
     private val networkClient: NetworkClient,
@@ -22,6 +23,29 @@ class SearchRepositoryImpl(
     override fun searchVacancies(text: String, filter: FilterParameters): Flow<Result<VacancyListData>> = flow {
         val response = networkClient.doRequest(
             VacancySearchRequest(prepareSearchQueryMap(text, filter))
+        )
+        when (response.resultCode) {
+            NO_INTERNET -> {
+                emit(Result.Error(ErrorType.NO_INTERNET))
+            }
+
+            CONTENT -> {
+                emit(
+                    Result.Success(
+                        data = converter.mapDtoToModel(response as VacancySearchResponse)
+                    )
+                )
+            }
+
+            else -> {
+                emit(Result.Error(ErrorType.SERVER_THROWABLE))
+            }
+        }
+    }
+
+    override fun getSimilarVacancies(vacancyId: String): Flow<Result<VacancyListData>> = flow {
+        val response = networkClient.doRequest(
+            SimilarVacancyRequest(vacancyId)
         )
         when (response.resultCode) {
             NO_INTERNET -> {

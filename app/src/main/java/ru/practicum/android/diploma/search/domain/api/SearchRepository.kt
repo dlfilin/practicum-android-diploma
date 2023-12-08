@@ -9,4 +9,6 @@ interface SearchRepository {
 
     fun searchVacancies(text: String, filter: FilterParameters): Flow<Result<VacancyListData>>
 
+    fun getSimilarVacancies(vacancyId: String): Flow<Result<VacancyListData>>
+
 }
