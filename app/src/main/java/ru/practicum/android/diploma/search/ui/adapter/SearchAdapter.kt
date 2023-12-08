@@ -48,7 +48,12 @@ class SearchViewHolder(
         with(binding) {
             vacancyNameAndCity.text = "${vacancy.vacancyName}, ${vacancy.area}"
             companyName.text = vacancy.employerName
-            salary.text = Formatter.formatSalary(itemView.context, vacancy.salaryFrom, vacancy.salaryTo, vacancy.salaryCurrency)
+            salary.text = Formatter.formatSalary(
+                itemView.context,
+                vacancy.salaryFrom,
+                vacancy.salaryTo,
+                vacancy.salaryCurrency
+            )
             Glide.with(itemView)
                 .load(vacancy.employerLogoUrl)
                 .placeholder(R.drawable.vacancy_item_placeholder)

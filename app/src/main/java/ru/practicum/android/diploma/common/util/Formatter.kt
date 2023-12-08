@@ -32,7 +32,7 @@ object Formatter {
         return formatter.format(number).replace(",", " ")
     }
 
-    fun formatSalary(context: Context, from: Int?, to: Int?, currencyCode: String?) : String {
+    fun formatSalary(context: Context, from: Int?, to: Int?, currencyCode: String?): String {
         return when {
             from != null && to != null && currencyCode != null ->
                 context.getString(
