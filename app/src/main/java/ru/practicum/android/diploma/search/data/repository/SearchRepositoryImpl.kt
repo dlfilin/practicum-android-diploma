@@ -15,7 +15,8 @@ import ru.practicum.android.diploma.search.domain.api.SearchRepository
 import ru.practicum.android.diploma.search.domain.model.VacancyListData
 
 class SearchRepositoryImpl(
-    private val networkClient: NetworkClient, private val converter: VacancyResponseMapper
+    private val networkClient: NetworkClient,
+    private val converter: VacancyResponseMapper
 ) : SearchRepository {
 
     override fun searchVacancies(text: String, filter: FilterParameters): Flow<Result<VacancyListData>> = flow {

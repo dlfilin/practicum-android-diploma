@@ -41,7 +41,9 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         }
     })
     private val onTrackClickDebounce = debounce<Boolean>(
-        CLICK_DEBOUNCE_DELAY, lifecycleScope, false
+        CLICK_DEBOUNCE_DELAY,
+        lifecycleScope,
+        false
     ) { param ->
         isClickAllowed = param
     }
@@ -177,7 +179,9 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
     private fun showFoundVacancy(foundVacancyData: VacancyListData) {
         hideAllView()
         val numOfVacancy = resources.getQuantityString(
-            R.plurals.vacancy_number, foundVacancyData.found, foundVacancyData.found
+            R.plurals.vacancy_number,
+            foundVacancyData.found,
+            foundVacancyData.found
         )
         binding.vacanciesFound.text = numOfVacancy
         binding.vacanciesFound.visibility = View.VISIBLE

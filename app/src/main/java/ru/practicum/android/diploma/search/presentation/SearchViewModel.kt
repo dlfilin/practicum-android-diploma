@@ -25,7 +25,9 @@ class SearchViewModel(
 
     private var latestSearchText: String = ""
     private val searchTrackDebounce = debounce<String>(
-        SEARCH_DEBOUNCE_DELAY_IN_MILLIS, viewModelScope, true
+        SEARCH_DEBOUNCE_DELAY_IN_MILLIS,
+        viewModelScope,
+        true
     ) { searchRequest ->
         searchRequest(searchRequest)
     }

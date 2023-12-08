@@ -15,7 +15,8 @@ import ru.practicum.android.diploma.vacancy.data.dto.VacancyDetailRequest
 import java.io.IOException
 
 class RetrofitNetworkClient(
-    private val context: Context, private val hhApiService: HhApiService
+    private val context: Context,
+    private val hhApiService: HhApiService
 ) : NetworkClient {
 
     override suspend fun doRequest(dto: Any): Response {
