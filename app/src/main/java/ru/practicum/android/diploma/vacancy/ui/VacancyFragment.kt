@@ -7,16 +7,17 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
-import androidx.core.os.bundleOf
 import androidx.core.text.HtmlCompat
 import androidx.core.text.HtmlCompat.FROM_HTML_MODE_LEGACY
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.common.util.Formatter
 import ru.practicum.android.diploma.databinding.FragmentVacancyBinding
@@ -30,29 +31,30 @@ class VacancyFragment : Fragment(R.layout.fragment_vacancy) {
 
     private var _binding: FragmentVacancyBinding? = null
     private val binding get() = _binding!!
+
+    private val args: VacancyFragmentArgs by navArgs()
+    private val menuHost: MenuHost get() = requireActivity()
     private var phonesAdapter: PhonesAdapter? = null
     private lateinit var onPhoneClickDebounce: (Phone) -> Unit
+    private val viewmodel by viewModel<VacancyViewModel> {
+        parametersOf(args.vacancyId)
+    }
+
     private var isFavorite = false
-
-    private val menuHost: MenuHost get() = requireActivity()
-
-    private val viewModel by viewModel<VacancyViewModel>()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentVacancyBinding.bind(view)
 
-//        val vacancyId = requireArguments().getString(ARG_VACANCY, "87930777")
-//        val vacancyId = "87930777" // no logo
-        val vacancyId = "88997708"
-        viewModel.getVacancy(vacancyId)
-        viewModel.observeVacancyState().observe(viewLifecycleOwner) {
+//        Toast.makeText(requireContext(), "vacancyId= ${args.vacancyId}", Toast.LENGTH_SHORT).show()
+        viewmodel.getVacancy(args.vacancyId)
+        viewmodel.observeVacancyState().observe(viewLifecycleOwner) {
             render(it)
         }
-
-
         binding.gotoSimilarJobsFragmentBtn.setOnClickListener {
-            findNavController().navigate(R.id.action_vacancyFragment_to_similarVacanciesFragment)
+            val direction =
+                VacancyFragmentDirections.actionVacancyFragmentToSimilarVacanciesFragment(viewmodel.getVacancyId())
+            findNavController().navigate(direction)
         }
 
         setObservables()
@@ -69,6 +71,7 @@ class VacancyFragment : Fragment(R.layout.fragment_vacancy) {
         when (state) {
             is VacancyScreenState.Loading -> showLoading()
             is VacancyScreenState.Error -> showError()
+            is VacancyScreenState.InternetThrowable -> showError()
             is VacancyScreenState.Content -> showContent(state.vacancy)
         }
     }
@@ -174,7 +177,7 @@ class VacancyFragment : Fragment(R.layout.fragment_vacancy) {
                     }
                 }
                 onPhoneClickDebounce = { phone ->
-                    viewModel.makeCall(phone)
+                    viewmodel.makeCall(phone)
                 }
                 tvPhone.visibility = View.VISIBLE
                 phoneList.adapter = phonesAdapter
@@ -208,7 +211,7 @@ class VacancyFragment : Fragment(R.layout.fragment_vacancy) {
                     }
 
                     R.id.action_toggle_favorite -> {
-                        //viewmodel.toggleFavorite()
+                        viewmodel.toggleFavorite()
                         true
                     }
 
@@ -219,7 +222,7 @@ class VacancyFragment : Fragment(R.layout.fragment_vacancy) {
     }
 
     private fun setObservables() {
-        /*viewmodel.state.observe(viewLifecycleOwner) { state ->
+        /*viewModel.state.observe(viewLifecycleOwner) { state ->
             isFavorite = state.vacancy
             // нужно дернуть тулбар в Activity, чтобы он перерисовался
             requireActivity().invalidateOptionsMenu()
@@ -228,10 +231,10 @@ class VacancyFragment : Fragment(R.layout.fragment_vacancy) {
 
     }
 
-    companion object {
+    /*companion object {
         fun createArgs(vacancyId: String): Bundle =
             bundleOf(ARG_VACANCY to vacancyId)
 
         private const val ARG_VACANCY = "vacancy"
-    }
+    }*/
 }

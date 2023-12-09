@@ -1,12 +1,15 @@
 package ru.practicum.android.diploma.search.presentation
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
-import ru.practicum.android.diploma.common.data.network.dto.ErrorType
+import ru.practicum.android.diploma.common.util.ErrorType
+import ru.practicum.android.diploma.common.util.Result
 import ru.practicum.android.diploma.common.util.debounce
+import ru.practicum.android.diploma.filter.domain.models.FilterParameters
 import ru.practicum.android.diploma.search.domain.api.SearchInteractor
 import ru.practicum.android.diploma.search.domain.model.VacancyListData
 
@@ -14,10 +17,13 @@ class SearchViewModel(
     private val searchInteractor: SearchInteractor
 ) : ViewModel() {
 
-    private val _state = MutableLiveData<SearchScreenState>()
+    private val _state = MutableLiveData<SearchScreenState>(SearchScreenState.Empty)
     val state: LiveData<SearchScreenState> get() = _state
 
-    private var latestSearchText: String? = null
+    private val _filterState = MutableLiveData<FilterParameters>(FilterParameters())
+    val filterState: LiveData<FilterParameters> get() = _filterState
+
+    private var latestSearchText: String = ""
     private val searchTrackDebounce = debounce<String>(
         SEARCH_DEBOUNCE_DELAY_IN_MILLIS,
         viewModelScope,
@@ -26,51 +32,69 @@ class SearchViewModel(
         searchRequest(searchRequest)
     }
 
+    init {
+        checkIfFilterWasUpdated()
+    }
+
     fun searchDebounce(changedText: String) {
         if (latestSearchText != changedText) {
             this.latestSearchText = changedText
-            searchTrackDebounce(latestSearchText!!)
+            searchTrackDebounce(latestSearchText)
         }
     }
 
-    fun searchRequest(searchText: String) {
+    private fun searchRequest(searchText: String) {
         if (searchText.isNotEmpty()) {
             renderState(SearchScreenState.Loading)
 
             viewModelScope.launch {
-                searchInteractor
-                    .searchVacancy(searchText)
-                    .collect { pair ->
-                        processResult(pair.first, pair.second)
-                    }
+                searchInteractor.searchVacancies(searchText, _filterState.value!!).collect {
+                    processResult(it)
+                }
             }
         }
     }
 
-    private fun processResult(foundVacancyData: VacancyListData?, errorMessage: ErrorType?) {
-        when {
-            errorMessage != null -> {
-                if (errorMessage == ErrorType.NO_INTERNET) {
+    private fun processResult(result: Result<VacancyListData>) {
+        when (result) {
+            is Result.Success -> {
+                if (result.data?.items.isNullOrEmpty()) {
+                    renderState(SearchScreenState.Empty)
+                } else {
+                    renderState(SearchScreenState.Content(result.data!!))
+                    Log.e("SIZE", result.data.items.size.toString())
+                    Log.e("DATA", result.data.items.toString())
+                }
+            }
+
+            is Result.Error -> {
+                if (result.errorType == ErrorType.NO_INTERNET) {
                     renderState(SearchScreenState.InternetThrowable)
                 } else {
                     renderState(SearchScreenState.Error)
                 }
-            }
-
-            foundVacancyData?.items.isNullOrEmpty() -> {
-                renderState(
-                    SearchScreenState.Empty
-                )
-            }
-
-            else -> {
-                foundVacancyData?.let { renderState(SearchScreenState.Content(vacancyData = it)) }
             }
         }
     }
 
     private fun renderState(state: SearchScreenState) {
         _state.postValue(state)
+    }
+
+    fun isFilterActive(): Boolean {
+        return _filterState.value!!.isNotEmpty
+    }
+
+    fun checkIfFilterWasUpdated() {
+        val oldFilter = _filterState.value!!
+        // пока тест, потом полезем в sharedprefs
+        val newFilter = FilterParameters(onlyWithSalary = false)
+
+        // проверяем, если он изменился
+        if (oldFilter != newFilter) {
+            _filterState.postValue(newFilter)
+            searchRequest(latestSearchText)
+        }
     }
 
     companion object {

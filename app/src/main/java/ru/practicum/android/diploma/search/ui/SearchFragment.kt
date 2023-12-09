@@ -10,6 +10,7 @@ import android.view.MotionEvent
 import android.view.View
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -28,19 +29,18 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
     private var _binding: FragmentSearchBinding? = null
     private val binding get() = _binding!!
     private val menuHost: MenuHost get() = requireActivity()
-    private var isClickAllowed = true
     private val viewmodel by viewModel<SearchViewModel>()
 
-    private val adapter = SearchAdapter(
-        object : SearchAdapter.VacancyClickListener {
-            override fun onVacancyClick(vacancy: VacancyItem) {
-                if (clickDebounce()) {
-                    findNavController().navigate(R.id.action_searchFragment_to_vacancyFragment)
-                    // передать id вакансии на экран информац3ии о вакансии
-                }
+    private var isClickAllowed = true
+
+    private val adapter = SearchAdapter(object : SearchAdapter.VacancyClickListener {
+        override fun onVacancyClick(vacancy: VacancyItem) {
+            if (clickDebounce()) {
+                val direction = SearchFragmentDirections.actionSearchFragmentToVacancyFragment(vacancy.id)
+                findNavController().navigate(direction)
             }
         }
-    )
+    })
     private val onTrackClickDebounce = debounce<Boolean>(
         CLICK_DEBOUNCE_DELAY,
         lifecycleScope,
@@ -65,6 +65,12 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         _binding = null
     }
 
+    override fun onResume() {
+        super.onResume()
+
+        viewmodel.checkIfFilterWasUpdated()
+    }
+
     private fun setTextWatcher() {
         val simpleTextWatcher = object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
@@ -80,8 +86,7 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
                     searchEditText.setOnTouchListener { view, motionEvent ->
                         val iconBoundries = searchEditText.compoundDrawables[2].bounds.width()
                         if (motionEvent.action == MotionEvent.ACTION_UP &&
-                            motionEvent.rawX >= searchEditText.right - iconBoundries * 2
-                        ) {
+                            motionEvent.rawX >= searchEditText.right - iconBoundries * 2) {
                             searchEditText.setText("")
                         }
                         view.performClick()
@@ -113,7 +118,7 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
                 super.onPrepareMenu(menu)
                 val item = menu.findItem(R.id.open_filter)
                 val icon =
-                    if (true) R.drawable.ic_filter_active else R.drawable.ic_filter_inactive
+                    if (viewmodel.isFilterActive()) R.drawable.ic_filter_active else R.drawable.ic_filter_inactive
                 item.setIcon(icon)
             }
 
@@ -137,9 +142,11 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
     private fun setObservables() {
         viewmodel.state.observe(viewLifecycleOwner) { state ->
             renderState(state)
+        }
+
+        viewmodel.filterState.observe(viewLifecycleOwner) { filterState ->
             // нужно дернуть тулбар в Activity, чтобы он перерисовался
             requireActivity().invalidateOptionsMenu()
-
         }
     }
 
@@ -155,20 +162,19 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
 
     private fun showInternetThrowable() {
         hideAllView()
-        binding.internetThrowablePlaceholder.visibility = View.VISIBLE
-        binding.internetThrowablePlaceHolderText.visibility = View.VISIBLE
+        binding.internetThrowablePlaceholder.isVisible = true
+        binding.internetThrowablePlaceHolderText.isVisible = true
     }
 
     private fun showError() {
         hideAllView()
-        binding.serverThrowablePlaceholder.visibility = View.VISIBLE
-        binding.serverThrowablePlaceholderText.visibility = View.VISIBLE
+        binding.serverThrowablePlaceholder.isVisible = true
+        binding.serverThrowablePlaceholderText.isVisible = true
     }
 
     private fun showEmpty() {
         hideAllView()
-        binding.searchFailPlaceholder.visibility = View.VISIBLE
-        binding.searchFailPlaceholderText.visibility = View.VISIBLE
+        binding.searchVacancyPlaceholder.isVisible = true
     }
 
     private fun showFoundVacancy(foundVacancyData: VacancyListData) {
@@ -179,29 +185,29 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
             foundVacancyData.found
         )
         binding.vacanciesFound.text = numOfVacancy
-        binding.vacanciesFound.visibility = View.VISIBLE
+        binding.vacanciesFound.isVisible = true
         adapter.setVacancyList(foundVacancyData.items)
-        binding.nestedScrollRv.visibility = View.VISIBLE
-        binding.vacanciesFound.visibility = View.VISIBLE
+        binding.nestedScrollRv.isVisible = true
+        binding.vacanciesFound.isVisible = true
     }
 
     private fun showLoading() {
         hideAllView()
-        binding.newSearchProgressBar.visibility = View.VISIBLE
+        binding.newSearchProgressBar.isVisible = true
     }
 
     private fun hideAllView() {
-        binding.vacanciesFound.visibility = View.GONE
-        binding.newSearchProgressBar.visibility = View.GONE
-        binding.searchVacancyPlaceholder.visibility = View.GONE
-        binding.internetThrowablePlaceholder.visibility = View.GONE
-        binding.internetThrowablePlaceHolderText.visibility = View.GONE
-        binding.serverThrowablePlaceholder.visibility = View.GONE
-        binding.serverThrowablePlaceholderText.visibility = View.GONE
-        binding.searchFailPlaceholder.visibility = View.GONE
-        binding.searchFailPlaceholderText.visibility = View.GONE
-        binding.nestedScrollRv.visibility = View.GONE
-        binding.recyclerViewProgressBar.visibility = View.GONE
+        binding.vacanciesFound.isVisible = false
+        binding.newSearchProgressBar.isVisible = false
+        binding.searchVacancyPlaceholder.isVisible = false
+        binding.internetThrowablePlaceholder.isVisible = false
+        binding.internetThrowablePlaceHolderText.isVisible = false
+        binding.serverThrowablePlaceholder.isVisible = false
+        binding.serverThrowablePlaceholderText.isVisible = false
+        binding.searchFailPlaceholder.isVisible = false
+        binding.searchFailPlaceholderText.isVisible = false
+        binding.nestedScrollRv.isVisible = false
+        binding.recyclerViewProgressBar.isVisible = false
     }
 
     private fun clickDebounce(): Boolean {

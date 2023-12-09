@@ -6,17 +6,18 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
-import ru.practicum.android.diploma.common.data.network.dto.ErrorType
+import ru.practicum.android.diploma.common.util.ErrorType
+import ru.practicum.android.diploma.common.util.Result
 import ru.practicum.android.diploma.vacancy.domain.api.VacancyInteractor
 import ru.practicum.android.diploma.vacancy.domain.models.Phone
 import ru.practicum.android.diploma.vacancy.domain.models.Vacancy
 
 class VacancyViewModel(
+    private val vacancyId: String,
     private val vacancyInteractor: VacancyInteractor
 ) : ViewModel() {
 
     private var isFavorite = false
-
     private val vacancyState = MutableLiveData<VacancyScreenState>()
     fun observeVacancyState(): LiveData<VacancyScreenState> = vacancyState
 
@@ -24,7 +25,7 @@ class VacancyViewModel(
         vacancyState.postValue(VacancyScreenState.Loading)
         viewModelScope.launch {
             vacancyInteractor.getVacancy(vacancyId).collect {
-                processResult(it.first, it.second)
+                processResult(it)
             }
         }
     }
@@ -34,25 +35,31 @@ class VacancyViewModel(
         TODO("make a call")
     }
 
-    private fun processResult(vacancy: Vacancy?, errorMessge: ErrorType?) {
-        when {
-            errorMessge != null -> {
-                vacancyState.postValue(VacancyScreenState.Error)
+    private fun processResult(result: Result<Vacancy>) {
+        when (result) {
+            is Result.Success -> {
+                renderState(VacancyScreenState.Content(result.data!!))
             }
 
-            vacancy == null -> {
-                vacancyState.postValue(VacancyScreenState.Error)
-            }
-
-            else -> {
-                vacancyState.postValue(VacancyScreenState.Content(vacancy = vacancy))
+            is Result.Error -> {
+                if (result.errorType == ErrorType.NO_INTERNET) {
+                    renderState(VacancyScreenState.InternetThrowable)
+                } else {
+                    renderState(VacancyScreenState.Error)
+                }
             }
         }
     }
 
-    /* fun toggleFavorite() {
-         // пока просто для наглядности
-         isFavorite = !isFavorite
-         _state.postValue(VacancyScreenState(isFavorite))
-     }*/
+    private fun renderState(state: VacancyScreenState) {
+        vacancyState.postValue(state)
+    }
+
+    fun toggleFavorite() {
+        // пока просто для наглядности
+        isFavorite = !isFavorite
+//         vacancyState.postValue(VacancyScreenState(isFavorite))
+    }
+
+    fun getVacancyId(): String = vacancyId
 }

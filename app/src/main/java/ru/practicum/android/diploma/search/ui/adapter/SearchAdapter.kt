@@ -11,8 +11,7 @@ import ru.practicum.android.diploma.common.util.Formatter
 import ru.practicum.android.diploma.databinding.VacancyViewItemBinding
 import ru.practicum.android.diploma.search.domain.model.VacancyItem
 
-class SearchAdapter(private val clickListener: VacancyClickListener) :
-    RecyclerView.Adapter<SearchViewHolder>() {
+class SearchAdapter(private val clickListener: VacancyClickListener) : RecyclerView.Adapter<SearchViewHolder>() {
 
     private var vacancyList = listOf<VacancyItem>()
 
@@ -46,7 +45,8 @@ class SearchViewHolder(
 ) : RecyclerView.ViewHolder(binding.root) {
     fun bind(vacancy: VacancyItem) {
         with(binding) {
-            vacancyNameAndCity.text = "${vacancy.vacancyName}, ${vacancy.area}"
+            vacancyNameAndCity.text =
+                itemView.resources.getString(R.string.vacancy_item_title, vacancy.vacancyName, vacancy.area)
             companyName.text = vacancy.employerName
             salary.text = Formatter.formatSalary(
                 itemView.context,
@@ -62,8 +62,7 @@ class SearchViewHolder(
                     RoundedCorners(
                         itemView.resources.getDimensionPixelSize(R.dimen.size_12)
                     ),
-                )
-                .into(employerLogoIv)
+                ).into(employerLogoIv)
         }
     }
 }

@@ -71,11 +71,11 @@
                     android:layout_marginStart="@dimen/space_16"
                     android:layout_marginTop="@dimen/space_16"
                     android:layout_marginBottom="@dimen/space_16"
+                    tools:src="@drawable/vacancy_item_placeholder"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    android:contentDescription="@string/employer_logo"
-                    tools:src="@drawable/vacancy_item_placeholder" />
+                    android:contentDescription="@string/employer_logo" />
 
                 <LinearLayout
                     android:layout_width="wrap_content"
