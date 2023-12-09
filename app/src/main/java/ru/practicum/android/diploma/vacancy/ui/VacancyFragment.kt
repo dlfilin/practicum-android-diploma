@@ -5,7 +5,6 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
-import android.widget.Toast
 import androidx.core.text.HtmlCompat
 import androidx.core.text.HtmlCompat.FROM_HTML_MODE_LEGACY
 import androidx.core.view.MenuHost
@@ -242,7 +241,10 @@ class VacancyFragment : Fragment(R.layout.fragment_vacancy) {
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
                 return when (menuItem.itemId) {
                     R.id.action_share -> {
-                        Toast.makeText(requireContext(), R.string.share_vacancy, Toast.LENGTH_SHORT).show()
+                        val vacancy = viewmodel.currentVacancy.value
+                        if (clickDebounce() && vacancy?.alternateUrl != null) {
+                            viewmodel.shareVacancy(vacancy.alternateUrl)
+                        }
                         true
                     }
 

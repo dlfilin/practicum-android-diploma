@@ -20,5 +20,7 @@ data class VacancyDetailsResponse(
     @SerializedName("key_skills")
     val keySkills: List<KeySkillDto>?,
     val contacts: ContactsDto?,
-    val address: AddressDto?
+    val address: AddressDto?,
+    @SerializedName("alternate_url")
+    val alternateUrl: String
 ) : Response()

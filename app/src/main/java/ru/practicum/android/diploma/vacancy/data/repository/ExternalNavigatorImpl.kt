@@ -25,4 +25,14 @@ class ExternalNavigatorImpl(private val context: Context) : ExternalNavigator {
             context.startActivity(this)
         }
     }
+
+    override fun shareInMessenger(url: String) {
+        Intent(Intent.ACTION_SEND).apply {
+            type = "text/plain"
+            putExtra(Intent.EXTRA_TEXT, url)
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK
+
+            context.startActivity(this)
+        }
+    }
 }

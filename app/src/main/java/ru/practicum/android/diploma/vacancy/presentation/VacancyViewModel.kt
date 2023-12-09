@@ -35,6 +35,10 @@ class VacancyViewModel(
         }
     }
 
+    fun shareVacancy(vacancyUrl: String) {
+        sharingInteractor.shareInMessenger(vacancyUrl)
+    }
+
     fun makeCall(phone: Phone) {
         sharingInteractor.makeCall(phone)
     }
