@@ -8,9 +8,15 @@ import ru.practicum.android.diploma.databinding.ItemPhoneBinding
 import ru.practicum.android.diploma.vacancy.domain.models.Phone
 
 class PhonesAdapter(
-    private val phones: List<Phone?>,
-    private val clickListener: (Phone) -> Unit
+    private val clickListener: PhoneClickListener
 ) : RecyclerView.Adapter<PhoneViewHolder>() {
+
+    private var phones = listOf<Phone?>()
+
+    fun updatePhones(newList: List<Phone?>) {
+        phones = newList
+        notifyDataSetChanged()
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PhoneViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
@@ -20,12 +26,16 @@ class PhonesAdapter(
     override fun onBindViewHolder(holder: PhoneViewHolder, position: Int) {
         phones[position]?.let { holder.bind(it) }
         holder.itemView.setOnClickListener {
-            phones[position]?.let { phone -> clickListener.invoke(phone) }
+            clickListener.onPhoneClick(phones[position]!!)
         }
     }
 
     override fun getItemCount(): Int {
         return phones.size
+    }
+
+    interface PhoneClickListener {
+        fun onPhoneClick(phone: Phone)
     }
 }
 

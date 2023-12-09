@@ -35,8 +35,15 @@ class VacancyFragment : Fragment(R.layout.fragment_vacancy) {
 
     private val args: VacancyFragmentArgs by navArgs()
     private val menuHost: MenuHost get() = requireActivity()
-    private var phonesAdapter: PhonesAdapter? = null
-    private lateinit var onPhoneClickDebounce: (Phone) -> Unit
+    private val phonesAdapter = PhonesAdapter(object : PhonesAdapter.PhoneClickListener {
+        override fun onPhoneClick(phone: Phone) {
+            if (clickDebounce()) {
+                viewmodel.makeCall(phone)
+            }
+        }
+    })
+
+    //    private lateinit var onPhoneClickDebounce: (Phone) -> Unit
     private val viewmodel by viewModel<VacancyViewModel> {
         parametersOf(args.vacancyId)
     }
@@ -218,13 +225,9 @@ class VacancyFragment : Fragment(R.layout.fragment_vacancy) {
 
             if (vacancy.contacts?.phones?.isNotEmpty() == true) {
                 tvPhone.isVisible = true
-                phonesAdapter = vacancy.contacts.phones.let {
-                    PhonesAdapter(it) { phone ->
-                        onPhoneClickDebounce(phone)
-                    }
-                }
-                onPhoneClickDebounce = { phone ->
-                    viewmodel.makeCall(phone)
+
+                vacancy.contacts.phones.let {
+                    phonesAdapter.updatePhones(it)
                 }
                 phoneList.adapter = phonesAdapter
                 tvPhone.isVisible = true
