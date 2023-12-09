@@ -78,11 +78,18 @@
         <action
             android:id="@+id/action_vacancyFragment_to_similarVacanciesFragment"
             app:destination="@id/similarVacanciesFragment" />
+        <argument
+            android:name="vacancyId"
+            app:argType="string" />
     </fragment>
     <fragment
         android:id="@+id/similarVacanciesFragment"
         android:name="ru.practicum.android.diploma.vacancy.ui.SimilarVacanciesFragment"
         android:label="@string/similar_vacancies_title_tv"
-        tools:layout="@layout/fragment_similar_vacancies" />
+        tools:layout="@layout/fragment_similar_vacancies" >
+        <argument
+            android:name="vacancyId"
+            app:argType="string" />
+    </fragment>
 
 </navigation>

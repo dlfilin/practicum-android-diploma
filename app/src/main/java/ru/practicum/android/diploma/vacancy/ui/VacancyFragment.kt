@@ -10,7 +10,9 @@ import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentVacancyBinding
 import ru.practicum.android.diploma.vacancy.presentation.VacancyViewModel
@@ -20,18 +22,25 @@ class VacancyFragment : Fragment(R.layout.fragment_vacancy) {
     private var _binding: FragmentVacancyBinding? = null
     private val binding get() = _binding!!
 
-    private var isFavorite = false
-
+    private val args: VacancyFragmentArgs by navArgs()
     private val menuHost: MenuHost get() = requireActivity()
 
-    private val viewmodel by viewModel<VacancyViewModel>()
+    private val viewmodel by viewModel<VacancyViewModel> {
+        parametersOf(args.vacancyId)
+    }
+
+    private var isFavorite = false
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentVacancyBinding.bind(view)
 
+        Toast.makeText(requireContext(), "vacancyId= ${args.vacancyId}", Toast.LENGTH_SHORT).show()
+
         binding.gotoSimilarJobsFragmentBtn.setOnClickListener {
-            findNavController().navigate(R.id.action_vacancyFragment_to_similarVacanciesFragment)
+            val direction =
+                VacancyFragmentDirections.actionVacancyFragmentToSimilarVacanciesFragment(viewmodel.getVacancyId())
+            findNavController().navigate(direction)
         }
 
         setObservables()

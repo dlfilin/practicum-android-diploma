@@ -9,7 +9,7 @@ import ru.practicum.android.diploma.search.domain.api.SearchRepository
 
 val repositoryModule = module {
     single<SearchRepository> {
-        SearchRepositoryImpl(networkClient = get(), convertor = get())
+        SearchRepositoryImpl(networkClient = get(), converter = get())
     }
     factory { FavoriteMapper() }
     single<FavoriteRepository> {
