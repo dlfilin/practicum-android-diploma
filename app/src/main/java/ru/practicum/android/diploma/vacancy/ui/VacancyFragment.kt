@@ -13,6 +13,7 @@ import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
@@ -21,6 +22,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.common.util.Formatter
+import ru.practicum.android.diploma.common.util.debounce
 import ru.practicum.android.diploma.databinding.FragmentVacancyBinding
 import ru.practicum.android.diploma.vacancy.domain.models.Phone
 import ru.practicum.android.diploma.vacancy.domain.models.Vacancy
@@ -42,20 +44,23 @@ class VacancyFragment : Fragment(R.layout.fragment_vacancy) {
     }
 
     private var isFavorite = false
+    private var isClickAllowed = true
+
+    private val onTrackClickDebounce = debounce<Boolean>(
+        CLICK_DEBOUNCE_DELAY,
+        lifecycleScope,
+        false
+    ) { param ->
+        isClickAllowed = param
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentVacancyBinding.bind(view)
 
-//        Toast.makeText(requireContext(), "vacancyId= ${args.vacancyId}", Toast.LENGTH_SHORT).show()
         viewmodel.getVacancy(args.vacancyId)
 
-        binding.gotoSimilarJobsFragmentBtn.setOnClickListener {
-            val direction =
-                VacancyFragmentDirections.actionVacancyFragmentToSimilarVacanciesFragment(viewmodel.getVacancyId())
-            findNavController().navigate(direction)
-        }
-
+        setListeners()
         setObservables()
         prepareToolbarMenu()
     }
@@ -254,6 +259,40 @@ class VacancyFragment : Fragment(R.layout.fragment_vacancy) {
         viewmodel.observeVacancyState().observe(viewLifecycleOwner) {
             render(it)
         }
+    }
 
+    private fun setListeners() {
+        binding.gotoSimilarJobsFragmentBtn.setOnClickListener {
+            val direction =
+                VacancyFragmentDirections.actionVacancyFragmentToSimilarVacanciesFragment(viewmodel.getVacancyId())
+            findNavController().navigate(direction)
+        }
+
+        binding.email.setOnClickListener {
+            val vacancy = viewmodel.currentVacancy.value
+            if (clickDebounce() && vacancy?.contacts?.email != null) {
+                val subject = StringBuilder()
+                    .append(requireContext().getString(R.string.vacancy_detail_title_tv))
+                    .append(": ")
+                    .append(vacancy.vacancyName)
+                    .append(", ")
+                    .append(vacancy.area)
+
+                viewmodel.sendEmail(vacancy.contacts.email, subject.toString())
+            }
+        }
+    }
+
+    private fun clickDebounce(): Boolean {
+        val current = isClickAllowed
+        if (isClickAllowed) {
+            isClickAllowed = false
+            onTrackClickDebounce(true)
+        }
+        return current
+    }
+
+    companion object {
+        private const val CLICK_DEBOUNCE_DELAY = 500L
     }
 }

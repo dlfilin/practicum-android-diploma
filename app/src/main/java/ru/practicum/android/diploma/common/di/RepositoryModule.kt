@@ -7,7 +7,9 @@ import ru.practicum.android.diploma.favorites.domain.repository.FavoriteReposito
 import ru.practicum.android.diploma.search.data.repository.SearchRepositoryImpl
 import ru.practicum.android.diploma.search.domain.api.SearchRepository
 import ru.practicum.android.diploma.vacancy.data.mapper.VacancyMapper
+import ru.practicum.android.diploma.vacancy.data.repository.ExternalNavigatorImpl
 import ru.practicum.android.diploma.vacancy.data.repository.VacancyRepositoryImpl
+import ru.practicum.android.diploma.vacancy.domain.ExternalNavigator
 import ru.practicum.android.diploma.vacancy.domain.api.VacancyRepository
 
 val repositoryModule = module {
@@ -21,5 +23,8 @@ val repositoryModule = module {
     factory { VacancyMapper() }
     single<VacancyRepository> {
         VacancyRepositoryImpl(networkClient = get(), vacancyMapper = get())
+    }
+    single<ExternalNavigator> {
+        ExternalNavigatorImpl(context = get())
     }
 }
