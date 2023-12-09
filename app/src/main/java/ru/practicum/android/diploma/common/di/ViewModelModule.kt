@@ -14,7 +14,12 @@ val viewModelModule = module {
     }
 
     viewModel { (vacancyId: String) ->
-        VacancyViewModel(vacancyId = vacancyId, vacancyInteractor = get(), sharingInteractor = get())
+        VacancyViewModel(
+            vacancyId = vacancyId,
+            vacancyInteractor = get(),
+            sharingInteractor = get(),
+            favoriteInteractor = get()
+        )
     }
 
     viewModel { (vacancyId: String) ->

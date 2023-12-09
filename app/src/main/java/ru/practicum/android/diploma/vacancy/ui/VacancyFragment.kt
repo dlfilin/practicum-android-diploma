@@ -249,7 +249,10 @@ class VacancyFragment : Fragment(R.layout.fragment_vacancy) {
                     }
 
                     R.id.action_toggle_favorite -> {
-                        viewmodel.toggleFavorite()
+                        val vacancy = viewmodel.currentVacancy.value
+                        if (vacancy != null) {
+                            viewmodel.toggleFavorite(vacancy)
+                        }
                         true
                     }
 

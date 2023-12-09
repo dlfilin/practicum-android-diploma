@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import ru.practicum.android.diploma.common.util.ErrorType
 import ru.practicum.android.diploma.common.util.Result
+import ru.practicum.android.diploma.favorites.domain.FavoriteInteractor
 import ru.practicum.android.diploma.vacancy.domain.SharingInteractor
 import ru.practicum.android.diploma.vacancy.domain.api.VacancyInteractor
 import ru.practicum.android.diploma.vacancy.domain.models.Phone
@@ -15,11 +16,11 @@ import ru.practicum.android.diploma.vacancy.domain.models.Vacancy
 class VacancyViewModel(
     private val vacancyId: String,
     private val vacancyInteractor: VacancyInteractor,
-    private val sharingInteractor: SharingInteractor
+    private val sharingInteractor: SharingInteractor,
+    private val favoriteInteractor: FavoriteInteractor
 ) : ViewModel() {
 
     private var isFavorite = MutableLiveData<Boolean>()
-    private var _isFav = false
     fun observeFavoriteState(): LiveData<Boolean> = isFavorite
     private val vacancyState = MutableLiveData<VacancyScreenState>()
     fun observeVacancyState(): LiveData<VacancyScreenState> = vacancyState
@@ -31,6 +32,8 @@ class VacancyViewModel(
         viewModelScope.launch {
             vacancyInteractor.getVacancy(vacancyId).collect {
                 processResult(it)
+                val favoriteStatus = isFavorite(vacancyId)
+                isFavorite.postValue(favoriteStatus)
             }
         }
     }
@@ -68,10 +71,23 @@ class VacancyViewModel(
         vacancyState.postValue(state)
     }
 
-    fun toggleFavorite() {
-        // пока просто для наглядности
-        isFavorite.postValue(!_isFav)
-        _isFav = !_isFav
+    fun toggleFavorite(vacancy: Vacancy) {
+        viewModelScope.launch {
+            val favoriteStatus = isFavorite(vacancy.id)
+
+            if (favoriteStatus) {
+                // delete
+                vacancy.let { favoriteInteractor.deleteFavoriteVacancy(it) }
+            } else {
+                // add
+                vacancy.let { favoriteInteractor.addFavoriteVacancy(it) }
+            }
+            isFavorite.postValue(!favoriteStatus)
+        }
+    }
+
+    private suspend fun isFavorite(vacancyId: String): Boolean {
+        return favoriteInteractor.isFavorite(vacancyId)
     }
 
     fun getVacancyId(): String = vacancyId

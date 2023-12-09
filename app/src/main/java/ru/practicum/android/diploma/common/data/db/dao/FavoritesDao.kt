@@ -20,4 +20,6 @@ interface FavoritesDao {
     @Query("SELECT * FROM favorites_vacancies")
     fun getFavoriteVacancies(): Flow<List<FavoriteEntity>>
 
+    @Query("SELECT COUNT(*) FROM favorites_vacancies WHERE id = :id")
+    suspend fun isFavorite(id: String): Boolean
 }
