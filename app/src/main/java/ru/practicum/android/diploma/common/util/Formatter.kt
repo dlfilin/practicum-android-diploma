@@ -76,4 +76,5 @@ object Formatter {
             number?.drop(PHONE_NUMBER_DIGITS_DROP_FIRST_5)
         )
     }
+
 }
