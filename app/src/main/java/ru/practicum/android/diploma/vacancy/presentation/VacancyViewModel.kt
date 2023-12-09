@@ -1,6 +1,5 @@
 package ru.practicum.android.diploma.vacancy.presentation
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -37,8 +36,7 @@ class VacancyViewModel(
     }
 
     fun makeCall(phone: Phone) {
-        Log.d("DEBUG", "в другой задаче сделаем")
-//        TODO("make a call")
+        sharingInteractor.makeCall(phone)
     }
 
     fun sendEmail(email: String, subject: String) {
