@@ -1,7 +1,7 @@
 package ru.practicum.android.diploma.vacancy.domain.impl
 
-import ru.practicum.android.diploma.vacancy.domain.SharingInteractor
 import ru.practicum.android.diploma.vacancy.domain.ExternalNavigator
+import ru.practicum.android.diploma.vacancy.domain.SharingInteractor
 
 class SharingInteractorImpl(
     val externalNavigator: ExternalNavigator
