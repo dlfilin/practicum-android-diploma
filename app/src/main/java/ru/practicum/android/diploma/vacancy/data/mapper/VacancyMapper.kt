@@ -26,7 +26,8 @@ class VacancyMapper {
             address = vacancyDto.address?.raw,
             description = vacancyDto.description,
             keySkills = transformKeySkills(vacancyDto.keySkills),
-            contacts = mapContacts(vacancyDto.contacts)
+            contacts = mapContacts(vacancyDto.contacts),
+            alternateUrl = vacancyDto.alternateUrl
         )
     }
 

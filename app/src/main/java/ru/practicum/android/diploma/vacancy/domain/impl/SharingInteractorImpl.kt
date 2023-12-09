@@ -16,4 +16,8 @@ class SharingInteractorImpl(
         val phoneString = Formatter.formatPhone(phone.country, phone.city, phone.number)
         externalNavigator.makeCall(phoneString)
     }
+
+    override fun shareInMessenger(url: String) {
+        externalNavigator.shareInMessenger(url)
+    }
 }
