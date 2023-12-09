@@ -17,7 +17,9 @@ class VacancyViewModel(
     private val vacancyInteractor: VacancyInteractor
 ) : ViewModel() {
 
-    private var isFavorite = false
+    private var isFavorite = MutableLiveData<Boolean>()
+    private var _isFav = false
+    fun observeFavoriteState(): LiveData<Boolean> = isFavorite
     private val vacancyState = MutableLiveData<VacancyScreenState>()
     fun observeVacancyState(): LiveData<VacancyScreenState> = vacancyState
 
@@ -32,7 +34,7 @@ class VacancyViewModel(
 
     fun makeCall(phone: Phone) {
         Log.d("DEBUG", "в другой задаче сделаем")
-        TODO("make a call")
+//        TODO("make a call")
     }
 
     private fun processResult(result: Result<Vacancy>) {
@@ -57,8 +59,8 @@ class VacancyViewModel(
 
     fun toggleFavorite() {
         // пока просто для наглядности
-        isFavorite = !isFavorite
-//         vacancyState.postValue(VacancyScreenState(isFavorite))
+        isFavorite.postValue(!_isFav)
+        _isFav = !_isFav
     }
 
     fun getVacancyId(): String = vacancyId

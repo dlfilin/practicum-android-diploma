@@ -1,6 +1,5 @@
 package ru.practicum.android.diploma.vacancy.data.repository
 
-import android.util.Log
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import ru.practicum.android.diploma.common.data.network.NetworkClient
@@ -20,7 +19,6 @@ class VacancyRepositoryImpl(
 ) : VacancyRepository {
     override fun getVacancy(vacancyId: String): Flow<Result<Vacancy>> = flow {
         val response = networkClient.doRequest(VacancyDetailRequest(vacancyId))
-        Log.d("DEBUG", response.toString())
 
         when (response.resultCode) {
             NO_INTERNET -> {

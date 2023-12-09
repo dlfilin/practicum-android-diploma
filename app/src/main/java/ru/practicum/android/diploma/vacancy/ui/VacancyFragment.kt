@@ -11,6 +11,7 @@ import androidx.core.text.HtmlCompat
 import androidx.core.text.HtmlCompat.FROM_HTML_MODE_LEGACY
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -48,9 +49,7 @@ class VacancyFragment : Fragment(R.layout.fragment_vacancy) {
 
 //        Toast.makeText(requireContext(), "vacancyId= ${args.vacancyId}", Toast.LENGTH_SHORT).show()
         viewmodel.getVacancy(args.vacancyId)
-        viewmodel.observeVacancyState().observe(viewLifecycleOwner) {
-            render(it)
-        }
+
         binding.gotoSimilarJobsFragmentBtn.setOnClickListener {
             val direction =
                 VacancyFragmentDirections.actionVacancyFragmentToSimilarVacanciesFragment(viewmodel.getVacancyId())
@@ -76,8 +75,26 @@ class VacancyFragment : Fragment(R.layout.fragment_vacancy) {
         }
     }
 
+    private fun hideAllView() {
+        binding.apply {
+            svVacancy.isVisible = false
+            tvContacts.isVisible = false
+            tvContactName.isVisible = false
+            contactName.isVisible = false
+            tvEmail.isVisible = false
+            email.isVisible = false
+            tvPhone.isVisible = false
+            tvPhone.isVisible = false
+            phoneList.isVisible = false
+            tvComment.isVisible = false
+            comment.isVisible = false
+        }
+//        TODO("отправить сюда вьюшки ошибок и загрузки")
+    }
+
     private fun showLoading() {
         Log.d("DEBUG", "Loading...")
+        hideAllView()
 //        TODO("should be implemented in another task")
     }
 
@@ -87,7 +104,9 @@ class VacancyFragment : Fragment(R.layout.fragment_vacancy) {
     }
 
     private fun showContent(vacancy: Vacancy) {
+        hideAllView()
         binding.apply {
+            svVacancy.isVisible = true
             nameVacancy.text = vacancy.vacancyName
             salary.text = Formatter.formatSalary(
                 requireContext(),
@@ -106,7 +125,13 @@ class VacancyFragment : Fragment(R.layout.fragment_vacancy) {
                 .into(binding.image)
 
             companyName.text = vacancy.employerName
-            city.text = if (vacancy.address.isNullOrEmpty()) vacancy.address else vacancy.area
+
+            if (vacancy.address.isNullOrEmpty()) {
+                city.text = vacancy.area
+            } else {
+                city.text = vacancy.address.toString()
+            }
+
             experience.text = vacancy.experience
 
             val employmentAndSchedueString = StringBuilder()
@@ -126,8 +151,8 @@ class VacancyFragment : Fragment(R.layout.fragment_vacancy) {
             )
 
             if (vacancy.keySkills.isNullOrEmpty()) {
-                tvKeySkill.visibility = View.GONE
-                keySkill.visibility = View.GONE
+                tvKeySkill.isVisible = false
+                keySkill.isVisible = false
             } else {
                 val keySkillsString = buildString {
                     append("<ul>")
@@ -152,25 +177,23 @@ class VacancyFragment : Fragment(R.layout.fragment_vacancy) {
                 vacancy.contacts?.email?.isNotEmpty() == true ||
                 vacancy.contacts?.phones?.toString()?.isNotEmpty() == true
             ) {
-                tvContacts.visibility = View.VISIBLE
+                tvContacts.isVisible = true
             }
 
             if (vacancy.contacts?.name?.isNotEmpty() == true) {
                 contactName.text = vacancy.contacts.name
-                tvContactName.visibility = View.VISIBLE
-                contactName.visibility = View.VISIBLE
+                tvContactName.isVisible = true
+                contactName.isVisible = true
             }
 
             if (vacancy.contacts?.email?.isNotEmpty() == true) {
                 email.text = vacancy.contacts.email
-                tvEmail.visibility = View.VISIBLE
-                email.visibility = View.VISIBLE
+                tvEmail.isVisible = true
+                email.isVisible = true
             }
 
-            Log.d("DEBUG", vacancy.contacts.toString())
-
             if (vacancy.contacts?.phones?.isNotEmpty() == true) {
-                tvPhone.visibility = View.VISIBLE
+                tvPhone.isVisible = true
                 phonesAdapter = vacancy.contacts.phones.let {
                     PhonesAdapter(it) { phone ->
                         onPhoneClickDebounce(phone)
@@ -179,9 +202,9 @@ class VacancyFragment : Fragment(R.layout.fragment_vacancy) {
                 onPhoneClickDebounce = { phone ->
                     viewmodel.makeCall(phone)
                 }
-                tvPhone.visibility = View.VISIBLE
                 phoneList.adapter = phonesAdapter
-                phoneList.visibility = View.VISIBLE
+                tvPhone.isVisible = true
+                phoneList.isVisible = true
             }
         }
     }
@@ -222,19 +245,15 @@ class VacancyFragment : Fragment(R.layout.fragment_vacancy) {
     }
 
     private fun setObservables() {
-        /*viewModel.state.observe(viewLifecycleOwner) { state ->
-            isFavorite = state.vacancy
+        viewmodel.observeFavoriteState().observe(viewLifecycleOwner) {
+            isFavorite = it
             // нужно дернуть тулбар в Activity, чтобы он перерисовался
             requireActivity().invalidateOptionsMenu()
 
-        }*/
+        }
+        viewmodel.observeVacancyState().observe(viewLifecycleOwner) {
+            render(it)
+        }
 
     }
-
-    /*companion object {
-        fun createArgs(vacancyId: String): Bundle =
-            bundleOf(ARG_VACANCY to vacancyId)
-
-        private const val ARG_VACANCY = "vacancy"
-    }*/
 }
