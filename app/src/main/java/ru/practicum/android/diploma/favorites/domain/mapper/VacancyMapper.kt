@@ -5,6 +5,7 @@ import ru.practicum.android.diploma.favorites.domain.models.Favorite
 import ru.practicum.android.diploma.vacancy.domain.models.Contacts
 import ru.practicum.android.diploma.vacancy.domain.models.Phone
 import ru.practicum.android.diploma.vacancy.domain.models.Vacancy
+import java.util.Locale
 
 class VacancyMapper {
 
@@ -47,6 +48,7 @@ class VacancyMapper {
 
     private fun transformSalaryToString(salaryFrom: Int?, salaryTo: Int?, salaryCurrency: String?): String {
         return String.format(
+            Locale.ENGLISH,
             "%d__%d__%s",
             salaryFrom,
             salaryTo,

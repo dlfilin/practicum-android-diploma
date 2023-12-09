@@ -127,22 +127,7 @@ class VacancyFragment : Fragment(R.layout.fragment_vacancy) {
                 vacancy.salaryCurrency
             )
 
-            val radiusForLogo = binding.root.resources.getDimensionPixelSize(R.dimen.size_12)
-
-            Glide.with(requireContext())
-                .load(vacancy.employerLogoUrl)
-                .placeholder(R.drawable.vacancy_item_placeholder)
-                .centerCrop()
-                .transform(RoundedCorners(radiusForLogo))
-                .into(binding.image)
-
-            companyName.text = vacancy.employerName
-
-            if (vacancy.address.isNullOrEmpty()) {
-                city.text = vacancy.area
-            } else {
-                city.text = vacancy.address.toString()
-            }
+            fillCompanySection(vacancy)
 
             experience.text = vacancy.experience
 
@@ -162,6 +147,34 @@ class VacancyFragment : Fragment(R.layout.fragment_vacancy) {
                 FROM_HTML_MODE_LEGACY
             )
 
+            fillKeySkills(vacancy)
+            fillContactsSection(vacancy)
+        }
+    }
+
+    private fun fillCompanySection(vacancy: Vacancy) {
+        binding.apply {
+            val radiusForLogo = binding.root.resources.getDimensionPixelSize(R.dimen.size_12)
+
+            Glide.with(requireContext())
+                .load(vacancy.employerLogoUrl)
+                .placeholder(R.drawable.vacancy_item_placeholder)
+                .centerCrop()
+                .transform(RoundedCorners(radiusForLogo))
+                .into(binding.image)
+
+            companyName.text = vacancy.employerName
+
+            if (vacancy.address.isNullOrEmpty()) {
+                city.text = vacancy.area
+            } else {
+                city.text = vacancy.address.toString()
+            }
+        }
+    }
+
+    private fun fillKeySkills(vacancy: Vacancy) {
+        binding.apply {
             if (vacancy.keySkills.isNullOrEmpty()) {
                 tvKeySkill.isVisible = false
                 keySkill.isVisible = false
@@ -178,11 +191,10 @@ class VacancyFragment : Fragment(R.layout.fragment_vacancy) {
                     FROM_HTML_MODE_LEGACY
                 )
             }
-            viewContactsSection(vacancy)
         }
     }
 
-    private fun viewContactsSection(vacancy: Vacancy) {
+    private fun fillContactsSection(vacancy: Vacancy) {
         binding.apply {
             if (
                 vacancy.contacts?.name?.isNotEmpty() == true ||
