@@ -6,10 +6,58 @@
     android:layout_height="match_parent"
     tools:context=".vacancy.ui.VacancyFragment">
 
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/clProgressBar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        tools:visibility="gone">
+
+        <ProgressBar
+            android:id="@+id/newSearchProgressBar"
+            style="@style/progressBar"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:visibility="visible" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/clErrorPlaceholder"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone">
+
+        <ImageView
+            android:id="@+id/errorPlaceholderImage"
+            style="@style/placeholderImage"
+            android:contentDescription="@string/server_throwable_tv"
+            android:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:src="@drawable/placeholder_error_server" />
+
+        <TextView
+            android:id="@+id/errorPlaceholderText"
+            style="@style/placeholderText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="visible"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/errorPlaceholderImage"
+            tools:text="@string/server_throwable_tv" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
     <ScrollView
         android:id="@+id/svVacancy"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        tools:visibility="visible">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -28,8 +76,8 @@
             <TextView
                 android:id="@+id/nameVacancy"
                 style="@style/vacancyTextViewMarginTop24"
-                android:textSize="@dimen/font_32"
                 android:fontFamily="@font/ys_display_bold"
+                android:textSize="@dimen/font_32"
                 app:layout_constraintEnd_toEndOf="@id/content_end"
                 app:layout_constraintStart_toStartOf="@id/content_start"
                 app:layout_constraintTop_toTopOf="parent"
