@@ -8,7 +8,7 @@ import kotlinx.coroutines.launch
 import ru.practicum.android.diploma.common.util.ErrorType
 import ru.practicum.android.diploma.common.util.Result
 import ru.practicum.android.diploma.favorites.domain.FavoriteInteractor
-import ru.practicum.android.diploma.vacancy.domain.SharingInteractor
+import ru.practicum.android.diploma.sharing.domain.SharingInteractor
 import ru.practicum.android.diploma.vacancy.domain.api.VacancyInteractor
 import ru.practicum.android.diploma.vacancy.domain.models.Phone
 import ru.practicum.android.diploma.vacancy.domain.models.Vacancy

@@ -1,4 +1,4 @@
-package ru.practicum.android.diploma.vacancy.domain
+package ru.practicum.android.diploma.sharing.domain
 
 interface ExternalNavigator {
     fun sendEmail(email: String, subject: String)

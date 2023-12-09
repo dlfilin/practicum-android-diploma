@@ -1,9 +1,9 @@
-package ru.practicum.android.diploma.vacancy.data.repository
+package ru.practicum.android.diploma.sharing.data.repository
 
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
-import ru.practicum.android.diploma.vacancy.domain.ExternalNavigator
+import ru.practicum.android.diploma.sharing.domain.ExternalNavigator
 
 class ExternalNavigatorImpl(private val context: Context) : ExternalNavigator {
     override fun sendEmail(email: String, subject: String) {

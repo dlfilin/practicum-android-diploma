@@ -1,8 +1,8 @@
-package ru.practicum.android.diploma.vacancy.domain.impl
+package ru.practicum.android.diploma.sharing.domain.impl
 
 import ru.practicum.android.diploma.common.util.Formatter
-import ru.practicum.android.diploma.vacancy.domain.ExternalNavigator
-import ru.practicum.android.diploma.vacancy.domain.SharingInteractor
+import ru.practicum.android.diploma.sharing.domain.ExternalNavigator
+import ru.practicum.android.diploma.sharing.domain.SharingInteractor
 import ru.practicum.android.diploma.vacancy.domain.models.Phone
 
 class SharingInteractorImpl(
