@@ -70,4 +70,5 @@ object Formatter {
             number?.drop(5)
         )
     }
+
 }
