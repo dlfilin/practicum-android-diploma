@@ -10,7 +10,6 @@ import ru.practicum.android.diploma.vacancy.domain.models.Vacancy
 
 class VacancyMapper {
     fun map(vacancyDto: VacancyDetailsResponse): Vacancy {
-
         return Vacancy(
             id = vacancyDto.id,
             vacancyName = vacancyDto.name,

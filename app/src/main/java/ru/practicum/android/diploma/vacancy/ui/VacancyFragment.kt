@@ -169,7 +169,7 @@ class VacancyFragment : Fragment(R.layout.fragment_vacancy) {
                 val keySkillsString = buildString {
                     append("<ul>")
                     vacancy.keySkills.forEach { keySkill ->
-                        append("<li>${keySkill}</li>")
+                        append("<li>$keySkill</li>")
                     }
                     append("</ul>")
                 }
