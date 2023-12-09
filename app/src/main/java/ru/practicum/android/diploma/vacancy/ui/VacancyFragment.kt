@@ -1,7 +1,6 @@
 package ru.practicum.android.diploma.vacancy.ui
 
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
@@ -75,13 +74,15 @@ class VacancyFragment : Fragment(R.layout.fragment_vacancy) {
         when (state) {
             is VacancyScreenState.Loading -> showLoading()
             is VacancyScreenState.Error -> showError()
-            is VacancyScreenState.InternetThrowable -> showError()
+            is VacancyScreenState.InternetThrowable -> showInternetThrowable()
             is VacancyScreenState.Content -> showContent(state.vacancy)
         }
     }
 
     private fun hideAllView() {
         binding.apply {
+            clProgressBar.isVisible = false
+            clErrorPlaceholder.isVisible = false
             svVacancy.isVisible = false
             tvContacts.isVisible = false
             tvContactName.isVisible = false
@@ -94,18 +95,25 @@ class VacancyFragment : Fragment(R.layout.fragment_vacancy) {
             tvComment.isVisible = false
             comment.isVisible = false
         }
-//        TODO("отправить сюда вьюшки ошибок и загрузки")
     }
 
     private fun showLoading() {
-        Log.d("DEBUG", "Loading...")
         hideAllView()
-//        TODO("should be implemented in another task")
+        binding.clProgressBar.isVisible = true
+    }
+
+    private fun showInternetThrowable() {
+        hideAllView()
+        binding.errorPlaceholderImage.setImageResource(R.drawable.placeholder_no_internet)
+        binding.errorPlaceholderText.setText(R.string.internet_throwable_tv)
+        binding.clErrorPlaceholder.isVisible = true
     }
 
     private fun showError() {
-        Log.d("DEBUG", "ERROR")
-//        TODO("should be implemented in another task")
+        hideAllView()
+        binding.errorPlaceholderImage.setImageResource(R.drawable.placeholder_error_server)
+        binding.errorPlaceholderText.setText(R.string.server_throwable_tv)
+        binding.clErrorPlaceholder.isVisible = true
     }
 
     private fun showContent(vacancy: Vacancy) {
