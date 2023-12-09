@@ -2,6 +2,7 @@ package ru.practicum.android.diploma.vacancy.ui.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import ru.practicum.android.diploma.common.util.Formatter
 import ru.practicum.android.diploma.databinding.ItemPhoneBinding
@@ -14,8 +15,11 @@ class PhonesAdapter(
     private var phones = listOf<Phone?>()
 
     fun updatePhones(newList: List<Phone?>) {
+        val diffResult =
+            DiffUtil.calculateDiff(PhoneDiffCallback(phones, newList))
+
         phones = newList
-        notifyDataSetChanged()
+        diffResult.dispatchUpdatesTo(this)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PhoneViewHolder {
