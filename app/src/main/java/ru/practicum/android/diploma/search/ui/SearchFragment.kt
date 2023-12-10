@@ -132,7 +132,7 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
             renderState(state)
         }
 
-        viewmodel.filterState.observe(viewLifecycleOwner) { filterState ->
+        viewmodel.filterState.observe(viewLifecycleOwner) {
             // нужно дернуть тулбар в Activity, чтобы он перерисовался
             requireActivity().invalidateOptionsMenu()
         }
