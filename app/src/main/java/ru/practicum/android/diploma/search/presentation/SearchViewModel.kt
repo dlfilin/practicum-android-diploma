@@ -37,6 +37,9 @@ class SearchViewModel(
     }
 
     fun searchDebounce(changedText: String) {
+        if (changedText.isBlank()) {
+            renderState(SearchScreenState.Defalt)
+        }
         if (latestSearchText != changedText) {
             this.latestSearchText = changedText
             searchTrackDebounce(latestSearchText)
