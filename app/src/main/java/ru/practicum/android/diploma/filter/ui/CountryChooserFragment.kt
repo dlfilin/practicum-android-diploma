@@ -3,6 +3,7 @@ package ru.practicum.android.diploma.filter.ui
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentCountryChooserBinding
@@ -14,7 +15,8 @@ class CountryChooserFragment : Fragment(R.layout.fragment_country_chooser) {
     private val binding get() = _binding!!
 
     private val adapter = CountryAdapter {
-
+        val action = CountryChooserFragmentDirections.actionCountryChooserFragmentToWorkPlaceFragment(it.name, "")
+        findNavController().navigate(action)
     }
 
 //    private val viewModel by viewModel<FilterViewModel>()

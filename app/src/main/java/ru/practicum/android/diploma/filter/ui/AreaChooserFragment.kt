@@ -7,6 +7,7 @@ import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentAreaChooserBinding
 import android.view.MotionEvent
 import androidx.core.widget.addTextChangedListener
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import ru.practicum.android.diploma.filter.ui.adapters.AreaAdapter
 
@@ -15,7 +16,11 @@ class AreaChooserFragment : Fragment(R.layout.fragment_area_chooser) {
     private var _binding: FragmentAreaChooserBinding? = null
     private val binding get() = _binding!!
 
-    private val adapter = AreaAdapter {}
+    private val adapter = AreaAdapter {
+        val action =
+            AreaChooserFragmentDirections.actionAreaChooserFragmentToWorkPlaceFragment("", it.name)
+        findNavController().navigate(action)
+    }
 
 //    private val viewModel by viewModel<FilterViewModel>()
 
