@@ -31,6 +31,13 @@ class WorkPlaceFragment : Fragment(R.layout.fragment_work_place) {
         binding.edTextNameAreaNameInput.setText(textArea)
         addCountry()
         addArea()
+
+        binding.btAdd.setOnClickListener {
+            val action = WorkPlaceFragmentDirections.actionWorkPlaceFragmentToFilterFragment(countryArgs = binding.edTextNameCountryNameInput.text.toString(),
+                industryArgs = binding.edTextNameAreaNameInput.text.toString())
+
+            findNavController().navigate(action)
+        }
     }
 
     private fun addArrowArea() {

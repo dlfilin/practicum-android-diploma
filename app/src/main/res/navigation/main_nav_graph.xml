@@ -36,6 +36,18 @@
         android:name="ru.practicum.android.diploma.filter.ui.FilterFragment"
         android:label="@string/filter_settings_title_tv"
         tools:layout="@layout/fragment_filter">
+        <argument
+            android:name="countryArgs"
+            app:argType="string"
+            android:defaultValue=""/>
+        <argument
+            android:name="areaArgs"
+            app:argType="string"
+            android:defaultValue=""/>
+        <argument
+            android:name="industryArgs"
+            app:argType="string"
+            android:defaultValue=""/>
         <action
             android:id="@+id/action_filterFragment_to_workPlaceFragment"
             app:destination="@id/workPlaceFragment" />
@@ -62,12 +74,19 @@
             android:name="areaArgs"
             app:argType="string"
             android:defaultValue=""/>
+        <action
+            android:id="@+id/action_workPlaceFragment_to_filterFragment"
+            app:destination="@id/filterFragment" />
     </fragment>
     <fragment
         android:id="@+id/industryChooserFragment"
         android:name="ru.practicum.android.diploma.filter.ui.IndustryChooserFragment"
         android:label="@string/choosing_industry_title_tv"
-        tools:layout="@layout/fragment_industry_chooser" />
+        tools:layout="@layout/fragment_industry_chooser" >
+        <action
+            android:id="@+id/action_industryChooserFragment_to_filterFragment"
+            app:destination="@id/filterFragment" />
+    </fragment>
     <fragment
         android:id="@+id/countryChooserFragment"
         android:name="ru.practicum.android.diploma.filter.ui.CountryChooserFragment"

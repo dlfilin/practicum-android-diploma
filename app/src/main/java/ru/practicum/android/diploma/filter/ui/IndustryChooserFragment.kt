@@ -7,6 +7,7 @@ import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentIndustryChooserBinding
@@ -23,8 +24,10 @@ class IndustryChooserFragment : Fragment(R.layout.fragment_industry_chooser) {
     private val adapter = IndustryAdapter(onItemCheckedListener = { item ->
         if (item.isChecked) {
             binding.btAdd.visibility = View.VISIBLE
-//            binding.btAdd.setOnClickListener {
-//            }
+            binding.btAdd.setOnClickListener {
+                val action = IndustryChooserFragmentDirections.actionIndustryChooserFragmentToFilterFragment(industryArgs =  item.name)
+                findNavController().navigate(action)
+            }
         }
 
     })
