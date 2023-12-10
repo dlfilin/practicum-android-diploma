@@ -1,16 +1,14 @@
 package ru.practicum.android.diploma.search.ui
 
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
-import android.view.MotionEvent
 import android.view.View
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
 import androidx.core.view.isVisible
+import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -75,37 +73,26 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
     }
 
     private fun setTextWatcher() {
-        val simpleTextWatcher = object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-                // before text change watcher
-            }
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                val searchEditText = binding.searchEditText
-                if (s.isNullOrEmpty()) {
-                    searchEditText.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_search, 0)
-                } else {
-                    searchEditText.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_clear, 0)
-                    searchEditText.setOnTouchListener { view, motionEvent ->
-                        val iconBoundries = searchEditText.compoundDrawables[2].bounds.width()
-                        if (motionEvent.action == MotionEvent.ACTION_UP &&
-                            motionEvent.rawX >= searchEditText.right - iconBoundries * 2
-                        ) {
-                            searchEditText.setText("")
-                        }
-                        view.performClick()
-                        false
-                    }
+        binding.searchEditText.doOnTextChanged { text, _, _, _ ->
+            if (text.isNullOrEmpty()) {
+                binding.searchLayoutField.apply {
+                    setEndIconDrawable(R.drawable.ic_search)
+                    tag = R.drawable.ic_search
                 }
-                search()
+            } else {
+                binding.searchLayoutField.apply {
+                    setEndIconDrawable(R.drawable.ic_clear)
+                    tag = R.drawable.ic_clear
+                }
             }
-
-            override fun afterTextChanged(s: Editable?) {
-                // looking for the solution to delete underline decoration when typing the words
-            }
+            search()
         }
 
-        simpleTextWatcher.let { binding.searchEditText.addTextChangedListener(it) }
+        binding.searchLayoutField.setEndIconOnClickListener {
+            if (binding.searchLayoutField.tag == R.drawable.ic_clear) {
+                binding.searchEditText.text?.clear()
+            }
+        }
     }
 
     private fun search() {
@@ -155,13 +142,13 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
 
         viewmodel.filterState.observe(viewLifecycleOwner) { filterState ->
             renderFilterIcon(filterState)
-            // нужно дернуть тулбар в Activity, чтобы он перерисовался
-            requireActivity().invalidateOptionsMenu()
         }
     }
 
     private fun renderFilterIcon(filterState: FilterState) {
         filterIsActive = filterState.isActive
+        // нужно дернуть тулбар в Activity, чтобы он перерисовался
+        requireActivity().invalidateOptionsMenu()
     }
 
     private fun renderState(it: SearchScreenState) {
