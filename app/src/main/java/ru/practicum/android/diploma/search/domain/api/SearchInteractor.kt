@@ -8,5 +8,5 @@ import ru.practicum.android.diploma.search.domain.model.VacancyListData
 interface SearchInteractor {
     fun searchVacancies(text: String, options: FilterParameters): Flow<Result<VacancyListData>>
     fun getSimilarVacancies(vacancyId: String): Flow<Result<VacancyListData>>
-
+    fun getFilterParameters(): FilterParameters
 }

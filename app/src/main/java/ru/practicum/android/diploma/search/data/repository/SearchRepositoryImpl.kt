@@ -5,6 +5,8 @@ import kotlinx.coroutines.flow.flow
 import ru.practicum.android.diploma.common.data.network.NetworkClient
 import ru.practicum.android.diploma.common.data.network.RetrofitNetworkClient.Companion.CONTENT
 import ru.practicum.android.diploma.common.data.network.RetrofitNetworkClient.Companion.NO_INTERNET
+import ru.practicum.android.diploma.common.data.storage.FilterStorage
+import ru.practicum.android.diploma.common.data.storage.mapper.FilterMapper
 import ru.practicum.android.diploma.common.util.ErrorType
 import ru.practicum.android.diploma.common.util.Result
 import ru.practicum.android.diploma.filter.domain.models.FilterParameters
@@ -17,7 +19,9 @@ import ru.practicum.android.diploma.vacancy.data.dto.SimilarVacancyRequest
 
 class SearchRepositoryImpl(
     private val networkClient: NetworkClient,
-    private val converter: VacancyResponseMapper
+    private val vacancyMapper: VacancyResponseMapper,
+    private val filterStorage: FilterStorage,
+    private val filterMapper: FilterMapper
 ) : SearchRepository {
 
     override fun searchVacancies(text: String, filter: FilterParameters): Flow<Result<VacancyListData>> = flow {
@@ -32,7 +36,7 @@ class SearchRepositoryImpl(
             CONTENT -> {
                 emit(
                     Result.Success(
-                        data = converter.mapDtoToModel(response as VacancySearchResponse)
+                        data = vacancyMapper.mapDtoToModel(response as VacancySearchResponse)
                     )
                 )
             }
@@ -55,7 +59,7 @@ class SearchRepositoryImpl(
             CONTENT -> {
                 emit(
                     Result.Success(
-                        data = converter.mapDtoToModel(response as VacancySearchResponse)
+                        data = vacancyMapper.mapDtoToModel(response as VacancySearchResponse)
                     )
                 )
             }
@@ -64,6 +68,10 @@ class SearchRepositoryImpl(
                 emit(Result.Error(ErrorType.SERVER_THROWABLE))
             }
         }
+    }
+
+    override fun getFilterParameters(): FilterParameters {
+        return filterMapper.mapDtoToFilterParameters(filterStorage.getFilterParameters())
     }
 
     private fun prepareSearchQueryMap(text: String, filter: FilterParameters): Map<String, String> {

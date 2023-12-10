@@ -1,14 +1,14 @@
 package ru.practicum.android.diploma.filter.ui
 
 import android.os.Bundle
-import android.view.View
-import androidx.fragment.app.Fragment
-import ru.practicum.android.diploma.R
-import ru.practicum.android.diploma.databinding.FragmentAreaChooserBinding
 import android.view.MotionEvent
+import android.view.View
 import androidx.core.widget.addTextChangedListener
+import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import ru.practicum.android.diploma.R
+import ru.practicum.android.diploma.databinding.FragmentAreaChooserBinding
 import ru.practicum.android.diploma.filter.ui.adapters.AreaAdapter
 
 class AreaChooserFragment : Fragment(R.layout.fragment_area_chooser) {

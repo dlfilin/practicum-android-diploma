@@ -7,8 +7,8 @@ import ru.practicum.android.diploma.favorites.domain.mapper.VacancyMapper
 import ru.practicum.android.diploma.search.domain.api.SearchInteractor
 import ru.practicum.android.diploma.search.domain.impl.SearchInteractorImpl
 import ru.practicum.android.diploma.sharing.domain.SharingInteractor
-import ru.practicum.android.diploma.vacancy.domain.api.VacancyInteractor
 import ru.practicum.android.diploma.sharing.domain.impl.SharingInteractorImpl
+import ru.practicum.android.diploma.vacancy.domain.api.VacancyInteractor
 import ru.practicum.android.diploma.vacancy.domain.impl.VacancyInteractorImpl
 
 val domainModule = module {

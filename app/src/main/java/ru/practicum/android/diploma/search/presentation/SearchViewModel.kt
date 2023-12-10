@@ -20,20 +20,22 @@ class SearchViewModel(
     private val _state = MutableLiveData<SearchScreenState>(SearchScreenState.Default)
     val state: LiveData<SearchScreenState> get() = _state
 
-    private val _filterState = MutableLiveData<FilterParameters>(FilterParameters())
-    val filterState: LiveData<FilterParameters> get() = _filterState
+    private val _filterState = MutableLiveData<FilterState>(FilterState(false))
+    val filterState: LiveData<FilterState> get() = _filterState
 
     private var latestSearchText: String = ""
+    private var filterParameters: FilterParameters = FilterParameters(
+        null,
+        null,
+        null,
+        false
+    )
     private val searchTrackDebounce = debounce<String>(
         SEARCH_DEBOUNCE_DELAY_IN_MILLIS,
         viewModelScope,
         true
     ) { searchRequest ->
         searchRequest(searchRequest)
-    }
-
-    init {
-        checkIfFilterWasUpdated()
     }
 
     fun searchDebounce(changedText: String) {
@@ -46,12 +48,17 @@ class SearchViewModel(
         }
     }
 
+    fun checkFilterState() {
+        filterParameters = searchInteractor.getFilterParameters()
+        _filterState.postValue(FilterState(filterParameters.isNotEmpty))
+    }
+
     private fun searchRequest(searchText: String) {
         if (searchText.isNotBlank()) {
             renderState(SearchScreenState.Loading)
 
             viewModelScope.launch {
-                searchInteractor.searchVacancies(searchText, _filterState.value!!).collect {
+                searchInteractor.searchVacancies(searchText, filterParameters).collect {
                     processResult(it)
                 }
             }
@@ -82,22 +89,6 @@ class SearchViewModel(
 
     private fun renderState(state: SearchScreenState) {
         _state.postValue(state)
-    }
-
-    fun isFilterActive(): Boolean {
-        return _filterState.value!!.isNotEmpty
-    }
-
-    fun checkIfFilterWasUpdated() {
-        val oldFilter = _filterState.value!!
-        // пока тест, потом полезем в sharedprefs
-        val newFilter = FilterParameters(onlyWithSalary = false)
-
-        // проверяем, если он изменился
-        if (oldFilter != newFilter) {
-            _filterState.postValue(newFilter)
-            searchRequest(latestSearchText)
-        }
     }
 
     companion object {
