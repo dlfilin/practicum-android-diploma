@@ -43,7 +43,7 @@ class VacancyMapper {
             salaryFrom = transformSalaryFromString(favorite.salary!!, "from"),
             salaryTo = transformSalaryFromString(favorite.salary, "to"),
             salaryCurrency = transformSalaryCurrencyFromString(favorite.salary),
-            area = convertFromGsonCity(favorite.city, "area"),
+            area = convertFromGsonToArea(favorite.city),
             experience = favorite.experience,
             schedule = favorite.schedule,
             employment = favorite.employment,
@@ -55,22 +55,24 @@ class VacancyMapper {
                 favorite.contactPhone
             ),
             alternateUrl = favorite.alternateUrl,
-            address = convertFromGsonCity(favorite.city, "address")
+            address = convertFromGsonToAddress(favorite.city)
         )
     }
 
-    private fun convertFromGsonCity(city: String?, flag: String = "unknown"): String {
-        if (city != null) {
-            val itemType = object : TypeToken<City>() {}.type
-            val cityObject = gson.fromJson<City>(city, itemType)
-            if (flag == "address" && cityObject.address != null) {
-                return cityObject.address
-            } else if (flag == "area" && cityObject.area != null) {
-                return cityObject.area
-            }
-        }
+    private fun getObjectFromGson(city: String): City {
+        val itemType = object : TypeToken<City>() {}.type
+        return gson.fromJson(city, itemType)
+    }
 
-        return flag
+    private fun convertFromGsonToAddress(city: String): String? {
+        val cityObject = getObjectFromGson(city)
+        if (cityObject.address != null) return cityObject.address
+        return null
+    }
+
+    private fun convertFromGsonToArea(city: String): String {
+        val cityObject = getObjectFromGson(city)
+        return cityObject.area
     }
 
     private fun convertToGsonCity(vacancy: Vacancy): String {
@@ -131,9 +133,9 @@ class VacancyMapper {
 
     private fun transformContactsFromFavorites(person: String?, email: String?, phones: String?): Contacts {
         var phoneList = listOf<Phone>()
-        if (phones != null) {
+        if (phones != null && phones != "null") {
             val itemType = object : TypeToken<List<Phone>>() {}.type
-            phoneList = gson.fromJson<List<Phone>>(phones, itemType)
+            phoneList = gson.fromJson(phones, itemType)
         }
 
         return Contacts(
@@ -145,7 +147,7 @@ class VacancyMapper {
 
     companion object {
         data class City(
-            val area: String?,
+            val area: String,
             val address: String?
         )
     }

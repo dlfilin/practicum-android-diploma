@@ -6,7 +6,7 @@ data class Favorite(
     val logoUrl: String? = null,
     val salary: String? = null,
     val nameCompany: String,
-    val city: String? = null,
+    val city: String,
     val experience: String?,
     val schedule: String?,
     val employment: String?,
