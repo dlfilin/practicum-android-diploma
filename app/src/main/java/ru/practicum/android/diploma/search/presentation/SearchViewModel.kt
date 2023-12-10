@@ -17,7 +17,7 @@ class SearchViewModel(
     private val searchInteractor: SearchInteractor
 ) : ViewModel() {
 
-    private val _state = MutableLiveData<SearchScreenState>(SearchScreenState.Defalt)
+    private val _state = MutableLiveData<SearchScreenState>(SearchScreenState.Default)
     val state: LiveData<SearchScreenState> get() = _state
 
     private val _filterState = MutableLiveData<FilterParameters>(FilterParameters())
@@ -38,7 +38,7 @@ class SearchViewModel(
 
     fun searchDebounce(changedText: String) {
         if (changedText.isBlank()) {
-            renderState(SearchScreenState.Defalt)
+            renderState(SearchScreenState.Default)
         }
         if (latestSearchText != changedText) {
             this.latestSearchText = changedText
