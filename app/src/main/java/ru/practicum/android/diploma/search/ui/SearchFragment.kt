@@ -86,14 +86,15 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
                     searchEditText.setOnTouchListener { view, motionEvent ->
                         val iconBoundries = searchEditText.compoundDrawables[2].bounds.width()
                         if (motionEvent.action == MotionEvent.ACTION_UP &&
-                            motionEvent.rawX >= searchEditText.right - iconBoundries * 2) {
+                            motionEvent.rawX >= searchEditText.right - iconBoundries * 2
+                        ) {
                             searchEditText.setText("")
                         }
                         view.performClick()
                         false
                     }
-                    search()
                 }
+                search()
             }
 
             override fun afterTextChanged(s: Editable?) {
@@ -152,6 +153,7 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
 
     private fun renderState(it: SearchScreenState) {
         when (it) {
+            is SearchScreenState.Defalt -> showDefalt()
             is SearchScreenState.Loading -> showLoading()
             is SearchScreenState.Content -> showFoundVacancy(it.vacancyData)
             is SearchScreenState.Empty -> showEmpty()
@@ -160,21 +162,15 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         }
     }
 
-    private fun showInternetThrowable() {
+    private fun showDefalt() {
         hideAllView()
-        binding.internetThrowablePlaceholder.isVisible = true
-        binding.internetThrowablePlaceHolderText.isVisible = true
+        binding.placeholderImage.isVisible = true
+        binding.placeholderImage.setImageResource(R.drawable.placeholder_start_of_search)
     }
 
-    private fun showError() {
+    private fun showLoading() {
         hideAllView()
-        binding.serverThrowablePlaceholder.isVisible = true
-        binding.serverThrowablePlaceholderText.isVisible = true
-    }
-
-    private fun showEmpty() {
-        hideAllView()
-        binding.searchVacancyPlaceholder.isVisible = true
+        binding.newSearchProgressBar.isVisible = true
     }
 
     private fun showFoundVacancy(foundVacancyData: VacancyListData) {
@@ -191,21 +187,35 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         binding.vacanciesFound.isVisible = true
     }
 
-    private fun showLoading() {
+    private fun showEmpty() {
         hideAllView()
-        binding.newSearchProgressBar.isVisible = true
+        binding.placeholderImage.isVisible = true
+        binding.placeholderMessage.isVisible = true
+        binding.placeholderImage.setImageResource(R.drawable.placeholder_empty_result)
+        binding.placeholderMessage.text = getString(R.string.load_vacancy_throwable_tv)
+    }
+
+    private fun showInternetThrowable() {
+        hideAllView()
+        binding.placeholderImage.isVisible = true
+        binding.placeholderMessage.isVisible = true
+        binding.placeholderImage.setImageResource(R.drawable.placeholder_no_internet)
+        binding.placeholderMessage.text = getString(R.string.internet_throwable_tv)
+    }
+
+    private fun showError() {
+        hideAllView()
+        binding.placeholderImage.isVisible = true
+        binding.placeholderMessage.isVisible = true
+        binding.placeholderImage.setImageResource(R.drawable.placeholder_error_server)
+        binding.placeholderMessage.text = getString(R.string.server_throwable_tv)
     }
 
     private fun hideAllView() {
         binding.vacanciesFound.isVisible = false
         binding.newSearchProgressBar.isVisible = false
-        binding.searchVacancyPlaceholder.isVisible = false
-        binding.internetThrowablePlaceholder.isVisible = false
-        binding.internetThrowablePlaceHolderText.isVisible = false
-        binding.serverThrowablePlaceholder.isVisible = false
-        binding.serverThrowablePlaceholderText.isVisible = false
-        binding.searchFailPlaceholder.isVisible = false
-        binding.searchFailPlaceholderText.isVisible = false
+        binding.placeholderImage.isVisible = false
+        binding.placeholderMessage.isVisible = false
         binding.nestedScrollRv.isVisible = false
         binding.recyclerViewProgressBar.isVisible = false
     }
