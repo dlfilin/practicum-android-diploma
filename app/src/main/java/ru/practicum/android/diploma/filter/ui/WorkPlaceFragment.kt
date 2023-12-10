@@ -15,6 +15,9 @@ class WorkPlaceFragment : Fragment(R.layout.fragment_work_place) {
     private var _binding: FragmentWorkPlaceBinding? = null
     private val binding get() = _binding!!
 
+     private val actionArea = WorkPlaceFragmentDirections.actionWorkPlaceFragmentToAreaChooserFragment()
+     private val actionCountry = WorkPlaceFragmentDirections.actionWorkPlaceFragmentToCountryChooserFragment()
+
     //    private val viewModel by viewModel<FilterViewModel>()
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -30,21 +33,40 @@ class WorkPlaceFragment : Fragment(R.layout.fragment_work_place) {
         addArea()
     }
 
+      private fun addArrowArea(){
+        AppCompatResources.getColorStateList(requireContext(), R.color.gray)
+            ?.let {
+                binding.edAreaName.setBoxStrokeColorStateList(it)
+                binding.edAreaName.defaultHintTextColor = it
+            }
+        binding.edAreaName.setEndIconDrawable(R.drawable.ic_arrow_forward)
+        binding.edTextNameAreaNameInput.setOnClickListener {
+            findNavController().navigate(actionArea)
+        }
+        binding.edTextNameAreaNameInput.setOnClickListener {
+            findNavController().navigate(actionArea)
+        }
+    }
+
+    private fun addArrowCountry(){
+        AppCompatResources.getColorStateList(requireContext(), R.color.gray)
+            ?.let {
+                binding.edCountryName.setBoxStrokeColorStateList(it)
+                binding.edCountryName.defaultHintTextColor = it
+            }
+        binding.edCountryName.setEndIconDrawable(R.drawable.ic_arrow_forward)
+        binding.btAdd.visibility = View.GONE
+        binding.gotoCountryChooserFragmentBtn.setOnClickListener {
+            findNavController().navigate(actionCountry)
+        }
+        binding.edTextNameCountryNameInput.setOnClickListener {
+            findNavController().navigate(actionCountry)
+        }
+    }
+
     private fun addArea() {
-        val action = WorkPlaceFragmentDirections.actionWorkPlaceFragmentToAreaChooserFragment()
         if (binding.edTextNameAreaNameInput.text.isNullOrBlank()) {
-            AppCompatResources.getColorStateList(requireContext(), R.color.gray)
-                ?.let {
-                    binding.edAreaName.setBoxStrokeColorStateList(it)
-                    binding.edAreaName.defaultHintTextColor = it
-                }
-            binding.edAreaName.setEndIconDrawable(R.drawable.ic_arrow_forward)
-            binding.edTextNameAreaNameInput.setOnClickListener {
-                findNavController().navigate(action)
-            }
-            binding.edTextNameAreaNameInput.setOnClickListener {
-                findNavController().navigate(action)
-            }
+            addArrowArea()
         } else {
             AppCompatResources.getColorStateList(requireContext(), R.color.black_universal)
                 ?.let {
@@ -55,7 +77,8 @@ class WorkPlaceFragment : Fragment(R.layout.fragment_work_place) {
             binding.edTextNameAreaNameInput.setOnTouchListener { v, event ->
                 if (event.action == MotionEvent.ACTION_UP) {
                     val drawable = binding.edTextNameAreaNameInput.compoundDrawables[2]
-                    if (drawable != null && event.rawX >= (binding.edTextNameAreaNameInput.right - drawable.bounds.width())) {
+                    if (drawable != null && event.rawX >=
+                        binding.edTextNameAreaNameInput.right - drawable.bounds.width()) {
                         binding.edTextNameAreaNameInput.setText("")
                         AppCompatResources.getColorStateList(requireContext(), R.color.gray)
                             ?.let {
@@ -64,12 +87,11 @@ class WorkPlaceFragment : Fragment(R.layout.fragment_work_place) {
                             }
                         binding.edAreaName.setEndIconDrawable(R.drawable.ic_arrow_forward)
                         binding.edTextNameAreaNameInput.setOnClickListener {
-                            findNavController().navigate(action)
+                            findNavController().navigate(actionArea)
                         }
                         binding.edAreaName.setEndIconOnClickListener {
-                            findNavController().navigate(action)
+                            findNavController().navigate(actionArea)
                         }
-
                         true
                     } else {
                         false
@@ -84,21 +106,9 @@ class WorkPlaceFragment : Fragment(R.layout.fragment_work_place) {
     }
 
     private fun addCountry() {
-        val action = WorkPlaceFragmentDirections.actionWorkPlaceFragmentToCountryChooserFragment()
+
         if (binding.edTextNameCountryNameInput.text.isNullOrBlank()) {
-            AppCompatResources.getColorStateList(requireContext(), R.color.gray)
-                ?.let {
-                    binding.edCountryName.setBoxStrokeColorStateList(it)
-                    binding.edCountryName.defaultHintTextColor = it
-                }
-            binding.edCountryName.setEndIconDrawable(R.drawable.ic_arrow_forward)
-            binding.btAdd.visibility = View.GONE
-            binding.gotoCountryChooserFragmentBtn.setOnClickListener {
-                findNavController().navigate(action)
-            }
-            binding.edTextNameCountryNameInput.setOnClickListener {
-                findNavController().navigate(action)
-            }
+            addArrowCountry()
         } else {
             AppCompatResources.getColorStateList(requireContext(), R.color.black_universal)
                 ?.let {
@@ -110,7 +120,8 @@ class WorkPlaceFragment : Fragment(R.layout.fragment_work_place) {
             binding.edTextNameCountryNameInput.setOnTouchListener { v, event ->
                 if (event.action == MotionEvent.ACTION_UP) {
                     val drawable = binding.edTextNameCountryNameInput.compoundDrawables[2]
-                    if (drawable != null && event.rawX >= (binding.edTextNameCountryNameInput.right - drawable.bounds.width())) {
+                    if (drawable != null && event.rawX >=
+                        binding.edTextNameCountryNameInput.right - drawable.bounds.width()) {
                         binding.edTextNameCountryNameInput.setText("")
                         AppCompatResources.getColorStateList(requireContext(), R.color.gray)
                             ?.let {
@@ -120,10 +131,10 @@ class WorkPlaceFragment : Fragment(R.layout.fragment_work_place) {
                         binding.edCountryName.setEndIconDrawable(R.drawable.ic_arrow_forward)
                         binding.btAdd.visibility = View.GONE
                         binding.edTextNameCountryNameInput.setOnClickListener {
-                            findNavController().navigate(action)
+                            findNavController().navigate(actionCountry)
                         }
                         binding.edCountryName.setEndIconOnClickListener {
-                            findNavController().navigate(action)
+                            findNavController().navigate(actionCountry)
                         }
 
                         true
