@@ -40,8 +40,8 @@ class VacancyMapper {
             vacancyName = favorite.nameVacancies,
             employerName = favorite.nameCompany,
             employerLogoUrl = favorite.logoUrl,
-            salaryFrom = transformSalaryFromString(favorite.salary!!, "from"),
-            salaryTo = transformSalaryFromString(favorite.salary, "to"),
+            salaryFrom = getSalaryFrom(favorite.salary!!),
+            salaryTo = getSalaryTo(favorite.salary),
             salaryCurrency = transformSalaryCurrencyFromString(favorite.salary),
             area = convertFromGsonToArea(favorite.city),
             experience = favorite.experience,
@@ -107,14 +107,15 @@ class VacancyMapper {
         )
     }
 
-    private fun transformSalaryFromString(salary: String, flag: String): Int? {
-        val strs = salary.split("__").toTypedArray()
-        if (flag == "to" && strs[1] != "null") {
-            return strs[1].toInt()
-        }
-        if (flag == "from" && strs[0] != "null") {
-            return strs[0].toInt()
-        }
+    private fun getSalaryFrom(salary: String): Int? {
+        val salaryArray = salary.split("__").toTypedArray()
+        if (salaryArray[0] != "null") return salaryArray[0].toInt()
+        return null
+    }
+
+    private fun getSalaryTo(salary: String): Int? {
+        val salaryArray = salary.split("__").toTypedArray()
+        if (salaryArray[1] != "null") return salaryArray[0].toInt()
         return null
     }
 
