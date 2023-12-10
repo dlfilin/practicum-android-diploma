@@ -133,13 +133,10 @@ class WorkPlaceFragment : Fragment(R.layout.fragment_work_place) {
                         binding.edCountryName.setEndIconOnClickListener {
                             findNavController().navigate(actionCountry)
                         }
-
                         true
-                    } else {
-                        false
+                    } else { false
                     }
-                } else {
-                    false
+                } else { false
                 }
             }
             binding.edTextNameCountryNameInput.requestFocus()
