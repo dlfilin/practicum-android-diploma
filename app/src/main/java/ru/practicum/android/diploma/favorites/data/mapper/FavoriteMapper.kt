@@ -21,7 +21,8 @@ class FavoriteMapper {
             contactEmail = favorite.contactEmail,
             contactPhone = favorite.contactPhone,
             comment = favorite.comment,
-            addTime = favorite.addTime
+            addTime = favorite.addTime,
+            alternateUrl = favorite.vacancyUrl
         )
     }
 
@@ -42,7 +43,8 @@ class FavoriteMapper {
             contactEmail = favorite.contactEmail,
             contactPhone = favorite.contactPhone,
             comment = favorite.comment,
-            addTime = favorite.addTime
+            addTime = favorite.addTime,
+            vacancyUrl = favorite.alternateUrl
         )
     }
 }
