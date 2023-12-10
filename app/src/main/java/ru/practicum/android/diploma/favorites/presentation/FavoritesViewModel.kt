@@ -18,6 +18,7 @@ class FavoritesViewModel(
     }
 
     fun getVacancies() {
+        renderState(FavoriteState.Loading)
         viewModelScope.launch {
             try {
                 favoriteInteractor.getAll().collect { vacancies ->
