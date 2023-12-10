@@ -1,16 +1,17 @@
-package ru.practicum.android.diploma.favorites.ui
+package ru.practicum.android.diploma.favorites.ui.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import ru.practicum.android.diploma.databinding.VacancyViewItemBinding
-import ru.practicum.android.diploma.favorites.domain.models.Favorite
+import ru.practicum.android.diploma.vacancy.domain.models.Vacancy
 
 class VacancyAdapter(
     private var onClickListener: OnClickListener
 ) : RecyclerView.Adapter<VacancyViewHolder>() {
 
-    private var vacancies = ArrayList<Favorite>()
+    private var vacancies = listOf<Vacancy>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VacancyViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -27,20 +28,19 @@ class VacancyAdapter(
     }
 
     fun updateRecycleView(
-        newVacancyList: List<Favorite>,
+        newVacancyList: List<Vacancy>,
         isPagination: Boolean = false
     ) {
         if (isPagination) {
             // здесь будем реализовывать полную версию с пейджингом
         } else {
-//            нужен рефакторинг с diffutil
-            vacancies.clear()
-            vacancies.addAll(newVacancyList)
-            notifyDataSetChanged()
+            val diffResult = DiffUtil.calculateDiff(VacancyDiffCallback(vacancies, newVacancyList))
+            vacancies = newVacancyList
+            diffResult.dispatchUpdatesTo(this)
         }
     }
 
     interface OnClickListener {
-        fun onVacancyClick(vacancy: Favorite)
+        fun onVacancyClick(vacancy: Vacancy)
     }
 }

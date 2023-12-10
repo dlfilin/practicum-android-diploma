@@ -54,6 +54,14 @@
         <action
             android:id="@+id/action_workPlaceFragment_to_areaChooserFragment"
             app:destination="@id/areaChooserFragment" />
+        <argument
+            android:name="countryArgs"
+            app:argType="string"
+            android:defaultValue=""/>
+        <argument
+            android:name="areaArgs"
+            app:argType="string"
+            android:defaultValue=""/>
     </fragment>
     <fragment
         android:id="@+id/industryChooserFragment"
@@ -64,12 +72,20 @@
         android:id="@+id/countryChooserFragment"
         android:name="ru.practicum.android.diploma.filter.ui.CountryChooserFragment"
         android:label="@string/choosing_country_title_tv"
-        tools:layout="@layout/fragment_country_chooser" />
+        tools:layout="@layout/fragment_country_chooser" >
+        <action
+            android:id="@+id/action_countryChooserFragment_to_workPlaceFragment"
+            app:destination="@id/workPlaceFragment" />
+    </fragment>
     <fragment
         android:id="@+id/areaChooserFragment"
         android:name="ru.practicum.android.diploma.filter.ui.AreaChooserFragment"
         android:label="@string/choosing_area_title_tv"
-        tools:layout="@layout/fragment_area_chooser" />
+        tools:layout="@layout/fragment_area_chooser" >
+        <action
+            android:id="@+id/action_areaChooserFragment_to_workPlaceFragment"
+            app:destination="@id/workPlaceFragment" />
+    </fragment>
     <fragment
         android:id="@+id/vacancyFragment"
         android:name="ru.practicum.android.diploma.vacancy.ui.VacancyFragment"
