@@ -200,4 +200,5 @@
         <item name="cornerSize">6dp</item>
         <item name="boxStrokeWidth">0dp</item>
         <item name="colorControlHighlight">@color/white_day_night</item>
+    </style>
 </resources>
