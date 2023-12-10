@@ -30,8 +30,22 @@ class VacancyViewModel(
     fun getVacancy(vacancyId: String) {
         vacancyState.postValue(VacancyScreenState.Loading)
         viewModelScope.launch {
-            vacancyInteractor.getVacancy(vacancyId).collect {
-                processResult(it)
+            vacancyInteractor.getVacancy(vacancyId).collect { result ->
+                when (result) {
+                    is Result.Success -> {
+                        _currentVacancy.value = result.data
+                        renderState(VacancyScreenState.Content(result.data!!))
+                    }
+
+                    is Result.Error -> {
+                        if (result.errorType == ErrorType.NO_INTERNET) {
+                            getVacancyFromDb(vacancyId)
+                            renderState(VacancyScreenState.InternetThrowable)
+                        } else {
+                            renderState(VacancyScreenState.Error)
+                        }
+                    }
+                }
                 val favoriteStatus = isFavorite(vacancyId)
                 isFavorite.postValue(favoriteStatus)
             }
@@ -50,23 +64,6 @@ class VacancyViewModel(
         sharingInteractor.sendEmail(email, subject)
     }
 
-    private fun processResult(result: Result<Vacancy>) {
-        when (result) {
-            is Result.Success -> {
-                _currentVacancy.value = result.data
-                renderState(VacancyScreenState.Content(result.data!!))
-            }
-
-            is Result.Error -> {
-                if (result.errorType == ErrorType.NO_INTERNET) {
-                    renderState(VacancyScreenState.InternetThrowable)
-                } else {
-                    renderState(VacancyScreenState.Error)
-                }
-            }
-        }
-    }
-
     private fun renderState(state: VacancyScreenState) {
         vacancyState.postValue(state)
     }
@@ -83,6 +80,16 @@ class VacancyViewModel(
                 vacancy.let { favoriteInteractor.addFavoriteVacancy(it) }
             }
             isFavorite.postValue(!favoriteStatus)
+        }
+    }
+
+    private suspend fun getVacancyFromDb(vacancyId: String) {
+        viewModelScope.launch {
+            val vacancyFromDb = favoriteInteractor.getById(vacancyId)
+            _currentVacancy.value = vacancyFromDb
+            if (vacancyFromDb != null) {
+                renderState(VacancyScreenState.Content(vacancyFromDb))
+            }
         }
     }
 

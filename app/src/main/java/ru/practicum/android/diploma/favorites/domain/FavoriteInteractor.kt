@@ -8,4 +8,5 @@ interface FavoriteInteractor {
     suspend fun addFavoriteVacancy(vacancy: Vacancy)
     suspend fun deleteFavoriteVacancy(vacancy: Vacancy)
     suspend fun isFavorite(id: String): Boolean
+    suspend fun getById(id: String): Vacancy?
 }
