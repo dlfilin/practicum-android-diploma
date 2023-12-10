@@ -1,6 +1,7 @@
 package ru.practicum.android.diploma.favorites.domain.mapper
 
 import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import ru.practicum.android.diploma.favorites.domain.models.Favorite
 import ru.practicum.android.diploma.vacancy.domain.models.Contacts
 import ru.practicum.android.diploma.vacancy.domain.models.Phone
@@ -33,6 +34,47 @@ class VacancyMapper {
         )
     }
 
+    fun mapToVacancy(favorite: Favorite): Vacancy {
+        return Vacancy(
+            id = favorite.id,
+            vacancyName = favorite.nameVacancies,
+            employerName = favorite.nameCompany,
+            employerLogoUrl = favorite.logoUrl,
+            salaryFrom = getSalaryFrom(favorite.salary!!),
+            salaryTo = getSalaryTo(favorite.salary),
+            salaryCurrency = transformSalaryCurrencyFromString(favorite.salary),
+            area = convertFromGsonToArea(favorite.city),
+            experience = favorite.experience,
+            schedule = favorite.schedule,
+            employment = favorite.employment,
+            description = favorite.description!!,
+            keySkills = convertFromGsonKeySkills(favorite.keySkills),
+            contacts = transformContactsFromFavorites(
+                favorite.contactPerson,
+                favorite.contactEmail,
+                favorite.contactPhone
+            ),
+            alternateUrl = favorite.alternateUrl,
+            address = convertFromGsonToAddress(favorite.city)
+        )
+    }
+
+    private fun getObjectFromGson(city: String): City {
+        val itemType = object : TypeToken<City>() {}.type
+        return gson.fromJson(city, itemType)
+    }
+
+    private fun convertFromGsonToAddress(city: String): String? {
+        val cityObject = getObjectFromGson(city)
+        if (cityObject.address != null) return cityObject.address
+        return null
+    }
+
+    private fun convertFromGsonToArea(city: String): String {
+        val cityObject = getObjectFromGson(city)
+        return cityObject.area
+    }
+
     private fun convertToGsonCity(vacancy: Vacancy): String {
         val city = City(area = vacancy.area, address = vacancy.address)
         return gson.toJson(city)
@@ -46,6 +88,15 @@ class VacancyMapper {
         return gson.toJson(skills)
     }
 
+    private fun convertFromGsonKeySkills(skills: String?): List<String>? {
+        if (skills != null) {
+            val itemType = object : TypeToken<List<String>>() {}.type
+            return gson.fromJson<List<String>>(skills, itemType)
+        }
+
+        return null
+    }
+
     private fun transformSalaryToString(salaryFrom: Int?, salaryTo: Int?, salaryCurrency: String?): String {
         return String.format(
             Locale.ENGLISH,
@@ -56,6 +107,23 @@ class VacancyMapper {
         )
     }
 
+    private fun getSalaryFrom(salary: String): Int? {
+        val salaryArray = salary.split("__").toTypedArray()
+        if (salaryArray[0] != "null") return salaryArray[0].toInt()
+        return null
+    }
+
+    private fun getSalaryTo(salary: String): Int? {
+        val salaryArray = salary.split("__").toTypedArray()
+        if (salaryArray[1] != "null") return salaryArray[0].toInt()
+        return null
+    }
+
+    private fun transformSalaryCurrencyFromString(salary: String): String {
+        val strs = salary.split("__").toTypedArray()
+        return strs[2]
+    }
+
     private fun transformContactsToContactPerson(contacts: Contacts?): String {
         return contacts?.name.toString()
     }
@@ -64,9 +132,23 @@ class VacancyMapper {
         return contacts?.email.toString()
     }
 
+    private fun transformContactsFromFavorites(person: String?, email: String?, phones: String?): Contacts {
+        var phoneList = listOf<Phone>()
+        if (phones != null && phones != "null") {
+            val itemType = object : TypeToken<List<Phone>>() {}.type
+            phoneList = gson.fromJson(phones, itemType)
+        }
+
+        return Contacts(
+            name = person,
+            email = email,
+            phones = phoneList
+        )
+    }
+
     companion object {
         data class City(
-            val area: String?,
+            val area: String,
             val address: String?
         )
     }
