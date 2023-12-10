@@ -236,4 +236,9 @@
         <item name="android:imeOptions">actionSearch</item>
         <item name="android:inputType">text</item>
     </style>
+
+    <style name="ShapeAppearance.App.SmallComponent" parent="ShapeAppearance.MaterialComponents.SmallComponent">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">@dimen/size_12</item>
+    </style>
 </resources>
