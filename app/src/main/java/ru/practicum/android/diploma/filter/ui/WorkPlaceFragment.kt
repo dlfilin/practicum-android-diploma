@@ -15,8 +15,8 @@ class WorkPlaceFragment : Fragment(R.layout.fragment_work_place) {
     private var _binding: FragmentWorkPlaceBinding? = null
     private val binding get() = _binding!!
 
-     private val actionArea = WorkPlaceFragmentDirections.actionWorkPlaceFragmentToAreaChooserFragment()
-     private val actionCountry = WorkPlaceFragmentDirections.actionWorkPlaceFragmentToCountryChooserFragment()
+    private val actionArea = WorkPlaceFragmentDirections.actionWorkPlaceFragmentToAreaChooserFragment()
+    private val actionCountry = WorkPlaceFragmentDirections.actionWorkPlaceFragmentToCountryChooserFragment()
 
     //    private val viewModel by viewModel<FilterViewModel>()
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -33,7 +33,7 @@ class WorkPlaceFragment : Fragment(R.layout.fragment_work_place) {
         addArea()
     }
 
-      private fun addArrowArea(){
+    private fun addArrowArea() {
         AppCompatResources.getColorStateList(requireContext(), R.color.gray)
             ?.let {
                 binding.edAreaName.setBoxStrokeColorStateList(it)
@@ -48,7 +48,7 @@ class WorkPlaceFragment : Fragment(R.layout.fragment_work_place) {
         }
     }
 
-    private fun addArrowCountry(){
+    private fun addArrowCountry() {
         AppCompatResources.getColorStateList(requireContext(), R.color.gray)
             ?.let {
                 binding.edCountryName.setBoxStrokeColorStateList(it)
@@ -65,8 +65,7 @@ class WorkPlaceFragment : Fragment(R.layout.fragment_work_place) {
     }
 
     private fun addArea() {
-        if (binding.edTextNameAreaNameInput.text.isNullOrBlank()) {
-            addArrowArea()
+        if (binding.edTextNameAreaNameInput.text.isNullOrBlank()) { addArrowArea()
         } else {
             AppCompatResources.getColorStateList(requireContext(), R.color.black_universal)
                 ?.let {
@@ -106,9 +105,7 @@ class WorkPlaceFragment : Fragment(R.layout.fragment_work_place) {
     }
 
     private fun addCountry() {
-
-        if (binding.edTextNameCountryNameInput.text.isNullOrBlank()) {
-            addArrowCountry()
+        if (binding.edTextNameCountryNameInput.text.isNullOrBlank()) { addArrowCountry()
         } else {
             AppCompatResources.getColorStateList(requireContext(), R.color.black_universal)
                 ?.let {
