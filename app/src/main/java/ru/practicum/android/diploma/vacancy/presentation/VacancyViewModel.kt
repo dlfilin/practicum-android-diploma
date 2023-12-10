@@ -40,7 +40,7 @@ class VacancyViewModel(
                     is Result.Error -> {
                         if (result.errorType == ErrorType.NO_INTERNET) {
                             getVacancyFromDb(vacancyId)
-                            renderState(VacancyScreenState.InternetThrowable)
+                            renderState(VacancyScreenState.Loading)
                         } else {
                             renderState(VacancyScreenState.Error)
                         }
@@ -89,6 +89,8 @@ class VacancyViewModel(
             _currentVacancy.value = vacancyFromDb
             if (vacancyFromDb != null) {
                 renderState(VacancyScreenState.Content(vacancyFromDb))
+            } else {
+                renderState(VacancyScreenState.InternetThrowable)
             }
         }
     }
