@@ -24,4 +24,8 @@ class FavoriteRepositoryImpl(
     override suspend fun deleteFavoriteVacancy(favorite: Favorite) {
         appDataBase.favoriteDao().deleteFavoriteVacancy(favoriteMapper.map(favorite))
     }
+
+    override suspend fun isFavorite(id: String): Boolean {
+        return appDataBase.favoriteDao().isFavorite(id)
+    }
 }

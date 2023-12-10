@@ -6,6 +6,11 @@ import ru.practicum.android.diploma.favorites.data.repository.FavoriteRepository
 import ru.practicum.android.diploma.favorites.domain.repository.FavoriteRepository
 import ru.practicum.android.diploma.search.data.repository.SearchRepositoryImpl
 import ru.practicum.android.diploma.search.domain.api.SearchRepository
+import ru.practicum.android.diploma.vacancy.data.mapper.VacancyMapper
+import ru.practicum.android.diploma.sharing.data.repository.ExternalNavigatorImpl
+import ru.practicum.android.diploma.vacancy.data.repository.VacancyRepositoryImpl
+import ru.practicum.android.diploma.sharing.domain.ExternalNavigator
+import ru.practicum.android.diploma.vacancy.domain.api.VacancyRepository
 
 val repositoryModule = module {
     single<SearchRepository> {
@@ -13,6 +18,13 @@ val repositoryModule = module {
     }
     factory { FavoriteMapper() }
     single<FavoriteRepository> {
-        FavoriteRepositoryImpl(get(), get())
+        FavoriteRepositoryImpl(appDataBase = get(), favoriteMapper = get())
+    }
+    factory { VacancyMapper() }
+    single<VacancyRepository> {
+        VacancyRepositoryImpl(networkClient = get(), vacancyMapper = get())
+    }
+    single<ExternalNavigator> {
+        ExternalNavigatorImpl(context = get())
     }
 }

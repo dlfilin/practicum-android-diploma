@@ -6,9 +6,58 @@
     android:layout_height="match_parent"
     tools:context=".vacancy.ui.VacancyFragment">
 
-    <ScrollView
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/clProgressBar"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        tools:visibility="gone">
+
+        <ProgressBar
+            android:id="@+id/newSearchProgressBar"
+            style="@style/progressBar"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:visibility="visible" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/clErrorPlaceholder"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone">
+
+        <ImageView
+            android:id="@+id/errorPlaceholderImage"
+            style="@style/placeholderImage"
+            android:contentDescription="@string/server_throwable_tv"
+            android:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:src="@drawable/placeholder_error_server" />
+
+        <TextView
+            android:id="@+id/errorPlaceholderText"
+            style="@style/placeholderText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="visible"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/errorPlaceholderImage"
+            tools:text="@string/server_throwable_tv" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <ScrollView
+        android:id="@+id/svVacancy"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        tools:visibility="visible">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -16,26 +65,19 @@
 
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/content_start"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:orientation="vertical"
+                style="@style/vacancyGuideline"
                 app:layout_constraintGuide_begin="@dimen/space_16" />
 
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/content_end"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:orientation="vertical"
+                style="@style/vacancyGuideline"
                 app:layout_constraintGuide_end="@dimen/space_16" />
 
             <TextView
                 android:id="@+id/nameVacancy"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
-                android:textColor="?attr/colorSecondary"
-                android:textSize="32sp"
-                android:textStyle="bold"
+                style="@style/vacancyTextViewMarginTop24"
+                android:fontFamily="@font/ys_display_bold"
+                android:textSize="@dimen/font_32"
                 app:layout_constraintEnd_toEndOf="@id/content_end"
                 app:layout_constraintStart_toStartOf="@id/content_start"
                 app:layout_constraintTop_toTopOf="parent"
@@ -43,11 +85,8 @@
 
             <TextView
                 android:id="@+id/salary"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/space_4"
+                style="@style/vacancyTextViewMarginTop4"
                 android:fontFamily="@font/ys_display_medium"
-                android:textColor="?attr/colorSecondary"
                 android:textSize="@dimen/font_22"
                 app:layout_constraintEnd_toEndOf="@id/content_end"
                 app:layout_constraintStart_toStartOf="@id/content_start"
@@ -56,79 +95,60 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/infoCompany"
-                android:layout_width="0dp"
+                android:layout_width="@dimen/size_0"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
+                android:layout_marginTop="@dimen/space_24"
                 android:background="@drawable/background_light_gray_rounded"
+                android:padding="@dimen/space_16"
                 app:layout_constraintEnd_toEndOf="@id/content_end"
                 app:layout_constraintStart_toStartOf="@id/content_start"
                 app:layout_constraintTop_toBottomOf="@id/salary">
 
                 <ImageView
                     android:id="@+id/image"
-                    android:layout_width="45dp"
-                    android:layout_height="45dp"
-                    android:layout_marginStart="@dimen/space_16"
-                    android:layout_marginTop="@dimen/space_16"
-                    android:layout_marginBottom="@dimen/space_16"
-                    tools:src="@drawable/vacancy_item_placeholder"
-                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:layout_width="@dimen/size_48"
+                    android:layout_height="@dimen/size_48"
+                    android:contentDescription="@string/employer_logo"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                     />
+                    tools:src="@drawable/vacancy_item_placeholder" />
 
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                <TextView
+                    android:id="@+id/companyName"
+                    style="@style/vacancyTextView"
                     android:layout_marginStart="@dimen/space_8"
-                    android:orientation="vertical"
-                    app:layout_constraintBottom_toBottomOf="@id/image"
+                    android:fontFamily="@font/ys_display_medium"
+                    android:textColor="@color/black_universal"
+                    android:textSize="@dimen/font_22"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@id/image"
-                    app:layout_constraintTop_toTopOf="@id/image">
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:text="Частная компания Automated Communication Solutions Ltd. и Партнеры" />
 
-                    <TextView
-                        android:id="@+id/companyName"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/ys_display_medium"
-                        android:textColor="?attr/colorSecondary"
-                        android:textSize="@dimen/font_22"
-                        tools:text="Еда" />
-
-                    <TextView
-                        android:id="@+id/city"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/ys_display_medium"
-                        android:textColor="?attr/colorSecondary"
-                        android:textSize="@dimen/font_16"
-                        tools:text="Москва" />
-
-                </LinearLayout>
+                <TextView
+                    android:id="@+id/city"
+                    style="@style/vacancyTextView"
+                    android:fontFamily="@font/ys_display_medium"
+                    android:textColor="@color/black_universal"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="@id/companyName"
+                    app:layout_constraintTop_toBottomOf="@id/companyName"
+                    tools:text="Санкт-Петербург, 2-ая Тверская-Ямская улица, д. 5. офис 2413" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <TextView
                 android:id="@+id/tvExperience"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
+                style="@style/vacancyTextViewMarginTop24"
                 android:fontFamily="@font/ys_display_medium"
                 android:text="@string/required_experience_tv"
-                android:textColor="?attr/colorSecondary"
-                android:textSize="@dimen/font_16"
                 app:layout_constraintEnd_toEndOf="@id/content_end"
                 app:layout_constraintStart_toStartOf="@id/content_start"
                 app:layout_constraintTop_toBottomOf="@id/infoCompany" />
 
             <TextView
                 android:id="@+id/experience"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/space_4"
-                android:fontFamily="@font/ys_display_regular"
-                android:textColor="?attr/colorSecondary"
-                android:textSize="@dimen/font_16"
+                style="@style/vacancyTextViewMarginTop4"
                 app:layout_constraintEnd_toEndOf="@id/content_end"
                 app:layout_constraintStart_toStartOf="@id/content_start"
                 app:layout_constraintTop_toBottomOf="@id/tvExperience"
@@ -136,12 +156,8 @@
 
             <TextView
                 android:id="@+id/schedule"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                style="@style/vacancyTextView"
                 android:layout_marginTop="@dimen/space_8"
-                android:fontFamily="@font/ys_display_regular"
-                android:textColor="?attr/colorSecondary"
-                android:textSize="@dimen/font_16"
                 app:layout_constraintEnd_toEndOf="@id/content_end"
                 app:layout_constraintStart_toStartOf="@id/content_start"
                 app:layout_constraintTop_toBottomOf="@id/experience"
@@ -149,12 +165,10 @@
 
             <TextView
                 android:id="@+id/tvDescription"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="32dp"
+                style="@style/vacancyTextView"
+                android:layout_marginTop="@dimen/space_32"
                 android:fontFamily="@font/ys_display_medium"
                 android:text="@string/job_description_tv"
-                android:textColor="?attr/colorSecondary"
                 android:textSize="@dimen/font_22"
                 app:layout_constraintEnd_toEndOf="@id/content_end"
                 app:layout_constraintStart_toStartOf="@id/content_start"
@@ -162,22 +176,16 @@
 
             <TextView
                 android:id="@+id/description"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/space_16"
-                android:textColor="?attr/colorSecondary"
+                style="@style/vacancyTextViewMarginTop16"
                 app:layout_constraintEnd_toEndOf="@id/content_end"
                 app:layout_constraintStart_toStartOf="@id/content_start"
                 app:layout_constraintTop_toBottomOf="@id/tvDescription" />
 
             <TextView
                 android:id="@+id/tvKeySkill"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
+                style="@style/vacancyTextViewMarginTop24"
                 android:fontFamily="@font/ys_display_medium"
                 android:text="@string/key_skills_tv"
-                android:textColor="?attr/colorSecondary"
                 android:textSize="@dimen/font_22"
                 app:layout_constraintEnd_toEndOf="@id/content_end"
                 app:layout_constraintStart_toStartOf="@id/content_start"
@@ -185,24 +193,16 @@
 
             <TextView
                 android:id="@+id/keySkill"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:fontFamily="@font/ys_display_regular"
-                android:textColor="?attr/colorSecondary"
-                android:textSize="@dimen/font_16"
+                style="@style/vacancyTextViewMarginTop16"
                 app:layout_constraintEnd_toEndOf="@id/content_end"
                 app:layout_constraintStart_toStartOf="@id/content_start"
                 app:layout_constraintTop_toBottomOf="@id/tvKeySkill" />
 
             <TextView
                 android:id="@+id/tvContacts"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
+                style="@style/vacancyTextViewMarginTop24"
                 android:fontFamily="@font/ys_display_medium"
                 android:text="@string/contacts_tv"
-                android:textColor="?attr/colorSecondary"
                 android:textSize="@dimen/font_22"
                 app:layout_constraintEnd_toEndOf="@id/content_end"
                 app:layout_constraintStart_toStartOf="@id/content_start"
@@ -210,23 +210,15 @@
 
             <TextView
                 android:id="@+id/tvContactName"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/space_16"
-                android:fontFamily="@font/ys_display_medium"
+                style="@style/vacancyTextViewMarginTop16"
                 android:text="@string/contact_person_tv"
-                android:textColor="?attr/colorSecondary"
-                android:textSize="@dimen/font_16"
                 app:layout_constraintEnd_toEndOf="@id/content_end"
                 app:layout_constraintStart_toStartOf="@id/content_start"
                 app:layout_constraintTop_toBottomOf="@id/tvContacts" />
 
             <TextView
                 android:id="@+id/contactName"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/space_4"
-                android:textColor="?attr/colorSecondary"
+                style="@style/vacancyTextViewMarginTop4"
                 app:layout_constraintEnd_toEndOf="@id/content_end"
                 app:layout_constraintStart_toStartOf="@id/content_start"
                 app:layout_constraintTop_toBottomOf="@id/tvContactName"
@@ -234,25 +226,17 @@
 
             <TextView
                 android:id="@+id/tvEmail"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/space_16"
+                style="@style/vacancyTextViewMarginTop16"
                 android:fontFamily="@font/ys_display_medium"
                 android:text="@string/email_tv"
-                android:textColor="?attr/colorSecondary"
-                android:textSize="@dimen/font_16"
                 app:layout_constraintEnd_toEndOf="@id/content_end"
                 app:layout_constraintStart_toStartOf="@id/content_start"
                 app:layout_constraintTop_toBottomOf="@id/contactName" />
 
             <TextView
                 android:id="@+id/email"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/space_4"
-                android:fontFamily="@font/ys_display_regular"
+                style="@style/vacancyTextViewMarginTop4"
                 android:textColor="@color/blue"
-                android:textSize="@dimen/font_16"
                 app:layout_constraintEnd_toEndOf="@id/content_end"
                 app:layout_constraintStart_toStartOf="@id/content_start"
                 app:layout_constraintTop_toBottomOf="@id/tvEmail"
@@ -260,51 +244,37 @@
 
             <TextView
                 android:id="@+id/tvPhone"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/space_16"
+                style="@style/vacancyTextViewMarginTop16"
                 android:fontFamily="@font/ys_display_medium"
                 android:text="@string/phone_number_tv"
-                android:textColor="?attr/colorSecondary"
-                android:textSize="@dimen/font_16"
                 app:layout_constraintEnd_toEndOf="@id/content_end"
                 app:layout_constraintStart_toStartOf="@id/content_start"
                 app:layout_constraintTop_toBottomOf="@id/email" />
 
-            <TextView
-                android:id="@+id/phone"
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/phoneList"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/space_4"
-                android:fontFamily="@font/ys_display_regular"
-                android:textColor="@color/blue"
-                android:textSize="@dimen/font_16"
+                android:nestedScrollingEnabled="false"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 app:layout_constraintEnd_toEndOf="@id/content_end"
                 app:layout_constraintStart_toStartOf="@id/content_start"
                 app:layout_constraintTop_toBottomOf="@id/tvPhone"
-                tools:text="+7 (904) 329-27-71" />
+                tools:itemCount="2"
+                tools:listitem="@layout/item_phone" />
 
             <TextView
                 android:id="@+id/tvComment"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/space_16"
+                style="@style/vacancyTextViewMarginTop16"
                 android:fontFamily="@font/ys_display_medium"
                 android:text="@string/comment_tv"
-                android:textColor="?attr/colorSecondary"
-                android:textSize="@dimen/font_16"
                 app:layout_constraintEnd_toEndOf="@id/content_end"
                 app:layout_constraintStart_toStartOf="@id/content_start"
-                app:layout_constraintTop_toBottomOf="@id/phone" />
+                app:layout_constraintTop_toBottomOf="@id/phoneList" />
 
             <TextView
                 android:id="@+id/comment"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/space_4"
-                android:fontFamily="@font/ys_display_regular"
-                android:textColor="?attr/colorSecondary"
-                android:textSize="@dimen/font_16"
+                style="@style/vacancyTextViewMarginTop4"
                 app:layout_constraintEnd_toEndOf="@id/content_end"
                 app:layout_constraintStart_toStartOf="@id/content_start"
                 app:layout_constraintTop_toBottomOf="@id/tvComment"
@@ -328,6 +298,5 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </ScrollView>
-
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

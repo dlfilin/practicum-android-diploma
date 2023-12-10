@@ -3,20 +3,91 @@ package ru.practicum.android.diploma.vacancy.presentation
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.launch
+import ru.practicum.android.diploma.common.util.ErrorType
+import ru.practicum.android.diploma.common.util.Result
+import ru.practicum.android.diploma.favorites.domain.FavoriteInteractor
+import ru.practicum.android.diploma.sharing.domain.SharingInteractor
+import ru.practicum.android.diploma.vacancy.domain.api.VacancyInteractor
+import ru.practicum.android.diploma.vacancy.domain.models.Phone
+import ru.practicum.android.diploma.vacancy.domain.models.Vacancy
 
 class VacancyViewModel(
-    private val vacancyId: String
+    private val vacancyId: String,
+    private val vacancyInteractor: VacancyInteractor,
+    private val sharingInteractor: SharingInteractor,
+    private val favoriteInteractor: FavoriteInteractor
 ) : ViewModel() {
 
-    private var isFavorite = false
+    private var isFavorite = MutableLiveData<Boolean>()
+    fun observeFavoriteState(): LiveData<Boolean> = isFavorite
+    private val vacancyState = MutableLiveData<VacancyScreenState>()
+    fun observeVacancyState(): LiveData<VacancyScreenState> = vacancyState
+    private val _currentVacancy = MutableLiveData<Vacancy?>(null)
+    val currentVacancy = _currentVacancy as LiveData<Vacancy?>
 
-    private val _state = MutableLiveData(VacancyScreenState(false))
-    val state: LiveData<VacancyScreenState> get() = _state
+    fun getVacancy(vacancyId: String) {
+        vacancyState.postValue(VacancyScreenState.Loading)
+        viewModelScope.launch {
+            vacancyInteractor.getVacancy(vacancyId).collect {
+                processResult(it)
+                val favoriteStatus = isFavorite(vacancyId)
+                isFavorite.postValue(favoriteStatus)
+            }
+        }
+    }
 
-    fun toggleFavorite() {
-        // пока просто для наглядности
-        isFavorite = !isFavorite
-        _state.postValue(VacancyScreenState(isFavorite))
+    fun shareVacancy(vacancyUrl: String) {
+        sharingInteractor.shareInMessenger(vacancyUrl)
+    }
+
+    fun makeCall(phone: Phone) {
+        sharingInteractor.makeCall(phone)
+    }
+
+    fun sendEmail(email: String, subject: String) {
+        sharingInteractor.sendEmail(email, subject)
+    }
+
+    private fun processResult(result: Result<Vacancy>) {
+        when (result) {
+            is Result.Success -> {
+                _currentVacancy.value = result.data
+                renderState(VacancyScreenState.Content(result.data!!))
+            }
+
+            is Result.Error -> {
+                if (result.errorType == ErrorType.NO_INTERNET) {
+                    renderState(VacancyScreenState.InternetThrowable)
+                } else {
+                    renderState(VacancyScreenState.Error)
+                }
+            }
+        }
+    }
+
+    private fun renderState(state: VacancyScreenState) {
+        vacancyState.postValue(state)
+    }
+
+    fun toggleFavorite(vacancy: Vacancy) {
+        viewModelScope.launch {
+            val favoriteStatus = isFavorite(vacancy.id)
+
+            if (favoriteStatus) {
+                // delete
+                vacancy.let { favoriteInteractor.deleteFavoriteVacancy(it) }
+            } else {
+                // add
+                vacancy.let { favoriteInteractor.addFavoriteVacancy(it) }
+            }
+            isFavorite.postValue(!favoriteStatus)
+        }
+    }
+
+    private suspend fun isFavorite(vacancyId: String): Boolean {
+        return favoriteInteractor.isFavorite(vacancyId)
     }
 
     fun getVacancyId(): String = vacancyId
