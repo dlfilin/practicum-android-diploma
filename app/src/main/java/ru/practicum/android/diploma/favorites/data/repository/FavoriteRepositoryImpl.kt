@@ -28,4 +28,13 @@ class FavoriteRepositoryImpl(
     override suspend fun isFavorite(id: String): Boolean {
         return appDataBase.favoriteDao().isFavorite(id)
     }
+
+    override suspend fun getById(id: String): Favorite? {
+        val favoriteEntity = appDataBase.favoriteDao().getById(id)
+        return if (favoriteEntity != null) {
+            favoriteMapper.map(favoriteEntity)
+        } else {
+            null
+        }
+    }
 }

@@ -22,4 +22,7 @@ interface FavoritesDao {
 
     @Query("SELECT COUNT(*) FROM favorites_vacancies WHERE id = :id")
     suspend fun isFavorite(id: String): Boolean
+
+    @Query("SELECT * FROM favorites_vacancies WHERE id = :id")
+    suspend fun getById(id: String): FavoriteEntity?
 }

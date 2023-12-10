@@ -30,4 +30,13 @@ class FavoriteInteractorImp(
     override suspend fun isFavorite(id: String): Boolean {
         return favoriteRepository.isFavorite(id)
     }
+
+    override suspend fun getById(id: String): Vacancy? {
+        val vacancy = favoriteRepository.getById(id)
+        return if (vacancy != null) {
+            vacancyMapper.mapToVacancy(vacancy)
+        } else {
+            null
+        }
+    }
 }
