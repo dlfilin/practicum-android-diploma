@@ -7,7 +7,7 @@ sealed interface SearchScreenState {
         val vacancyData: VacancyListData
     ) : SearchScreenState
 
-    data object Defalt : SearchScreenState
+    data object Default : SearchScreenState
     data object Loading : SearchScreenState
     data object Error : SearchScreenState
     data object InternetThrowable : SearchScreenState
