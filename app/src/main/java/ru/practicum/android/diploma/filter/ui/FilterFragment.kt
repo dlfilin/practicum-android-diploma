@@ -175,9 +175,11 @@ class FilterFragment : Fragment(R.layout.fragment_filter) {
             textInputEditTextSalary.text?.clear()
             if (edIndustry.text.isNullOrEmpty() && edWorkPlace.text.isNullOrEmpty()
                 && textInputEditTextSalary.text.isNullOrEmpty()
-            )
+            ) {
                 btClear.isVisible = false
-            btAdd.isVisible = false
+                btAdd.isVisible = false
+            }
+
         }
     }
 
