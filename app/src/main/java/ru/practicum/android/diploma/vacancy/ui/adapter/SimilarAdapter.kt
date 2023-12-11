@@ -67,11 +67,11 @@ class SimilarAdapter(private val itemClickListener: ItemClickListener) :
         }
 
         override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-           return oldList[oldItemPosition] == newList[newItemPosition]
+            return oldList[oldItemPosition] == newList[newItemPosition]
         }
     }
 
-    fun addSimilarList(newData : List<VacancyItem>){
+    fun addSimilarList(newData: List<VacancyItem>) {
         val diffCallback = DiffSimilarCallback(similarList, newData)
         val diffResult = DiffUtil.calculateDiff(diffCallback)
         similarList.clear()
