@@ -1,7 +1,6 @@
 package ru.practicum.android.diploma.filter.ui
 
 import android.os.Bundle
-import android.view.MotionEvent
 import android.view.View
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.fragment.app.Fragment
@@ -81,36 +80,27 @@ class WorkPlaceFragment : Fragment(R.layout.fragment_work_place) {
                     binding.edAreaName.setBoxStrokeColorStateList(it)
                     binding.edAreaName.defaultHintTextColor = it
                 }
-            binding.edAreaName.setEndIconDrawable(R.drawable.ic_clear)
-            binding.edTextNameAreaNameInput.setOnTouchListener { v, event ->
-                if (event.action == MotionEvent.ACTION_UP) {
-                    val drawable = binding.edTextNameAreaNameInput.compoundDrawables[2]
-                    if (drawable != null && event.rawX >=
-                        binding.edTextNameAreaNameInput.right - drawable.bounds.width()
-                    ) {
-                        binding.edTextNameAreaNameInput.setText("")
-                        AppCompatResources.getColorStateList(requireContext(), R.color.gray)
-                            ?.let {
-                                binding.edAreaName.setBoxStrokeColorStateList(it)
-                                binding.edAreaName.defaultHintTextColor = it
-                            }
-                        binding.edAreaName.setEndIconDrawable(R.drawable.ic_arrow_forward)
-                        binding.edTextNameAreaNameInput.setOnClickListener {
-                            findNavController().navigate(actionArea)
-                        }
-                        binding.edAreaName.setEndIconOnClickListener {
-                            findNavController().navigate(actionArea)
-                        }
-                        true
-                    } else {
-                        false
+            binding.edAreaName.apply {
+                setEndIconDrawable(R.drawable.ic_clear)
+                tag = R.drawable.ic_clear
+            }
+        }
+        binding.edAreaName.setEndIconOnClickListener {
+            if (binding.edAreaName.tag == R.drawable.ic_clear) {
+                binding.edTextNameAreaNameInput.text?.clear()
+                binding.edAreaName.setEndIconDrawable(R.drawable.ic_arrow_forward)
+                AppCompatResources.getColorStateList(requireContext(), R.color.gray)
+                    ?.let {
+                        binding.edAreaName.setBoxStrokeColorStateList(it)
+                        binding.edAreaName.defaultHintTextColor = it
                     }
-                } else {
-                    false
+                binding.edTextNameAreaNameInput.setOnClickListener {
+                    findNavController().navigate(actionArea)
+                }
+                binding.edAreaName.setEndIconOnClickListener {
+                    findNavController().navigate(actionArea)
                 }
             }
-            binding.edTextNameAreaNameInput.requestFocus()
-            binding.edTextNameAreaNameInput.clearFocus()
         }
     }
 
@@ -123,38 +113,29 @@ class WorkPlaceFragment : Fragment(R.layout.fragment_work_place) {
                     binding.edCountryName.setBoxStrokeColorStateList(it)
                     binding.edCountryName.defaultHintTextColor = it
                 }
-            binding.edCountryName.setEndIconDrawable(R.drawable.ic_clear)
-            binding.btAdd.visibility = View.VISIBLE
-            binding.edTextNameCountryNameInput.setOnTouchListener { v, event ->
-                if (event.action == MotionEvent.ACTION_UP) {
-                    val drawable = binding.edTextNameCountryNameInput.compoundDrawables[2]
-                    if (drawable != null && event.rawX >=
-                        binding.edTextNameCountryNameInput.right - drawable.bounds.width()
-                    ) {
-                        binding.edTextNameCountryNameInput.setText("")
-                        AppCompatResources.getColorStateList(requireContext(), R.color.gray)
-                            ?.let {
-                                binding.edCountryName.setBoxStrokeColorStateList(it)
-                                binding.edCountryName.defaultHintTextColor = it
-                            }
-                        binding.edCountryName.setEndIconDrawable(R.drawable.ic_arrow_forward)
-                        binding.btAdd.visibility = View.GONE
-                        binding.edTextNameCountryNameInput.setOnClickListener {
-                            findNavController().navigate(actionCountry)
-                        }
-                        binding.edCountryName.setEndIconOnClickListener {
-                            findNavController().navigate(actionCountry)
-                        }
-                        true
-                    } else {
-                        false
+            binding.edCountryName.apply {
+                setEndIconDrawable(R.drawable.ic_clear)
+                tag = R.drawable.ic_clear
+                binding.btAdd.visibility = View.VISIBLE
+            }
+        }
+        binding.edCountryName.setEndIconOnClickListener {
+            if (binding.edCountryName.tag == R.drawable.ic_clear) {
+                binding.edTextNameCountryNameInput.text?.clear()
+                binding.edCountryName.setEndIconDrawable(R.drawable.ic_arrow_forward)
+                AppCompatResources.getColorStateList(requireContext(), R.color.gray)
+                    ?.let {
+                        binding.edCountryName.setBoxStrokeColorStateList(it)
+                        binding.edCountryName.defaultHintTextColor = it
                     }
-                } else {
-                    false
+                binding.btAdd.visibility = View.GONE
+                binding.edTextNameCountryNameInput.setOnClickListener {
+                    findNavController().navigate(actionCountry)
+                }
+                binding.edCountryName.setEndIconOnClickListener {
+                    findNavController().navigate(actionCountry)
                 }
             }
-            binding.edTextNameCountryNameInput.requestFocus()
-            binding.edTextNameCountryNameInput.clearFocus()
         }
     }
 
