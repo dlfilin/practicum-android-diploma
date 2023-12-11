@@ -34,6 +34,7 @@ class SimilarVacanciesViewModel(
     }
 
     private fun processResult(result: Result<VacancyListData>) {
+        renderState(SimilarVacanciesScreenState.Loading)
         when (result) {
             is Result.Success -> {
                 if (result.data?.items.isNullOrEmpty()) {
