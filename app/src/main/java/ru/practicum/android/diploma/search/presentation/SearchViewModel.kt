@@ -11,6 +11,7 @@ import ru.practicum.android.diploma.common.util.Result
 import ru.practicum.android.diploma.common.util.debounce
 import ru.practicum.android.diploma.filter.domain.models.FilterParameters
 import ru.practicum.android.diploma.search.domain.api.SearchInteractor
+import ru.practicum.android.diploma.search.domain.model.QuerySearch
 import ru.practicum.android.diploma.search.domain.model.VacancyListData
 
 class SearchViewModel(
@@ -38,6 +39,14 @@ class SearchViewModel(
         searchRequest(searchRequest)
     }
 
+    private val searchTrackDebouncePraktikumPaging = debounce<QuerySearch>(
+        SEARCH_DEBOUNCE_DELAY_IN_MILLIS,
+        viewModelScope,
+        true
+    ) { searchRequest ->
+        searchRequestPraktikumPaging(searchRequest)
+    }
+
     fun searchDebounce(changedText: String) {
         if (changedText.isBlank()) {
             renderState(SearchScreenState.Default)
@@ -46,6 +55,14 @@ class SearchViewModel(
             this.latestSearchText = changedText
             searchTrackDebounce(latestSearchText)
         }
+    }
+
+    fun searchDebouncePraktikumPaging(search: QuerySearch) {
+        if (search.text.isBlank()) {
+            renderState(SearchScreenState.Default)
+        }
+        this.latestSearchText = search.text
+        searchTrackDebouncePraktikumPaging(search)
     }
 
     fun checkFilterState() {
@@ -65,6 +82,18 @@ class SearchViewModel(
         }
     }
 
+    private fun searchRequestPraktikumPaging(search: QuerySearch) {
+        if (search.text.isNotBlank()) {
+            if (search.page == 0) renderState(SearchScreenState.Loading)
+
+            viewModelScope.launch {
+                searchInteractor.searchVacanciesPraktikumPaging(search, filterParameters).collect {
+                    processResult(it)
+                }
+            }
+        }
+    }
+
     private fun processResult(result: Result<VacancyListData>) {
         when (result) {
             is Result.Success -> {
@@ -72,6 +101,7 @@ class SearchViewModel(
                     renderState(SearchScreenState.Empty)
                 } else {
                     renderState(SearchScreenState.Content(result.data!!))
+                    Log.e("DEBUG", result.data.page.toString())
                     Log.e("SIZE", result.data.items.size.toString())
                     Log.e("DATA", result.data.items.toString())
                 }

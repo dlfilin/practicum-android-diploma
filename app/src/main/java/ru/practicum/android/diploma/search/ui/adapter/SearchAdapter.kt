@@ -1,7 +1,9 @@
 package ru.practicum.android.diploma.search.ui.adapter
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterInside
@@ -13,11 +15,27 @@ import ru.practicum.android.diploma.search.domain.model.VacancyItem
 
 class SearchAdapter(private val clickListener: VacancyClickListener) : RecyclerView.Adapter<SearchViewHolder>() {
 
-    private var vacancyList = listOf<VacancyItem>()
+//    private var vacancyList = listOf<VacancyItem>()
+    private val vacancyList = arrayListOf<VacancyItem>()
 
-    fun setVacancyList(newList: List<VacancyItem>) {
+    /*fun setVacancyList(newList: List<VacancyItem>) {
         vacancyList = newList
         notifyDataSetChanged()
+    }*/
+
+    fun updateVacancyList(newList: List<VacancyItem>) {
+        val newListForCompare = vacancyList.map { it } as ArrayList<VacancyItem>
+        newListForCompare.addAll(newList)
+        Log.d("DIFF", vacancyList.size.toString())
+        val diffResult =
+            DiffUtil.calculateDiff(
+                VacancyDiffCallback(
+                    vacancyList,
+                    newListForCompare as List<VacancyItem>
+                )
+            )
+        vacancyList.addAll(newList)
+        diffResult.dispatchUpdatesTo(this)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SearchViewHolder {

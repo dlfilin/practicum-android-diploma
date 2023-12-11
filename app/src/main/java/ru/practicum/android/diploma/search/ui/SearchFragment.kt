@@ -5,17 +5,21 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
+import android.view.ViewGroup
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
 import androidx.core.view.isVisible
+import androidx.core.widget.NestedScrollView
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.RecyclerView
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.common.util.debounce
 import ru.practicum.android.diploma.databinding.FragmentSearchBinding
+import ru.practicum.android.diploma.search.domain.model.QuerySearch
 import ru.practicum.android.diploma.search.domain.model.VacancyItem
 import ru.practicum.android.diploma.search.domain.model.VacancyListData
 import ru.practicum.android.diploma.search.presentation.FilterState
@@ -49,6 +53,9 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         isClickAllowed = param
     }
 
+    private var currentPage = 0
+    private val searchQuery = QuerySearch(0, "", perPage = 10)
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentSearchBinding.bind(view)
@@ -58,6 +65,29 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         checkFilterState()
         setToolbarMenu()
         setObservables()
+
+        val recyclerView = requireView().findViewById<RecyclerView>(R.id.vacancyListRv)
+        val nestedScrollView = requireView().findViewById<NestedScrollView>(R.id.nestedScrollRv)
+        var paginatedRv: RecyclerView? = null
+
+        nestedScrollView.viewTreeObserver?.addOnScrollChangedListener {
+            if (paginatedRv == null) {
+                val holder = nestedScrollView.getChildAt(0) as ViewGroup
+                for (i in 0 until holder.childCount) {
+                    if (holder.getChildAt(i).id == recyclerView.id) {
+                        paginatedRv = holder.getChildAt(i) as RecyclerView
+                        break
+                    }
+                }
+            }
+            paginatedRv?.let {
+                if (it.bottom - (nestedScrollView.height + nestedScrollView.scrollY) == 0) {
+                    binding.recyclerViewProgressBar.isVisible = true
+                    searchQuery.page = currentPage + 1
+                    viewmodel.searchDebouncePraktikumPaging(searchQuery)
+                }
+            }
+        }
     }
 
     override fun onDestroyView() {
@@ -96,11 +126,18 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
     }
 
     private fun search() {
-        viewmodel.searchDebounce(binding.searchEditText.text.toString())
+        val searchString = binding.searchEditText.text.toString()
+        searchQuery.text = searchString
+        searchQuery.page = currentPage
+        viewmodel.searchDebouncePraktikumPaging(searchQuery)
+//        viewmodel.searchDebounce(binding.searchEditText.text.toString())
     }
 
     private fun setRvAdapter() {
         binding.vacancyListRv.adapter = adapter
+        // для приятного скроллинга
+        binding.vacancyListRv.setHasFixedSize(false)
+        binding.vacancyListRv.isNestedScrollingEnabled = false
     }
 
     private fun setToolbarMenu() {
@@ -175,6 +212,7 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
 
     private fun showFoundVacancy(foundVacancyData: VacancyListData) {
         hideAllView()
+        currentPage = foundVacancyData.page
         val numOfVacancy = resources.getQuantityString(
             R.plurals.vacancy_number,
             foundVacancyData.found,
@@ -182,7 +220,8 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         )
         binding.vacanciesFound.text = numOfVacancy
         binding.vacanciesFound.isVisible = true
-        adapter.setVacancyList(foundVacancyData.items)
+//        adapter.setVacancyList(foundVacancyData.items)
+        adapter.updateVacancyList(foundVacancyData.items)
         binding.nestedScrollRv.isVisible = true
         binding.vacanciesFound.isVisible = true
     }
