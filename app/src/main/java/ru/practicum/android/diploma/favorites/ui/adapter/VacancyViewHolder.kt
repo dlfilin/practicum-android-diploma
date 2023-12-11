@@ -25,7 +25,7 @@ class VacancyViewHolder(
 
             vacancyNameAndCity.text = buildString {
                 append(vacancy.vacancyName)
-                vacancy.address?.takeIf { it.isNotEmpty() }?.let {
+                vacancy.area.takeIf { it.isNotEmpty() }?.let {
                     append(", $it")
                 }
             }
