@@ -60,7 +60,6 @@ dependencies {
     implementation(libs.gson)
     implementation(libs.logging.interceptor)
 
-
     // DI
     implementation(libs.koin.android)
 
@@ -73,6 +72,8 @@ dependencies {
     kapt(libs.androidx.room.compiler)
     implementation(libs.androidx.room.ktx)
 
+    // paging library v3
+    implementation(libs.androidx.paging.runtime.ktx)
 
     // region Unit tests
     testImplementation(libs.unitTests.junit)

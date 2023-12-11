@@ -2,6 +2,7 @@
 koinAndroid = "3.3.0"
 loggingInterceptor = "4.11.0"
 navigation = "2.7.5"
+paging = "3.2.1"
 retrofit = "2.9.0"
 glide = "4.16.0"
 gson = "2.10.1"
@@ -58,6 +59,9 @@ androidx-navigation-safe-args-gradle-plugin = { module = "androidx.navigation:na
 androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "roomRuntime" }
 androidx-room-ktx = { module = "androidx.room:room-ktx", version.ref = "roomRuntime" }
 room-runtime = { module = "androidx.room:room-runtime", version.ref = "roomRuntime" }
+
+#Paging
+androidx-paging-runtime-ktx = { module = "androidx.paging:paging-runtime-ktx", version.ref = "paging" }
 
 # Unit tests
 unitTests-junit = "junit:junit:4.13.2"
