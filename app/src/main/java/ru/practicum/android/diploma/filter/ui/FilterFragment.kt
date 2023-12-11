@@ -41,24 +41,30 @@ class FilterFragment : Fragment(R.layout.fragment_filter) {
         addIndustry()
     }
 
+     private fun addArrowWorkPlace(){
+        AppCompatResources.getColorStateList(requireContext(), R.color.gray)
+            ?.let {
+                binding.edWorkPlaceLayout.setBoxStrokeColorStateList(it)
+                binding.edWorkPlaceLayout.defaultHintTextColor = it
+            }
+        binding.edWorkPlaceLayout.setEndIconDrawable(R.drawable.ic_arrow_forward)
+        binding.edWorkPlace.setOnClickListener {
+            findNavController().navigate(actionWorkPlace)
+        }
+        binding.edWorkPlace.setOnClickListener {
+            findNavController().navigate(actionWorkPlace)
+        }
+    }
+
     private fun addWorkPlace() {
         if (binding.edWorkPlace.text.isNullOrBlank()) {
-            AppCompatResources.getColorStateList(requireContext(), R.color.gray)?.let {
-                    binding.edWorkPlaceLayout.setBoxStrokeColorStateList(it)
-                    binding.edWorkPlaceLayout.defaultHintTextColor = it
-                }
-            binding.edWorkPlaceLayout.setEndIconDrawable(R.drawable.ic_arrow_forward)
-            binding.edWorkPlace.setOnClickListener {
-                findNavController().navigate(actionWorkPlace)
-            }
-            binding.edWorkPlace.setOnClickListener {
-                findNavController().navigate(actionWorkPlace)
-            }
+            addArrowWorkPlace()
         } else {
-            AppCompatResources.getColorStateList(requireContext(), R.color.black_universal)?.let {
-                    binding.edWorkPlaceLayout.setBoxStrokeColorStateList(it)
-                    binding.edWorkPlaceLayout.defaultHintTextColor = it
-                }
+            AppCompatResources.getColorStateList(requireContext(), R.color.black_universal)
+                ?.let {
+                binding.edWorkPlaceLayout.setBoxStrokeColorStateList(it)
+                binding.edWorkPlaceLayout.defaultHintTextColor = it
+            }
             binding.edWorkPlaceLayout.apply {
                 setEndIconDrawable(R.drawable.ic_clear)
                 tag = R.drawable.ic_clear
@@ -68,10 +74,11 @@ class FilterFragment : Fragment(R.layout.fragment_filter) {
             if (binding.edWorkPlaceLayout.tag == R.drawable.ic_clear) {
                 binding.edWorkPlace.text?.clear()
                 binding.edWorkPlaceLayout.setEndIconDrawable(R.drawable.ic_arrow_forward)
-                AppCompatResources.getColorStateList(requireContext(), R.color.gray)?.let {
-                        binding.edWorkPlaceLayout.setBoxStrokeColorStateList(it)
-                        binding.edWorkPlaceLayout.defaultHintTextColor = it
-                    }
+                AppCompatResources.getColorStateList(requireContext(), R.color.gray)
+                    ?.let {
+                    binding.edWorkPlaceLayout.setBoxStrokeColorStateList(it)
+                    binding.edWorkPlaceLayout.defaultHintTextColor = it
+                }
                 binding.edWorkPlace.setOnClickListener {
                     findNavController().navigate(actionWorkPlace)
                 }
@@ -82,24 +89,30 @@ class FilterFragment : Fragment(R.layout.fragment_filter) {
         }
     }
 
+     private fun addArrowIndustry(){
+        AppCompatResources.getColorStateList(requireContext(), R.color.gray)
+            ?.let {
+                binding.edIndustryLayout.setBoxStrokeColorStateList(it)
+                binding.edIndustryLayout.defaultHintTextColor = it
+            }
+        binding.edIndustryLayout.setEndIconDrawable(R.drawable.ic_arrow_forward)
+        binding.edIndustry.setOnClickListener {
+            findNavController().navigate(actionIndustry)
+        }
+        binding.edIndustry.setOnClickListener {
+            findNavController().navigate(actionIndustry)
+        }
+    }
+
     private fun addIndustry() {
         if (binding.edIndustry.text.isNullOrBlank()) {
-            AppCompatResources.getColorStateList(requireContext(), R.color.gray)?.let {
-                    binding.edIndustryLayout.setBoxStrokeColorStateList(it)
-                    binding.edIndustryLayout.defaultHintTextColor = it
-                }
-            binding.edIndustryLayout.setEndIconDrawable(R.drawable.ic_arrow_forward)
-            binding.edIndustry.setOnClickListener {
-                findNavController().navigate(actionIndustry)
-            }
-            binding.edIndustry.setOnClickListener {
-                findNavController().navigate(actionIndustry)
-            }
+            addArrowIndustry()
         } else {
-            AppCompatResources.getColorStateList(requireContext(), R.color.black_universal)?.let {
-                    binding.edIndustryLayout.setBoxStrokeColorStateList(it)
-                    binding.edIndustryLayout.defaultHintTextColor = it
-                }
+            AppCompatResources.getColorStateList(requireContext(), R.color.black_universal)
+                ?.let {
+                binding.edIndustryLayout.setBoxStrokeColorStateList(it)
+                binding.edIndustryLayout.defaultHintTextColor = it
+            }
             binding.edIndustryLayout.apply {
                 setEndIconDrawable(R.drawable.ic_clear)
                 tag = R.drawable.ic_clear
@@ -109,10 +122,11 @@ class FilterFragment : Fragment(R.layout.fragment_filter) {
             if (binding.edIndustryLayout.tag == R.drawable.ic_clear) {
                 binding.edIndustry.text?.clear()
                 binding.edIndustryLayout.setEndIconDrawable(R.drawable.ic_arrow_forward)
-                AppCompatResources.getColorStateList(requireContext(), R.color.gray)?.let {
-                        binding.edIndustryLayout.setBoxStrokeColorStateList(it)
-                        binding.edIndustryLayout.defaultHintTextColor = it
-                    }
+                AppCompatResources.getColorStateList(requireContext(), R.color.gray)
+                    ?.let {
+                    binding.edIndustryLayout.setBoxStrokeColorStateList(it)
+                    binding.edIndustryLayout.defaultHintTextColor = it
+                }
                 binding.edIndustry.setOnClickListener {
                     findNavController().navigate(actionIndustry)
                 }

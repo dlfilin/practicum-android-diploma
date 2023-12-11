@@ -33,9 +33,10 @@ class WorkPlaceFragment : Fragment(R.layout.fragment_work_place) {
         addArea()
 
         binding.btAdd.setOnClickListener {
-            val action = WorkPlaceFragmentDirections.actionWorkPlaceFragmentToFilterFragment(countryArgs = binding.edTextNameCountryNameInput.text.toString(),
-                industryArgs = binding.edTextNameAreaNameInput.text.toString())
-
+            val action = WorkPlaceFragmentDirections.actionWorkPlaceFragmentToFilterFragment(
+                countryArgs = binding.edTextNameCountryNameInput.text.toString(),
+                industryArgs = binding.edTextNameAreaNameInput.text.toString()
+            )
             findNavController().navigate(action)
         }
     }
@@ -72,7 +73,8 @@ class WorkPlaceFragment : Fragment(R.layout.fragment_work_place) {
     }
 
     private fun addArea() {
-        if (binding.edTextNameAreaNameInput.text.isNullOrBlank()) { addArrowArea()
+        if (binding.edTextNameAreaNameInput.text.isNullOrBlank()) {
+            addArrowArea()
         } else {
             AppCompatResources.getColorStateList(requireContext(), R.color.black_universal)
                 ?.let {
@@ -84,7 +86,8 @@ class WorkPlaceFragment : Fragment(R.layout.fragment_work_place) {
                 if (event.action == MotionEvent.ACTION_UP) {
                     val drawable = binding.edTextNameAreaNameInput.compoundDrawables[2]
                     if (drawable != null && event.rawX >=
-                        binding.edTextNameAreaNameInput.right - drawable.bounds.width()) {
+                        binding.edTextNameAreaNameInput.right - drawable.bounds.width()
+                    ) {
                         binding.edTextNameAreaNameInput.setText("")
                         AppCompatResources.getColorStateList(requireContext(), R.color.gray)
                             ?.let {
@@ -112,7 +115,8 @@ class WorkPlaceFragment : Fragment(R.layout.fragment_work_place) {
     }
 
     private fun addCountry() {
-        if (binding.edTextNameCountryNameInput.text.isNullOrBlank()) { addArrowCountry()
+        if (binding.edTextNameCountryNameInput.text.isNullOrBlank()) {
+            addArrowCountry()
         } else {
             AppCompatResources.getColorStateList(requireContext(), R.color.black_universal)
                 ?.let {
@@ -125,7 +129,8 @@ class WorkPlaceFragment : Fragment(R.layout.fragment_work_place) {
                 if (event.action == MotionEvent.ACTION_UP) {
                     val drawable = binding.edTextNameCountryNameInput.compoundDrawables[2]
                     if (drawable != null && event.rawX >=
-                        binding.edTextNameCountryNameInput.right - drawable.bounds.width()) {
+                        binding.edTextNameCountryNameInput.right - drawable.bounds.width()
+                    ) {
                         binding.edTextNameCountryNameInput.setText("")
                         AppCompatResources.getColorStateList(requireContext(), R.color.gray)
                             ?.let {
@@ -141,9 +146,11 @@ class WorkPlaceFragment : Fragment(R.layout.fragment_work_place) {
                             findNavController().navigate(actionCountry)
                         }
                         true
-                    } else { false
+                    } else {
+                        false
                     }
-                } else { false
+                } else {
+                    false
                 }
             }
             binding.edTextNameCountryNameInput.requestFocus()
