@@ -3,6 +3,9 @@ package ru.practicum.android.diploma.filter.ui
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.content.res.AppCompatResources
+import androidx.core.view.isEmpty
+import androidx.core.view.isVisible
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -34,105 +37,157 @@ class FilterFragment : Fragment(R.layout.fragment_filter) {
             binding.edWorkPlace.setText(textWorkPlace)
         }
 
+        listenSalaryEditText()
+        checkBoxSalary()
+
+
         val industryName = args.industryArgs
         binding.edIndustry.setText(industryName)
 
         addWorkPlace()
         addIndustry()
+
+        binding.btClear.setOnClickListener {
+            showDefault()
+            binding.btClear.isVisible = false
+            binding.btAdd.isVisible = false
+        }
     }
 
-    private fun addArrowWorkPlace() {
+    private fun addArrowWorkPlace() = with(binding) {
         AppCompatResources.getColorStateList(requireContext(), R.color.gray)
             ?.let {
-                binding.edWorkPlaceLayout.setBoxStrokeColorStateList(it)
-                binding.edWorkPlaceLayout.defaultHintTextColor = it
+                edWorkPlaceLayout.setBoxStrokeColorStateList(it)
+                edWorkPlaceLayout.defaultHintTextColor = it
             }
-        binding.edWorkPlaceLayout.setEndIconDrawable(R.drawable.ic_arrow_forward)
-        binding.edWorkPlace.setOnClickListener {
+        edWorkPlaceLayout.setEndIconDrawable(R.drawable.ic_arrow_forward)
+        edWorkPlace.setOnClickListener {
             findNavController().navigate(actionWorkPlace)
         }
-        binding.edWorkPlace.setOnClickListener {
+        edWorkPlace.setOnClickListener {
             findNavController().navigate(actionWorkPlace)
         }
     }
 
-    private fun addWorkPlace() {
-        if (binding.edWorkPlace.text.isNullOrBlank()) {
+    private fun addWorkPlace() = with(binding) {
+        if (edWorkPlace.text.isNullOrBlank()) {
             addArrowWorkPlace()
         } else {
             AppCompatResources.getColorStateList(requireContext(), R.color.black_universal)
                 ?.let {
-                    binding.edWorkPlaceLayout.setBoxStrokeColorStateList(it)
-                    binding.edWorkPlaceLayout.defaultHintTextColor = it
+                    edWorkPlaceLayout.setBoxStrokeColorStateList(it)
+                    edWorkPlaceLayout.defaultHintTextColor = it
                 }
-            binding.edWorkPlaceLayout.apply {
+            edWorkPlaceLayout.apply {
                 setEndIconDrawable(R.drawable.ic_clear)
                 tag = R.drawable.ic_clear
+                btClear.isVisible = true
+                btAdd.isVisible = true
             }
         }
-        binding.edWorkPlaceLayout.setEndIconOnClickListener {
-            if (binding.edWorkPlaceLayout.tag == R.drawable.ic_clear) {
-                binding.edWorkPlace.text?.clear()
-                binding.edWorkPlaceLayout.setEndIconDrawable(R.drawable.ic_arrow_forward)
+        edWorkPlaceLayout.setEndIconOnClickListener {
+            if (edWorkPlaceLayout.tag == R.drawable.ic_clear) {
+                edWorkPlace.text?.clear()
+                edWorkPlaceLayout.setEndIconDrawable(R.drawable.ic_arrow_forward)
                 AppCompatResources.getColorStateList(requireContext(), R.color.gray)
                     ?.let {
-                        binding.edWorkPlaceLayout.setBoxStrokeColorStateList(it)
-                        binding.edWorkPlaceLayout.defaultHintTextColor = it
+                        edWorkPlaceLayout.setBoxStrokeColorStateList(it)
+                        edWorkPlaceLayout.defaultHintTextColor = it
                     }
-                binding.edWorkPlace.setOnClickListener {
+                edWorkPlace.setOnClickListener {
                     findNavController().navigate(actionWorkPlace)
                 }
-                binding.edWorkPlaceLayout.setEndIconOnClickListener {
+                edWorkPlaceLayout.setEndIconOnClickListener {
                     findNavController().navigate(actionWorkPlace)
                 }
             }
         }
     }
 
-    private fun addArrowIndustry() {
+    private fun addArrowIndustry() = with(binding) {
         AppCompatResources.getColorStateList(requireContext(), R.color.gray)
             ?.let {
-                binding.edIndustryLayout.setBoxStrokeColorStateList(it)
-                binding.edIndustryLayout.defaultHintTextColor = it
+                edIndustryLayout.setBoxStrokeColorStateList(it)
+                edIndustryLayout.defaultHintTextColor = it
             }
-        binding.edIndustryLayout.setEndIconDrawable(R.drawable.ic_arrow_forward)
-        binding.edIndustry.setOnClickListener {
+        edIndustryLayout.setEndIconDrawable(R.drawable.ic_arrow_forward)
+        edIndustry.setOnClickListener {
             findNavController().navigate(actionIndustry)
         }
-        binding.edIndustry.setOnClickListener {
+        edIndustry.setOnClickListener {
             findNavController().navigate(actionIndustry)
         }
     }
 
-    private fun addIndustry() {
-        if (binding.edIndustry.text.isNullOrBlank()) {
+    private fun addIndustry() = with(binding) {
+        if (edIndustry.text.isNullOrBlank()) {
             addArrowIndustry()
         } else {
             AppCompatResources.getColorStateList(requireContext(), R.color.black_universal)
                 ?.let {
-                    binding.edIndustryLayout.setBoxStrokeColorStateList(it)
-                    binding.edIndustryLayout.defaultHintTextColor = it
+                    edIndustryLayout.setBoxStrokeColorStateList(it)
+                    edIndustryLayout.defaultHintTextColor = it
                 }
-            binding.edIndustryLayout.apply {
+            edIndustryLayout.apply {
                 setEndIconDrawable(R.drawable.ic_clear)
                 tag = R.drawable.ic_clear
+                btClear.isVisible = true
+                btAdd.isVisible = true
             }
         }
-        binding.edIndustryLayout.setEndIconOnClickListener {
-            if (binding.edIndustryLayout.tag == R.drawable.ic_clear) {
-                binding.edIndustry.text?.clear()
-                binding.edIndustryLayout.setEndIconDrawable(R.drawable.ic_arrow_forward)
+        edIndustryLayout.setEndIconOnClickListener {
+            if (edIndustryLayout.tag == R.drawable.ic_clear) {
+                edIndustry.text?.clear()
+                edIndustryLayout.setEndIconDrawable(R.drawable.ic_arrow_forward)
                 AppCompatResources.getColorStateList(requireContext(), R.color.gray)
                     ?.let {
-                        binding.edIndustryLayout.setBoxStrokeColorStateList(it)
-                        binding.edIndustryLayout.defaultHintTextColor = it
+                        edIndustryLayout.setBoxStrokeColorStateList(it)
+                        edIndustryLayout.defaultHintTextColor = it
                     }
-                binding.edIndustry.setOnClickListener {
+                edIndustry.setOnClickListener {
                     findNavController().navigate(actionIndustry)
                 }
-                binding.edIndustryLayout.setEndIconOnClickListener {
+                edIndustryLayout.setEndIconOnClickListener {
                     findNavController().navigate(actionIndustry)
                 }
+            }
+        }
+    }
+
+    private fun showDefault() = with(binding) {
+        edWorkPlace.text?.clear()
+        edIndustry.text?.clear()
+        textInputEditTextSalary.text?.clear()
+        checkBoxSalary.isChecked = false
+        btClear.isVisible = false
+        btAdd.isVisible = false
+    }
+
+    private fun listenSalaryEditText() = with(binding) {
+        textInputEditTextSalary.addTextChangedListener {
+            if (!edIndustryLayout.isEmpty()) {
+                btClear.isVisible = true
+                btAdd.isVisible = true
+            }
+        }
+
+        textInputLayoutSalary.setEndIconOnClickListener {
+            textInputEditTextSalary.text?.clear()
+            if (edIndustry.text.isNullOrEmpty() && edWorkPlace.text.isNullOrEmpty()
+                && textInputEditTextSalary.text.isNullOrEmpty()
+            ) {
+                btClear.isVisible = false
+                btAdd.isVisible = false
+            }
+
+        }
+    }
+
+    private fun checkBoxSalary() = with(binding) {
+        checkBoxSalary.setOnClickListener {
+            if (checkBoxSalary.isChecked) {
+                btClear.isVisible = true
+                btAdd.isVisible = true
             }
         }
     }

@@ -171,6 +171,7 @@
         <item name="android:layout_height">@dimen/size_0</item>
         <item name="android:orientation">vertical</item>
     </style>
+
     <style name="vacancyTextView">
         <item name="android:layout_width">@dimen/size_0</item>
         <item name="android:layout_height">wrap_content</item>
@@ -178,12 +179,15 @@
         <item name="android:textSize">@dimen/font_16</item>
         <item name="android:fontFamily">@font/ys_display_regular</item>
     </style>
+
     <style name="vacancyTextViewMarginTop4" parent="vacancyTextView">
         <item name="android:layout_marginTop">@dimen/space_4</item>
     </style>
+
     <style name="vacancyTextViewMarginTop16" parent="vacancyTextView">
         <item name="android:layout_marginTop">@dimen/space_16</item>
     </style>
+
     <style name="vacancyTextViewMarginTop24" parent="vacancyTextView">
         <item name="android:layout_marginTop">@dimen/space_24</item>
     </style>
@@ -195,7 +199,7 @@
         <item name="android:textColor">?attr/colorSecondary</item>
         <item name="android:fontFamily">@font/ys_display_regular</item>
     </style>
-      <!-- TextInputLayout -->
+    <!-- TextInputLayout -->
     <style name="Widget.EdText.TextInputLayout" parent="Widget.MaterialComponents.TextInputLayout.FilledBox">
         <item name="cornerSize">6dp</item>
         <item name="boxStrokeWidth">0dp</item>
@@ -240,5 +244,20 @@
     <style name="ShapeAppearance.App.SmallComponent" parent="ShapeAppearance.MaterialComponents.SmallComponent">
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">@dimen/size_12</item>
+    </style>
+
+    <style name="bigWhiteButton" parent="whiteElements">
+        <item name="android:fontFamily">@font/ys_display_medium</item>
+        <item name="android:paddingVertical">@dimen/space_20</item>
+    </style>
+
+    <style name="whiteElements" parent="Widget.AppCompat.Button.Borderless.Colored">
+        <item name="android:fontFamily">@font/ys_display_medium</item>
+        <item name="android:paddingVertical">@dimen/space_20</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">@dimen/font_16</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textColor">?attr/colorOnPrimary</item>
     </style>
 </resources>
