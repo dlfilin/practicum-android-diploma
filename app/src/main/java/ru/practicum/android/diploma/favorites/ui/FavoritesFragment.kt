@@ -53,7 +53,6 @@ class FavoritesFragment : Fragment(R.layout.fragment_favorites) {
         when (state) {
             is FavoriteState.Empty -> showEmpty()
             is FavoriteState.Error -> showError()
-            is FavoriteState.Loading -> showLoading()
             is FavoriteState.Content -> showContent(state.vacancies)
         }
     }
@@ -63,13 +62,7 @@ class FavoritesFragment : Fragment(R.layout.fragment_favorites) {
             favoritesPlaceholder.isVisible = false
             favoritesPlaceholderText.isVisible = false
             favoritesRecyclerView.isVisible = false
-            favoritesProgressBar.isVisible = false
         }
-    }
-
-    private fun showLoading() {
-        hideAll()
-        binding.favoritesProgressBar.isVisible = true
     }
 
     private fun showEmpty() {
