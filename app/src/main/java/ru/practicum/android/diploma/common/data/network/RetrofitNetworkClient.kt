@@ -5,7 +5,10 @@ import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import retrofit2.HttpException
 import ru.practicum.android.diploma.common.data.network.dto.Response
+import ru.practicum.android.diploma.common.util.ErrorType
+import ru.practicum.android.diploma.common.util.Result
 import ru.practicum.android.diploma.filter.data.dto.AreaRequest
 import ru.practicum.android.diploma.filter.data.dto.CountryRequest
 import ru.practicum.android.diploma.filter.data.dto.IndustryRequest
@@ -19,8 +22,8 @@ class RetrofitNetworkClient(
     private val hhApiService: HhApiService
 ) : NetworkClient {
 
-    override suspend fun doRequest(dto: Any): Response {
-        if (!isConnected()) return Response().apply { resultCode = NO_INTERNET }
+    override suspend fun doRequest(dto: Any): Result<Response> {
+        if (!isConnected()) return Result.Error(ErrorType.NO_INTERNET)
 
         return withContext(Dispatchers.IO) {
             try {
@@ -31,14 +34,13 @@ class RetrofitNetworkClient(
                     is AreaRequest -> hhApiService.getAllAreas()
                     is CountryRequest -> hhApiService.getCountries()
                     is IndustryRequest -> hhApiService.getAllIndustries()
-                    else -> Response().apply { resultCode = BAD_REQUEST }
+                    else -> throw Exception("BAD_REQUEST")
                 }
-                response.apply { resultCode = CONTENT }
+                Result.Success(response)
             } catch (e: IOException) {
-                Response().apply {
-                    resultCode = SERVER_THROWABLE
-                    message = e.message
-                }
+                Result.Error(ErrorType.SERVER_THROWABLE)
+            } catch (exception: HttpException) {
+                Result.Error(ErrorType.NON_200_RESPONSE)
             }
         }
     }
@@ -57,12 +59,5 @@ class RetrofitNetworkClient(
             }
         }
         return false
-    }
-
-    companion object {
-        const val NO_INTERNET = -1
-        const val CONTENT = 200
-        const val BAD_REQUEST = 400
-        const val SERVER_THROWABLE = 500
     }
 }

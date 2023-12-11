@@ -8,5 +8,6 @@ sealed class Result<T>(val data: T? = null, val errorType: ErrorType? = null) {
 
 enum class ErrorType {
     NO_INTERNET,
+    NON_200_RESPONSE,
     SERVER_THROWABLE
 }

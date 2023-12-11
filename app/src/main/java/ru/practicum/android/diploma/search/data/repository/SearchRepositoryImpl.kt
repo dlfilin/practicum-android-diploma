@@ -3,11 +3,8 @@ package ru.practicum.android.diploma.search.data.repository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import ru.practicum.android.diploma.common.data.network.NetworkClient
-import ru.practicum.android.diploma.common.data.network.RetrofitNetworkClient.Companion.CONTENT
-import ru.practicum.android.diploma.common.data.network.RetrofitNetworkClient.Companion.NO_INTERNET
 import ru.practicum.android.diploma.common.data.storage.FilterStorage
 import ru.practicum.android.diploma.common.data.storage.mapper.FilterMapper
-import ru.practicum.android.diploma.common.util.ErrorType
 import ru.practicum.android.diploma.common.util.Result
 import ru.practicum.android.diploma.filter.domain.models.FilterParameters
 import ru.practicum.android.diploma.search.data.dto.VacancySearchRequest
@@ -25,47 +22,31 @@ class SearchRepositoryImpl(
 ) : SearchRepository {
 
     override fun searchVacancies(text: String, filter: FilterParameters): Flow<Result<VacancyListData>> = flow {
-        val response = networkClient.doRequest(
+        val result = networkClient.doRequest(
             VacancySearchRequest(prepareSearchQueryMap(text, filter))
         )
-        when (response.resultCode) {
-            NO_INTERNET -> {
-                emit(Result.Error(ErrorType.NO_INTERNET))
+        when (result) {
+            is Result.Success -> {
+                val data = vacancyMapper.mapDtoToModel(result.data as VacancySearchResponse)
+                emit(Result.Success(data))
             }
-
-            CONTENT -> {
-                emit(
-                    Result.Success(
-                        data = vacancyMapper.mapDtoToModel(response as VacancySearchResponse)
-                    )
-                )
-            }
-
-            else -> {
-                emit(Result.Error(ErrorType.SERVER_THROWABLE))
+            is Result.Error -> {
+                emit(Result.Error(result.errorType!!))
             }
         }
     }
 
     override fun getSimilarVacancies(vacancyId: String): Flow<Result<VacancyListData>> = flow {
-        val response = networkClient.doRequest(
+        val result = networkClient.doRequest(
             SimilarVacancyRequest(vacancyId)
         )
-        when (response.resultCode) {
-            NO_INTERNET -> {
-                emit(Result.Error(ErrorType.NO_INTERNET))
+        when (result) {
+            is Result.Success -> {
+                val data = vacancyMapper.mapDtoToModel(result.data as VacancySearchResponse)
+                emit(Result.Success(data))
             }
-
-            CONTENT -> {
-                emit(
-                    Result.Success(
-                        data = vacancyMapper.mapDtoToModel(response as VacancySearchResponse)
-                    )
-                )
-            }
-
-            else -> {
-                emit(Result.Error(ErrorType.SERVER_THROWABLE))
+            is Result.Error -> {
+                emit(Result.Error(result.errorType!!))
             }
         }
     }

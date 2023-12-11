@@ -5,17 +5,12 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.paging.Pager
-import androidx.paging.PagingConfig
-import androidx.paging.PagingData
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import ru.practicum.android.diploma.common.util.ErrorType
 import ru.practicum.android.diploma.common.util.Result
 import ru.practicum.android.diploma.common.util.debounce
 import ru.practicum.android.diploma.filter.domain.models.FilterParameters
 import ru.practicum.android.diploma.search.domain.api.SearchInteractor
-import ru.practicum.android.diploma.search.domain.model.VacancyItem
 import ru.practicum.android.diploma.search.domain.model.VacancyListData
 
 class SearchViewModel(
