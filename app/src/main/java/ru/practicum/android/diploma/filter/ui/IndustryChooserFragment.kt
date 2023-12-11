@@ -26,7 +26,9 @@ class IndustryChooserFragment : Fragment(R.layout.fragment_industry_chooser) {
             binding.btAdd.visibility = View.VISIBLE
             binding.btAdd.setOnClickListener {
                 val action =
-                    IndustryChooserFragmentDirections.actionIndustryChooserFragmentToFilterFragment(industryArgs = item.name)
+                    IndustryChooserFragmentDirections.actionIndustryChooserFragmentToFilterFragment(
+                        industryArgs = item.name
+                    )
                 findNavController().navigate(action)
             }
         }
