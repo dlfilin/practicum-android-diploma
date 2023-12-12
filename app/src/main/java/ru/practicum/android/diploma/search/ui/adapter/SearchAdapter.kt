@@ -2,6 +2,7 @@ package ru.practicum.android.diploma.search.ui.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterInside
@@ -13,11 +14,37 @@ import ru.practicum.android.diploma.search.domain.model.VacancyItem
 
 class SearchAdapter(private val clickListener: VacancyClickListener) : RecyclerView.Adapter<SearchViewHolder>() {
 
-    private var vacancyList = listOf<VacancyItem>()
+    private var vacancyList = arrayListOf<VacancyItem>()
 
-    fun setVacancyList(newList: List<VacancyItem>) {
-        vacancyList = newList
-        notifyDataSetChanged()
+    fun updateVacancyList(newList: List<VacancyItem>, isPaging: Boolean = false) {
+        if (isPaging) {
+            val newListForCompare = vacancyList.map { it } as ArrayList<VacancyItem>
+            newListForCompare.addAll(newList)
+            val diffResult =
+                DiffUtil.calculateDiff(
+                    VacancyDiffCallback(
+                        vacancyList,
+                        newListForCompare as List<VacancyItem>
+                    )
+                )
+            vacancyList.addAll(newList)
+            diffResult.dispatchUpdatesTo(this)
+        } else {
+            /* с диспатчером мигает!
+            val diffResult = DiffUtil.calculateDiff(
+                VacancyDiffCallback(
+                    vacancyList,
+                    newList
+                )
+                )
+            vacancyList.clear()
+            vacancyList.addAll(newList)
+            diffResult.dispatchUpdatesTo(this)*/
+
+            vacancyList.clear()
+            vacancyList.addAll(newList)
+            notifyDataSetChanged()
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SearchViewHolder {

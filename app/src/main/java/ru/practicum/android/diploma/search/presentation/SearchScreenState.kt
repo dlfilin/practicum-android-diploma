@@ -12,4 +12,7 @@ sealed interface SearchScreenState {
     data object Error : SearchScreenState
     data object InternetThrowable : SearchScreenState
     data object Empty : SearchScreenState
+    data object MaxPage : SearchScreenState
+    data object ToastErrorInternet : SearchScreenState
+    data object ToastError : SearchScreenState
 }

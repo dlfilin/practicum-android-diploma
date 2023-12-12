@@ -1,6 +1,5 @@
 package ru.practicum.android.diploma.search.data.repository
 
-import android.util.Log
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import ru.practicum.android.diploma.common.data.network.NetworkClient
@@ -12,6 +11,7 @@ import ru.practicum.android.diploma.search.data.dto.VacancySearchRequest
 import ru.practicum.android.diploma.search.data.dto.VacancySearchResponse
 import ru.practicum.android.diploma.search.data.mapper.VacancyResponseMapper
 import ru.practicum.android.diploma.search.domain.api.SearchRepository
+import ru.practicum.android.diploma.search.domain.model.QuerySearch
 import ru.practicum.android.diploma.search.domain.model.VacancyListData
 import ru.practicum.android.diploma.vacancy.data.dto.SimilarVacancyRequest
 
@@ -22,11 +22,13 @@ class SearchRepositoryImpl(
     private val filterMapper: FilterMapper
 ) : SearchRepository {
 
-    override fun searchVacancies(text: String, filter: FilterParameters): Flow<NetworkResult<VacancyListData>> = flow {
+    override fun searchVacancies(
+        querySearch: QuerySearch,
+        filter: FilterParameters
+    ): Flow<NetworkResult<VacancyListData>> = flow {
         val result = networkClient.doRequest(
-            VacancySearchRequest(prepareSearchQueryMap(text = text, filter = filter))
+            VacancySearchRequest(prepareSearchQueryMap(querySearch, filter))
         )
-        Log.d("indaa", "$result - search")
         when (result) {
             is NetworkResult.Success -> {
                 val data = vacancyMapper.mapDtoToModel(result.data as VacancySearchResponse)
@@ -59,16 +61,12 @@ class SearchRepositoryImpl(
         return filterMapper.mapDtoToFilterParameters(filterStorage.getFilterParameters())
     }
 
-    private fun prepareSearchQueryMap(
-        text: String,
-        pageIndex: Int = 0,
-        pageSize: Int = 10,
-        filter: FilterParameters
-    ): Map<String, String> {
+    private fun prepareSearchQueryMap(querySearch: QuerySearch, filter: FilterParameters): Map<String, String> {
         val map: HashMap<String, String> = HashMap()
-        map["text"] = text
-        map["page"] = pageIndex.toString()
-        map["per_page"] = pageSize.toString()
+        map["text"] = querySearch.text
+        map["page"] = querySearch.page.toString()
+        map["per_page"] = querySearch.perPage.toString()
+
 
         if (filter.area != null) {
             map["area"] = filter.area.id

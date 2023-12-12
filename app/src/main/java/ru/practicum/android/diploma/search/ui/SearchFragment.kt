@@ -5,13 +5,17 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
+import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
 import androidx.core.view.isVisible
+import androidx.core.widget.NestedScrollView
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.RecyclerView
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.common.util.debounce
@@ -58,6 +62,28 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         checkFilterState()
         setToolbarMenu()
         setObservables()
+
+        val recyclerView = requireView().findViewById<RecyclerView>(R.id.vacancyListRv)
+        val nestedScrollView = requireView().findViewById<NestedScrollView>(R.id.nestedScrollRv)
+        var paginatedRv: RecyclerView? = null
+
+        nestedScrollView.viewTreeObserver?.addOnScrollChangedListener {
+            if (paginatedRv == null) {
+                val holder = nestedScrollView.getChildAt(0) as ViewGroup
+                for (i in 0 until holder.childCount) {
+                    if (holder.getChildAt(i).id == recyclerView.id) {
+                        paginatedRv = holder.getChildAt(i) as RecyclerView
+                        break
+                    }
+                }
+            }
+            paginatedRv?.let {
+                if (it.bottom - (nestedScrollView.height + nestedScrollView.scrollY) == 0) {
+                    binding.recyclerViewProgressBar.isVisible = true
+                    viewmodel.searchDebounce(binding.searchEditText.text.toString())
+                }
+            }
+        }
     }
 
     override fun onDestroyView() {
@@ -101,6 +127,9 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
 
     private fun setRvAdapter() {
         binding.vacancyListRv.adapter = adapter
+        // для приятного скроллинга
+        binding.vacancyListRv.setHasFixedSize(false)
+        binding.vacancyListRv.isNestedScrollingEnabled = false
     }
 
     private fun setToolbarMenu() {
@@ -159,6 +188,9 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
             is SearchScreenState.Empty -> showEmpty()
             is SearchScreenState.InternetThrowable -> showInternetThrowable()
             is SearchScreenState.Error -> showError()
+            is SearchScreenState.MaxPage -> binding.recyclerViewProgressBar.isVisible = false
+            is SearchScreenState.ToastError -> showToast(getString(R.string.server_throwable_tv))
+            is SearchScreenState.ToastErrorInternet -> showToast(getString(R.string.internet_throwable_tv))
         }
     }
 
@@ -182,7 +214,13 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         )
         binding.vacanciesFound.text = numOfVacancy
         binding.vacanciesFound.isVisible = true
-        adapter.setVacancyList(foundVacancyData.items)
+        if (foundVacancyData.page > 0) {
+            adapter.updateVacancyList(foundVacancyData.items, true)
+        } else {
+            adapter.updateVacancyList(foundVacancyData.items)
+            binding.vacancyListRv.scrollToPosition(0)
+            binding.nestedScrollRv.scrollTo(0, 0)
+        }
         binding.nestedScrollRv.isVisible = true
         binding.vacanciesFound.isVisible = true
     }
@@ -209,6 +247,11 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         binding.placeholderMessage.isVisible = true
         binding.placeholderImage.setImageResource(R.drawable.placeholder_error_server)
         binding.placeholderMessage.text = getString(R.string.server_throwable_tv)
+    }
+
+    private fun showToast(message: String) {
+        binding.recyclerViewProgressBar.isVisible = false
+        Toast.makeText(requireContext(), message, Toast.LENGTH_LONG).show()
     }
 
     private fun hideAllView() {
