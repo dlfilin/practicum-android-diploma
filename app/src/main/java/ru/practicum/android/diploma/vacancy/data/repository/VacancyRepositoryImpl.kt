@@ -22,6 +22,7 @@ class VacancyRepositoryImpl(
                 val data = vacancyMapper.map(result.data as VacancyDetailsResponse)
                 emit(NetworkResult.Success(data))
             }
+
             is NetworkResult.Error -> {
                 emit(NetworkResult.Error(result.errorType!!))
             }
