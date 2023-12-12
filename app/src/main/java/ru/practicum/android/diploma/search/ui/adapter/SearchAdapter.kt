@@ -17,7 +17,6 @@ class SearchAdapter(private val clickListener: VacancyClickListener) : RecyclerV
     private var vacancyList = arrayListOf<VacancyItem>()
 
     fun updateVacancyList(newList: List<VacancyItem>, isPaging: Boolean = false) {
-
         if (isPaging) {
             val newListForCompare = vacancyList.map { it } as ArrayList<VacancyItem>
             newListForCompare.addAll(newList)

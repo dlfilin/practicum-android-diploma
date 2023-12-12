@@ -3,8 +3,6 @@ package ru.practicum.android.diploma.search.data.repository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import ru.practicum.android.diploma.common.data.network.NetworkClient
-import ru.practicum.android.diploma.common.data.network.RetrofitNetworkClient.Companion.CONTENT
-import ru.practicum.android.diploma.common.data.network.RetrofitNetworkClient.Companion.NO_INTERNET
 import ru.practicum.android.diploma.common.data.storage.FilterStorage
 import ru.practicum.android.diploma.common.data.storage.mapper.FilterMapper
 import ru.practicum.android.diploma.common.util.NetworkResult
@@ -24,21 +22,14 @@ class SearchRepositoryImpl(
     private val filterMapper: FilterMapper
 ) : SearchRepository {
 
-    override fun searchVacancies(querySearch: QuerySearch, filter: FilterParameters): Flow<Result<VacancyListData>> = flow {
-        val response = networkClient.doRequest(
+    override fun searchVacancies(querySearch: QuerySearch, filter: FilterParameters): Flow<NetworkResult<VacancyListData>> = flow {
+        val result = networkClient.doRequest(
             VacancySearchRequest(prepareSearchQueryMap(querySearch, filter))
         )
-        when (response.resultCode) {
-            NO_INTERNET -> {
-                emit(Result.Error(ErrorType.NO_INTERNET))
-            }
-
-            CONTENT -> {
-                emit(
-                    Result.Success(
-                        data = vacancyMapper.mapDtoToModel(response as VacancySearchResponse)
-                    )
-                )
+        when (result) {
+            is NetworkResult.Success -> {
+                val data = vacancyMapper.mapDtoToModel(result.data as VacancySearchResponse)
+                emit(NetworkResult.Success(data))
             }
 
             is NetworkResult.Error -> {

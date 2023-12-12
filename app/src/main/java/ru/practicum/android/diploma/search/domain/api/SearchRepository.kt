@@ -7,7 +7,7 @@ import ru.practicum.android.diploma.search.domain.model.QuerySearch
 import ru.practicum.android.diploma.search.domain.model.VacancyListData
 
 interface SearchRepository {
-    fun searchVacancies(querySearch: QuerySearch, filter: FilterParameters): Flow<Result<VacancyListData>>
+    fun searchVacancies(querySearch: QuerySearch, filter: FilterParameters): Flow<NetworkResult<VacancyListData>>
     fun getSimilarVacancies(vacancyId: String): Flow<NetworkResult<VacancyListData>>
     fun getFilterParameters(): FilterParameters
 }
