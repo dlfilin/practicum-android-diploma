@@ -65,12 +65,9 @@ class SearchRepositoryImpl(
     ): Map<String, String> {
         val map: HashMap<String, String> = HashMap()
         map["text"] = text
-        if (pageIndex != 0) {
-            map["page"] = pageIndex.toString()
-        }
-        if (pageSize != 10) {
-            map["per_page"] = pageSize.toString()
-        }
+        map["page"] = pageIndex.toString()
+        map["per_page"] = pageSize.toString()
+
         if (filter.area != null) {
             map["area"] = filter.area.id
         }
@@ -85,4 +82,5 @@ class SearchRepositoryImpl(
         }
         return map
     }
+
 }

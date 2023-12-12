@@ -34,14 +34,14 @@ class RetrofitNetworkClient(
                     is AreaRequest -> hhApiService.getAllAreas()
                     is CountryRequest -> hhApiService.getCountries()
                     is IndustryRequest -> hhApiService.getAllIndustries()
-                    else -> throw Exception("BAD_REQUEST")
+                    else -> throw BadRequestException()
                 }
                 NetworkResult.Success(response)
             } catch (e: IOException) {
                 NetworkResult.Error(ErrorType.SERVER_THROWABLE)
             } catch (e: HttpException) {
                 NetworkResult.Error(ErrorType.NON_200_RESPONSE)
-            } catch (e: Exception) {
+            } catch (e: BadRequestException) {
                 NetworkResult.Error(ErrorType.BAD_REQUEST)
             }
         }
@@ -62,4 +62,6 @@ class RetrofitNetworkClient(
         }
         return false
     }
+
+    class BadRequestException : Exception()
 }
