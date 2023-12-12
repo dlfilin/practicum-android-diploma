@@ -63,6 +63,4 @@ class RetrofitNetworkClient(
         }
         return false
     }
-
-    class BadRequestException(message: String) : Exception(message)
 }
