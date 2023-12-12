@@ -7,7 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import ru.practicum.android.diploma.common.util.ErrorType
-import ru.practicum.android.diploma.common.util.Result
+import ru.practicum.android.diploma.common.util.NetworkResult
 import ru.practicum.android.diploma.search.domain.api.SearchInteractor
 import ru.practicum.android.diploma.search.domain.model.VacancyListData
 
@@ -33,9 +33,9 @@ class SimilarVacanciesViewModel(
         }
     }
 
-    private fun processResult(result: Result<VacancyListData>) {
+    private fun processResult(result: NetworkResult<VacancyListData>) {
         when (result) {
-            is Result.Success -> {
+            is NetworkResult.Success -> {
                 if (result.data?.items.isNullOrEmpty()) {
                     renderState(SimilarVacanciesScreenState.Empty)
                 } else {
@@ -45,7 +45,7 @@ class SimilarVacanciesViewModel(
                 }
             }
 
-            is Result.Error -> {
+            is NetworkResult.Error -> {
                 if (result.errorType == ErrorType.NO_INTERNET) {
                     renderState(SimilarVacanciesScreenState.InternetThrowable)
                 } else {
