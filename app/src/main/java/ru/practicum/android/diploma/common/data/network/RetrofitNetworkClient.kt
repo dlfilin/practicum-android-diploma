@@ -4,6 +4,7 @@ import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
 import retrofit2.HttpException
 import ru.practicum.android.diploma.common.data.network.dto.Response
@@ -27,6 +28,8 @@ class RetrofitNetworkClient(
 
         return withContext(Dispatchers.IO) {
             try {
+                delay(3000) // some delay to test loading state
+
                 val response = when (dto) {
                     is VacancySearchRequest -> hhApiService.searchVacancies(dto.options)
                     is VacancyDetailRequest -> hhApiService.getVacancyDetails(dto.vacancyId)

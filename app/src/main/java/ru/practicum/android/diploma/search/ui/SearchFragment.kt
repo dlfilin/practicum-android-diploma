@@ -5,23 +5,39 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
+import android.widget.Toast
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
+import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
+import androidx.core.widget.addTextChangedListener
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
+import androidx.paging.LoadState
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.common.util.debounce
+import ru.practicum.android.diploma.common.util.simpleScan
 import ru.practicum.android.diploma.databinding.FragmentSearchBinding
 import ru.practicum.android.diploma.search.domain.model.VacancyItem
 import ru.practicum.android.diploma.search.domain.model.VacancyListData
 import ru.practicum.android.diploma.search.presentation.FilterState
 import ru.practicum.android.diploma.search.presentation.SearchScreenState
 import ru.practicum.android.diploma.search.presentation.SearchViewModel
-import ru.practicum.android.diploma.search.ui.adapter.SearchAdapter
+import ru.practicum.android.diploma.search.ui.adapter.DefaultLoadStateAdapter
+import ru.practicum.android.diploma.search.ui.adapter.VacanciesAdapter
+import java.lang.Thread.State
 
 class SearchFragment : Fragment(R.layout.fragment_search) {
 
@@ -33,15 +49,7 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
     private var isClickAllowed = true
     private var filterIsActive = false
 
-    private val adapter = SearchAdapter(object : SearchAdapter.VacancyClickListener {
-        override fun onVacancyClick(vacancy: VacancyItem) {
-            if (clickDebounce()) {
-                val direction = SearchFragmentDirections.actionSearchFragmentToVacancyFragment(vacancy.id)
-                findNavController().navigate(direction)
-            }
-        }
-    })
-    private val onTrackClickDebounce = debounce<Boolean>(
+    private val onItemClickDebounce = debounce<Boolean>(
         CLICK_DEBOUNCE_DELAY,
         lifecycleScope,
         false
@@ -54,11 +62,107 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         _binding = FragmentSearchBinding.bind(view)
 
         setTextWatcher()
-        setRvAdapter()
-        checkFilterState()
+//        setRvAdapter()
+//        checkFilterState()
         setToolbarMenu()
-        setObservables()
+//        setObservables()
+
+
+//        setVacanciesList()
+//        setupSearchInput()
+//        observeErrorMessages()
+
+        val adapter = VacanciesAdapter(object : VacanciesAdapter.VacancyClickListener {
+            override fun onVacancyClick(vacancy: VacancyItem) {
+                if (clickDebounce()) {
+                    val direction = SearchFragmentDirections.actionSearchFragmentToVacancyFragment(vacancy.id)
+                    findNavController().navigate(direction)
+                }
+            }
+        })
+        binding.vacancyListRv.adapter = adapter
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            // We repeat on the STARTED lifecycle because an Activity may be PAUSED
+            // but still visible on the screen, for example in a multi window app
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewmodel.itemsFlow.collectLatest {
+                    adapter.submitData(it)
+                }
+            }
+        }
+
+        // Use the CombinedLoadStates provided by the loadStateFlow on the ArticleAdapter to
+        // show progress bars when more data is being fetched
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                adapter.loadStateFlow.collect {
+                    binding.recyclerViewProgressBar.isVisible = it.source.append is LoadState.Loading
+                }
+            }
+        }
     }
+
+
+
+//    private fun setVacanciesList() {
+//        val adapter = VacanciesAdapter(object : VacanciesAdapter.VacancyClickListener {
+//            override fun onVacancyClick(vacancy: VacancyItem) {
+//                if (clickDebounce()) {
+//                    val direction = SearchFragmentDirections.actionSearchFragmentToVacancyFragment(vacancy.id)
+//                    findNavController().navigate(direction)
+//                }
+//            }
+//        })
+//
+//        val footerAdapter = DefaultLoadStateAdapter()
+//        val headerAdapter = DefaultLoadStateAdapter()
+//
+//        // combined adapter which shows both the list of Vacancies + footer indicator when loading pages
+//        val adapterWithLoadState = adapter.withLoadStateHeaderAndFooter(headerAdapter, footerAdapter)
+//
+//        binding.vacancyListRv.adapter = adapterWithLoadState
+////        (binding.vacancyListRv.itemAnimator as? DefaultItemAnimator)?.supportsChangeAnimations = false
+//
+//        observeVacancies(adapter)
+//        observeLoadState(adapter)
+//
+//        handleScrollingToTopWhenSearching(adapter)
+//        handleListVisibility(adapter)
+//    }
+
+//    private fun handleScrollingToTopWhenSearching(adapter: VacanciesAdapter) = lifecycleScope.launch {
+//        // list should be scrolled to the 1st item (index = 0) if data has been reloaded:
+//        // (prev state = Loading, current state = NotLoading)
+//        getRefreshLoadStateFlow(adapter)
+//            .simpleScan(count = 2)
+//            .collectLatest { (previousState, currentState) ->
+//                if (previousState is LoadState.Loading && currentState is LoadState.NotLoading) {
+//                    binding.vacancyListRv.scrollToPosition(0)
+//                }
+//            }
+//    }
+//
+//    @OptIn(ExperimentalCoroutinesApi::class)
+//    private fun handleListVisibility(adapter: VacanciesAdapter) = lifecycleScope.launch {
+//        // list should be hidden if an error is displayed OR if items are being loaded after the error:
+//        // (current state = Error) OR (prev state = Error)
+//        //   OR
+//        // (before prev state = Error, prev state = NotLoading, current state = Loading)
+//        getRefreshLoadStateFlow(adapter)
+//            .simpleScan(count = 3)
+//            .collectLatest { (beforePrevious, previous, current) ->
+//                binding.vacancyListRv.isInvisible = current is LoadState.Error
+//                    || previous is LoadState.Error
+//                    || (beforePrevious is LoadState.Error && previous is LoadState.NotLoading
+//                    && current is LoadState.Loading)
+//            }
+//    }
+//
+//    private fun getRefreshLoadStateFlow(adapter: VacanciesAdapter): Flow<LoadState> {
+//        return adapter.loadStateFlow
+//            .map { it.refresh }
+//    }
 
     override fun onDestroyView() {
         super.onDestroyView()
@@ -85,7 +189,7 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
                     tag = R.drawable.ic_clear
                 }
             }
-            search()
+            viewmodel.setSearchBy(text.toString())
         }
 
         binding.searchLayoutField.setEndIconOnClickListener {
@@ -95,13 +199,9 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         }
     }
 
-    private fun search() {
-        viewmodel.searchDebounce(binding.searchEditText.text.toString())
-    }
-
-    private fun setRvAdapter() {
-        binding.vacancyListRv.adapter = adapter
-    }
+//    private fun setRvAdapter() {
+//        binding.vacancyListRv.adapter = adapter
+//    }
 
     private fun setToolbarMenu() {
         menuHost.invalidateMenu()
@@ -182,8 +282,8 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         )
         binding.vacanciesFound.text = numOfVacancy
         binding.vacanciesFound.isVisible = true
-        adapter.setVacancyList(foundVacancyData.items)
-        binding.nestedScrollRv.isVisible = true
+//        adapter.setVacancyList(foundVacancyData.items)
+        binding.vacancyListRv.isVisible = true
         binding.vacanciesFound.isVisible = true
     }
 
@@ -216,7 +316,7 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         binding.newSearchProgressBar.isVisible = false
         binding.placeholderImage.isVisible = false
         binding.placeholderMessage.isVisible = false
-        binding.nestedScrollRv.isVisible = false
+        binding.vacancyListRv.isVisible = false
         binding.recyclerViewProgressBar.isVisible = false
     }
 
@@ -224,7 +324,7 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         val current = isClickAllowed
         if (isClickAllowed) {
             isClickAllowed = false
-            onTrackClickDebounce(true)
+            onItemClickDebounce(true)
         }
         return current
     }
