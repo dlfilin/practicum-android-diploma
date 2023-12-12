@@ -10,5 +10,4 @@ enum class ErrorType {
     NO_INTERNET,
     NON_200_RESPONSE,
     SERVER_THROWABLE,
-    BAD_REQUEST
 }
