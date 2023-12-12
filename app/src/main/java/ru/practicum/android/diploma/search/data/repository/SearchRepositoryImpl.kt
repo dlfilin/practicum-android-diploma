@@ -21,11 +21,15 @@ class SearchRepositoryImpl(
     private val filterMapper: FilterMapper
 ) : SearchRepository {
 
-    override fun searchVacancies(text: String, filter: FilterParameters): Flow<NetworkResult<VacancyListData>> = flow {
-        val result = networkClient.doRequest(
-            VacancySearchRequest(prepareSearchQueryMap(text = text, filter = filter))
+    override fun searchVacanciesPaged(
+        text: String, pageIndex: Int, pageSize: Int, filter: FilterParameters
+    ): Flow<NetworkResult<VacancyListData>> = flow {
+        val request = VacancySearchRequest(
+            prepareSearchQueryMap(
+                text = text, pageIndex = pageIndex, pageSize = pageSize, filter = filter
+            )
         )
-        when (result) {
+        when (val result = networkClient.doRequest(request)) {
             is NetworkResult.Success -> {
                 val data = vacancyMapper.mapDtoToModel(result.data as VacancySearchResponse)
                 emit(NetworkResult.Success(data))
@@ -58,10 +62,7 @@ class SearchRepositoryImpl(
     }
 
     private fun prepareSearchQueryMap(
-        text: String,
-        pageIndex: Int = 0,
-        pageSize: Int = 10,
-        filter: FilterParameters
+        text: String, pageIndex: Int = 0, pageSize: Int = 10, filter: FilterParameters
     ): Map<String, String> {
         val map: HashMap<String, String> = HashMap()
         map["text"] = text

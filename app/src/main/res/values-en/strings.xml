@@ -3,7 +3,9 @@
     <string name="app_name">Job Search</string>
 
     <!--    common-->
-    <string name="internet_throwable_tv">No internet connection</string>
+    <string name="internet_throwable_tv">No Internet connection</string>
+    <string name="toast_internet_throwable">Check your Internet connection</string>
+    <string name="toast_unknown_error">An error occurred</string>
     <string name="server_throwable_tv">Server error</string>
     <string name="load_vacancy_throwable_tv">Cannot get\nthe list of vacancies</string>
     <!--    bottom navigation-->
@@ -13,6 +15,7 @@
     <!--    search vacancy fragment-->
     <string name="search_title_tv">Vacancy search</string>
     <string name="hint_search_vacancy_et">Enter request</string>
+    <string name="no_vacancies_found_title">No vacancies found</string>
     <!--    filter fragment-->
     <string name="filter_settings_title_tv">Filter settings</string>
     <string name="place_of_work_btn">Place of work</string>

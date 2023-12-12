@@ -1,6 +1,5 @@
 package ru.practicum.android.diploma.search.presentation
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -8,9 +7,11 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import ru.practicum.android.diploma.common.util.ErrorType
 import ru.practicum.android.diploma.common.util.NetworkResult
+import ru.practicum.android.diploma.common.util.SingleLiveEvent
 import ru.practicum.android.diploma.common.util.debounce
 import ru.practicum.android.diploma.filter.domain.models.FilterParameters
 import ru.practicum.android.diploma.search.domain.api.SearchInteractor
+import ru.practicum.android.diploma.search.domain.model.VacancyItem
 import ru.practicum.android.diploma.search.domain.model.VacancyListData
 
 class SearchViewModel(
@@ -20,47 +21,59 @@ class SearchViewModel(
     private val _state = MutableLiveData<SearchScreenState>(SearchScreenState.Default)
     val state: LiveData<SearchScreenState> get() = _state
 
-    private val _filterState = MutableLiveData<FilterState>(FilterState(false))
+    private val _filterState = MutableLiveData(FilterState(false))
     val filterState: LiveData<FilterState> get() = _filterState
 
+    private val _toastEvent = SingleLiveEvent<ErrorType>()
+    val toastEvent: LiveData<ErrorType> get() = _toastEvent
+
+    private var currentPage: Int = 0
+    private var totalFound: Int = 0
+    private var maxPages = 1
+    private var isNextPageLoading: Boolean = false
+    private val vacanciesList = mutableListOf<VacancyItem>()
+
     private var latestSearchText: String = ""
-    private var filterParameters: FilterParameters = FilterParameters(
-        null,
-        null,
-        null,
-        false
-    )
-    private val searchTrackDebounce = debounce<String>(
+    private var filterParameters: FilterParameters = FilterParameters()
+
+    private val searchDebounced = debounce<String>(
         SEARCH_DEBOUNCE_DELAY_IN_MILLIS,
         viewModelScope,
         true
-    ) { searchRequest ->
-        searchRequest(searchRequest)
+    ) { searchText ->
+        if (searchText != latestSearchText) {
+            clearLastSearch()
+            latestSearchText = searchText
+            renderState(SearchScreenState.InitialLoading)
+            searchRequest(currentPage)
+        }
     }
 
-    fun searchDebounce(changedText: String) {
+    fun searchTextChanged(changedText: String) {
         if (changedText.isBlank()) {
+            clearLastSearch()
             renderState(SearchScreenState.Default)
         }
-        if (latestSearchText != changedText) {
-            this.latestSearchText = changedText
-            searchTrackDebounce(latestSearchText)
+        searchDebounced(changedText)
+    }
+
+    fun onLastItemReached() {
+        if (currentPage < (maxPages - 1) && !isNextPageLoading) {
+            renderState(SearchScreenState.NextPageLoading(true))
+            isNextPageLoading = true
+            searchRequest(currentPage + 1)
         }
     }
 
-    fun checkFilterState() {
-        filterParameters = searchInteractor.getFilterParameters()
-        _filterState.postValue(FilterState(filterParameters.isNotEmpty))
-    }
-
-    private fun searchRequest(searchText: String) {
-        if (searchText.isNotBlank()) {
-            renderState(SearchScreenState.Loading)
-
-            viewModelScope.launch {
-                searchInteractor.searchVacancies(searchText, filterParameters).collect {
-                    processResult(it)
-                }
+    private fun searchRequest(page: Int) {
+        viewModelScope.launch {
+            searchInteractor.searchVacanciesPaged(
+                text = latestSearchText,
+                pageIndex = page,
+                pageSize = ITEMS_PER_PAGE,
+                filterParameters
+            ).collect {
+                processResult(result = it)
             }
         }
     }
@@ -68,30 +81,56 @@ class SearchViewModel(
     private fun processResult(result: NetworkResult<VacancyListData>) {
         when (result) {
             is NetworkResult.Success -> {
-                if (result.data?.items.isNullOrEmpty()) {
+                val vacancyListData = result.data!!
+                with(vacancyListData) {
+                    maxPages = pages
+                    totalFound = found
+                    currentPage = page
+                }
+                if (totalFound == 0) {
                     renderState(SearchScreenState.Empty)
                 } else {
-                    renderState(SearchScreenState.Content(result.data!!))
-                    Log.e("SIZE", result.data.items.size.toString())
-                    Log.e("DATA", result.data.items.toString())
+                    vacanciesList.addAll(vacancyListData.items)
+                    val data = vacancyListData.copy(items = vacanciesList)
+                    renderState(SearchScreenState.Content(data))
                 }
             }
 
             is NetworkResult.Error -> {
-                if (result.errorType == ErrorType.NO_INTERNET) {
-                    renderState(SearchScreenState.InternetThrowable)
+                if (isNextPageLoading) {
+                    _toastEvent.postValue(result.errorType!!)
+                    renderState(SearchScreenState.NextPageLoading(false))
                 } else {
-                    renderState(SearchScreenState.Error)
+                    if (result.errorType == ErrorType.NO_INTERNET) {
+                        renderState(SearchScreenState.InternetThrowable)
+                    } else {
+                        renderState(SearchScreenState.Error)
+                    }
                 }
             }
         }
+        isNextPageLoading = false
     }
 
     private fun renderState(state: SearchScreenState) {
         _state.postValue(state)
     }
 
+    private fun clearLastSearch() {
+        latestSearchText = ""
+        currentPage = 0
+        totalFound = 0
+        maxPages = 1
+        vacanciesList.clear()
+    }
+
+    fun checkFilterState() {
+        filterParameters = searchInteractor.getFilterParameters()
+        _filterState.postValue(FilterState(filterParameters.isNotEmpty))
+    }
+
     companion object {
         private const val SEARCH_DEBOUNCE_DELAY_IN_MILLIS = 2000L
+        private const val ITEMS_PER_PAGE = 20
     }
 }
