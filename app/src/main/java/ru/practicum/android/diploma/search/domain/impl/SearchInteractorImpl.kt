@@ -9,7 +9,10 @@ import ru.practicum.android.diploma.search.domain.model.QuerySearch
 import ru.practicum.android.diploma.search.domain.model.VacancyListData
 
 class SearchInteractorImpl(private val repository: SearchRepository) : SearchInteractor {
-    override fun searchVacancies(querySearch: QuerySearch, options: FilterParameters): Flow<NetworkResult<VacancyListData>> {
+    override fun searchVacancies(
+        querySearch: QuerySearch,
+        options: FilterParameters
+    ): Flow<NetworkResult<VacancyListData>> {
         return repository.searchVacancies(querySearch, options)
     }
 

@@ -14,7 +14,9 @@ class VacancyRepositoryImpl(
     private val networkClient: NetworkClient,
     private val vacancyMapper: VacancyMapper
 ) : VacancyRepository {
-    override fun getVacancy(vacancyId: String): Flow<NetworkResult<Vacancy>> = flow {
+    override fun getVacancy(
+        vacancyId: String
+    ): Flow<NetworkResult<Vacancy>> = flow {
         when (val result = networkClient.doRequest(VacancyDetailRequest(vacancyId))) {
             is NetworkResult.Success -> {
                 val data = vacancyMapper.map(result.data as VacancyDetailsResponse)
