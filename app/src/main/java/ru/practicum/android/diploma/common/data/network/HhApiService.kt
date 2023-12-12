@@ -6,7 +6,7 @@ import retrofit2.http.Path
 import retrofit2.http.QueryMap
 import ru.practicum.android.diploma.BuildConfig
 import ru.practicum.android.diploma.filter.data.dto.AreaResponse
-import ru.practicum.android.diploma.filter.data.dto.IndustryResponse
+import ru.practicum.android.diploma.filter.data.dto.IndustryDto
 import ru.practicum.android.diploma.search.data.dto.VacancySearchResponse
 import ru.practicum.android.diploma.vacancy.data.dto.VacancyDetailsResponse
 
@@ -33,7 +33,7 @@ interface HhApiService {
 
     @Headers(TOKEN_BEARER_STRING, USER_AGENT_STRING)
     @GET("/industries")
-    suspend fun getAllIndustries(): IndustryResponse
+    suspend fun getAllIndustries(): List<IndustryDto>
 
     companion object {
         private const val USER_AGENT_STRING = "HH-User-Agent: my_hh_vacancies (danila.filin@gmail.com)"

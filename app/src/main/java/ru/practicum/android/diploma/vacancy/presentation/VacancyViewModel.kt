@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import ru.practicum.android.diploma.common.util.ErrorType
-import ru.practicum.android.diploma.common.util.Result
+import ru.practicum.android.diploma.common.util.NetworkResult
 import ru.practicum.android.diploma.favorites.domain.FavoriteInteractor
 import ru.practicum.android.diploma.sharing.domain.SharingInteractor
 import ru.practicum.android.diploma.vacancy.domain.api.VacancyInteractor
@@ -32,12 +32,12 @@ class VacancyViewModel(
         viewModelScope.launch {
             vacancyInteractor.getVacancy(vacancyId).collect { result ->
                 when (result) {
-                    is Result.Success -> {
+                    is NetworkResult.Success -> {
                         _currentVacancy.value = result.data
                         renderState(VacancyScreenState.Content(result.data!!))
                     }
 
-                    is Result.Error -> {
+                    is NetworkResult.Error -> {
                         if (result.errorType == ErrorType.NO_INTERNET) {
                             getVacancyFromDb(vacancyId)
                             renderState(VacancyScreenState.Loading)
