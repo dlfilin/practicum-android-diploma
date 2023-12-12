@@ -214,13 +214,12 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         )
         binding.vacanciesFound.text = numOfVacancy
         binding.vacanciesFound.isVisible = true
-        if (foundVacancyData.page >0) {
+        if (foundVacancyData.page > 0) {
             adapter.updateVacancyList(foundVacancyData.items, true)
-        }
-        else {
+        } else {
             adapter.updateVacancyList(foundVacancyData.items)
             binding.vacancyListRv.scrollToPosition(0)
-            binding.nestedScrollRv.scrollTo(0,0)
+            binding.nestedScrollRv.scrollTo(0, 0)
         }
         binding.nestedScrollRv.isVisible = true
         binding.vacanciesFound.isVisible = true

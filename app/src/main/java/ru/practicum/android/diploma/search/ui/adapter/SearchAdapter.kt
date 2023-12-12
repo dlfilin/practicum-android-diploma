@@ -16,12 +16,6 @@ class SearchAdapter(private val clickListener: VacancyClickListener) : RecyclerV
 
     private var vacancyList = arrayListOf<VacancyItem>()
 
-    /*fun setVacancyList(newList: List<VacancyItem>) {
-        vacancyList.clear()
-        vacancyList.addAll(newList)
-        notifyDataSetChanged()
-    }*/
-
     fun updateVacancyList(newList: List<VacancyItem>, isPaging: Boolean = false) {
 
         if (isPaging) {

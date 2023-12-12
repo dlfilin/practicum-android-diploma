@@ -25,28 +25,29 @@ class SearchRepositoryImpl(
     private val filterMapper: FilterMapper
 ) : SearchRepository {
 
-    override fun searchVacancies(querySearch: QuerySearch, filter: FilterParameters): Flow<Result<VacancyListData>> = flow {
-        val response = networkClient.doRequest(
-            VacancySearchRequest(prepareSearchQueryMap(querySearch, filter))
-        )
-        when (response.resultCode) {
-            NO_INTERNET -> {
-                emit(Result.Error(ErrorType.NO_INTERNET))
-            }
+    override fun searchVacancies(querySearch: QuerySearch, filter: FilterParameters): Flow<Result<VacancyListData>> =
+        flow {
+            val response = networkClient.doRequest(
+                VacancySearchRequest(prepareSearchQueryMap(querySearch, filter))
+            )
+            when (response.resultCode) {
+                NO_INTERNET -> {
+                    emit(Result.Error(ErrorType.NO_INTERNET))
+                }
 
-            CONTENT -> {
-                emit(
-                    Result.Success(
-                        data = vacancyMapper.mapDtoToModel(response as VacancySearchResponse)
+                CONTENT -> {
+                    emit(
+                        Result.Success(
+                            data = vacancyMapper.mapDtoToModel(response as VacancySearchResponse)
+                        )
                     )
-                )
-            }
+                }
 
-            else -> {
-                emit(Result.Error(ErrorType.SERVER_THROWABLE))
+                else -> {
+                    emit(Result.Error(ErrorType.SERVER_THROWABLE))
+                }
             }
         }
-    }
 
     override fun getSimilarVacancies(vacancyId: String): Flow<Result<VacancyListData>> = flow {
         val response = networkClient.doRequest(
