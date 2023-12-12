@@ -13,6 +13,7 @@ import ru.practicum.android.diploma.common.util.NetworkResult
 import ru.practicum.android.diploma.filter.data.dto.AreaRequest
 import ru.practicum.android.diploma.filter.data.dto.CountryRequest
 import ru.practicum.android.diploma.filter.data.dto.IndustryRequest
+import ru.practicum.android.diploma.filter.data.dto.IndustryResponse
 import ru.practicum.android.diploma.search.data.dto.VacancySearchRequest
 import ru.practicum.android.diploma.vacancy.data.dto.SimilarVacancyRequest
 import ru.practicum.android.diploma.vacancy.data.dto.VacancyDetailRequest
@@ -34,7 +35,7 @@ class RetrofitNetworkClient(
                     is SimilarVacancyRequest -> hhApiService.searchSimilarVacancies(dto.vacancyId)
                     is AreaRequest -> hhApiService.getAllAreas()
                     is CountryRequest -> hhApiService.getCountries()
-                    is IndustryRequest -> hhApiService.getAllIndustries()
+                    is IndustryRequest -> IndustryResponse(hhApiService.getAllIndustries())
                     else -> Response()
                 }
                 NetworkResult.Success(response)

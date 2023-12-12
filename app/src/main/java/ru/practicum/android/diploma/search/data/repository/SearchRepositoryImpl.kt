@@ -1,5 +1,6 @@
 package ru.practicum.android.diploma.search.data.repository
 
+import android.util.Log
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import ru.practicum.android.diploma.common.data.network.NetworkClient
@@ -25,6 +26,7 @@ class SearchRepositoryImpl(
         val result = networkClient.doRequest(
             VacancySearchRequest(prepareSearchQueryMap(text = text, filter = filter))
         )
+        Log.d("indaa", "$result - search")
         when (result) {
             is NetworkResult.Success -> {
                 val data = vacancyMapper.mapDtoToModel(result.data as VacancySearchResponse)
