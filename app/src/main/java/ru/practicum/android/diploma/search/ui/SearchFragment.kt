@@ -6,6 +6,7 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
 import androidx.core.view.isVisible
@@ -19,7 +20,6 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.common.util.debounce
 import ru.practicum.android.diploma.databinding.FragmentSearchBinding
-import ru.practicum.android.diploma.search.domain.model.QuerySearch
 import ru.practicum.android.diploma.search.domain.model.VacancyItem
 import ru.practicum.android.diploma.search.domain.model.VacancyListData
 import ru.practicum.android.diploma.search.presentation.FilterState
@@ -53,9 +53,6 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         isClickAllowed = param
     }
 
-    private var currentPage = 0
-    private val searchQuery = QuerySearch(0, "", perPage = 10)
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentSearchBinding.bind(view)
@@ -83,8 +80,7 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
             paginatedRv?.let {
                 if (it.bottom - (nestedScrollView.height + nestedScrollView.scrollY) == 0) {
                     binding.recyclerViewProgressBar.isVisible = true
-                    searchQuery.page = currentPage + 1
-                    viewmodel.searchDebouncePraktikumPaging(searchQuery)
+                    viewmodel.searchDebounce(binding.searchEditText.text.toString())
                 }
             }
         }
@@ -126,11 +122,7 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
     }
 
     private fun search() {
-        val searchString = binding.searchEditText.text.toString()
-        searchQuery.text = searchString
-        searchQuery.page = currentPage
-        viewmodel.searchDebouncePraktikumPaging(searchQuery)
-//        viewmodel.searchDebounce(binding.searchEditText.text.toString())
+        viewmodel.searchDebounce(binding.searchEditText.text.toString())
     }
 
     private fun setRvAdapter() {
@@ -196,6 +188,9 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
             is SearchScreenState.Empty -> showEmpty()
             is SearchScreenState.InternetThrowable -> showInternetThrowable()
             is SearchScreenState.Error -> showError()
+            is SearchScreenState.MaxPage -> binding.recyclerViewProgressBar.isVisible = false
+            is SearchScreenState.ToastError -> showToast(getString(R.string.server_throwable_tv))
+            is SearchScreenState.ToastErrorInternet -> showToast(getString(R.string.internet_throwable_tv))
         }
     }
 
@@ -212,7 +207,6 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
 
     private fun showFoundVacancy(foundVacancyData: VacancyListData) {
         hideAllView()
-        currentPage = foundVacancyData.page
         val numOfVacancy = resources.getQuantityString(
             R.plurals.vacancy_number,
             foundVacancyData.found,
@@ -220,8 +214,14 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         )
         binding.vacanciesFound.text = numOfVacancy
         binding.vacanciesFound.isVisible = true
-//        adapter.setVacancyList(foundVacancyData.items)
-        adapter.updateVacancyList(foundVacancyData.items)
+        if (foundVacancyData.page >0) {
+            adapter.updateVacancyList(foundVacancyData.items, true)
+        }
+        else {
+            adapter.updateVacancyList(foundVacancyData.items)
+            binding.vacancyListRv.scrollToPosition(0)
+            binding.nestedScrollRv.scrollTo(0,0)
+        }
         binding.nestedScrollRv.isVisible = true
         binding.vacanciesFound.isVisible = true
     }
@@ -248,6 +248,11 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         binding.placeholderMessage.isVisible = true
         binding.placeholderImage.setImageResource(R.drawable.placeholder_error_server)
         binding.placeholderMessage.text = getString(R.string.server_throwable_tv)
+    }
+
+    private fun showToast(message: String) {
+        binding.recyclerViewProgressBar.isVisible = false
+        Toast.makeText(requireContext(), message, Toast.LENGTH_LONG).show()
     }
 
     private fun hideAllView() {

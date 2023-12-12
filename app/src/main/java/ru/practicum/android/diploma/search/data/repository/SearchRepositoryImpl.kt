@@ -25,9 +25,9 @@ class SearchRepositoryImpl(
     private val filterMapper: FilterMapper
 ) : SearchRepository {
 
-    override fun searchVacancies(text: String, filter: FilterParameters): Flow<Result<VacancyListData>> = flow {
+    override fun searchVacancies(querySearch: QuerySearch, filter: FilterParameters): Flow<Result<VacancyListData>> = flow {
         val response = networkClient.doRequest(
-            VacancySearchRequest(prepareSearchQueryMap(text, filter))
+            VacancySearchRequest(prepareSearchQueryMap(querySearch, filter))
         )
         when (response.resultCode) {
             NO_INTERNET -> {
@@ -75,49 +75,7 @@ class SearchRepositoryImpl(
         return filterMapper.mapDtoToFilterParameters(filterStorage.getFilterParameters())
     }
 
-    override fun searchVacanciesPraktikumPaging(querySearch: QuerySearch, filter: FilterParameters): Flow<Result<VacancyListData>> = flow {
-        val response = networkClient.doRequest(
-            VacancySearchRequest(prepareSearchQueryMapPraktikumPaging(querySearch, filter))
-        )
-        when (response.resultCode) {
-            NO_INTERNET -> {
-                emit(Result.Error(ErrorType.NO_INTERNET))
-            }
-
-            CONTENT -> {
-                emit(
-                    Result.Success(
-                        data = vacancyMapper.mapDtoToModel(response as VacancySearchResponse)
-                    )
-                )
-            }
-
-            else -> {
-                emit(Result.Error(ErrorType.SERVER_THROWABLE))
-            }
-        }
-    }
-
-    private fun prepareSearchQueryMap(text: String, filter: FilterParameters): Map<String, String> {
-        val map: HashMap<String, String> = HashMap()
-        map["text"] = text
-
-//        if (filter.area != null) {
-//            map["area"] = filter.area.id
-//        }
-//        if (filter.industry != null) {
-//            map["industry"] = filter.industry.id
-//        }
-//        if (filter.salary != null) {
-//            map["salary"] = filter.salary.toString()
-//        }
-//        if (filter.onlyWithSalary != null) {
-//            map["only_with_salary"] = filter.onlyWithSalary.toString()
-//        }
-
-        return map
-    }
-    private fun prepareSearchQueryMapPraktikumPaging(querySearch: QuerySearch, filter: FilterParameters): Map<String, String> {
+    private fun prepareSearchQueryMap(querySearch: QuerySearch, filter: FilterParameters): Map<String, String> {
         val map: HashMap<String, String> = HashMap()
         map["text"] = querySearch.text
         map["page"] = querySearch.page.toString()

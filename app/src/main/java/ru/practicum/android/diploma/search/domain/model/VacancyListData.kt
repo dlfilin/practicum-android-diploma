@@ -6,6 +6,4 @@ data class VacancyListData(
     val page: Int,
     val pages: Int,
     val perPage: Int
-
-
 )
