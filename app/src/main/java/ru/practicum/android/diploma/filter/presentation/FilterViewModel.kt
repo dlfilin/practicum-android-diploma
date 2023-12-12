@@ -5,8 +5,8 @@ import ru.practicum.android.diploma.filter.domain.api.FilterInteractor
 
 class FilterViewModel(private val interactor: FilterInteractor) : ViewModel() {
 
-    suspend fun addIndustryInBd() {
-        interactor.getIndustry()
+    suspend fun getIndustryAndSaveDb() {
+        interactor.getIndustryAndSaveDb()
     }
 
 }

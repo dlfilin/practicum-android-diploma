@@ -5,7 +5,7 @@ import ru.practicum.android.diploma.filter.domain.models.Industry
 
 interface FilterInteractor {
 
-    suspend fun getIndustry()
+    suspend fun getIndustryAndSaveDb()
 
     fun getIndustries(): Flow<List<Industry>>
 }

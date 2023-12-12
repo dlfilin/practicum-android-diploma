@@ -17,7 +17,7 @@ class AddFilterRepositoryImpl(
     private val database: AppDataBase,
 ) : AddFilterRepository {
 
-    override suspend fun getIndustry() {
+    override suspend fun getIndustryAndSaveDb() {
         when (val result = networkClient.doRequest(IndustryRequest())) {
             is NetworkResult.Success -> {
                 val data = mapIndustry(result.data as IndustryResponse)

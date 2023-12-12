@@ -30,9 +30,8 @@ class FilterFragment : Fragment(R.layout.fragment_filter) {
         _binding = FragmentFilterBinding.bind(view)
 
         lifecycle.coroutineScope.launch {
-            viewModel.addIndustryInBd()
+            viewModel.getIndustryAndSaveDb()
         }
-
 
         val args: FilterFragmentArgs by navArgs()
         val countryName = args.countryArgs
