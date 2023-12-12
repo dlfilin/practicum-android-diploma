@@ -22,7 +22,10 @@ class SearchRepositoryImpl(
     private val filterMapper: FilterMapper
 ) : SearchRepository {
 
-    override fun searchVacancies(querySearch: QuerySearch, filter: FilterParameters): Flow<NetworkResult<VacancyListData>> = flow {
+    override fun searchVacancies(
+        querySearch: QuerySearch,
+        filter: FilterParameters
+    ): Flow<NetworkResult<VacancyListData>> = flow {
         val result = networkClient.doRequest(
             VacancySearchRequest(prepareSearchQueryMap(querySearch, filter))
         )
