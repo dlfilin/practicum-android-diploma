@@ -88,6 +88,7 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewmodel.itemsFlow.collectLatest {
                     adapter.submitData(it)
+//                    Toast.makeText(requireContext(), it.toString(), Toast.LENGTH_SHORT).show()
                 }
             }
         }
@@ -97,6 +98,18 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 adapter.loadStateFlow.collect {
+
+                    val state = it.source.append
+                    if (state is LoadState.Error) {
+                        when (state.error.message) {
+                            "NO_INTERNET" -> Toast.makeText(requireContext(), "NO_INTERNET", Toast.LENGTH_SHORT).show()
+                            "NON_200_RESPONSE" -> Toast.makeText(requireContext(), "NON_200_RESPONSE", Toast.LENGTH_SHORT).show()
+                        }
+                    } else if (state is LoadState.Loading) {
+                        Toast.makeText(requireContext(), "LoadState.Loading", Toast.LENGTH_SHORT).show()
+                    } else {
+                        Toast.makeText(requireContext(), "LoadState.NotLoading", Toast.LENGTH_SHORT).show()
+                    }
                     binding.recyclerViewProgressBar.isVisible = it.source.append is LoadState.Loading
                 }
             }

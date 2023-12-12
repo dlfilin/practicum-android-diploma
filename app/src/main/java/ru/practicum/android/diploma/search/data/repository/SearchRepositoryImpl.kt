@@ -51,7 +51,7 @@ class SearchRepositoryImpl(
                 prefetchDistance = PAGE_SIZE / 2,
                 enablePlaceholders = false
             ),
-            pagingSourceFactory = { VacancyPagingSource(loader) }
+            pagingSourceFactory = { VacancyPagingSource(networkClient, text, filter) }
         ).flow
     }
 
