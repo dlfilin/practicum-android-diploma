@@ -7,19 +7,23 @@ import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import kotlinx.coroutines.launch
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentIndustryChooserBinding
 import ru.practicum.android.diploma.filter.domain.models.Industry
+import ru.practicum.android.diploma.filter.presentation.IndustryViewModel
 import ru.practicum.android.diploma.filter.ui.adapters.IndustryAdapter
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class IndustryChooserFragment : Fragment(R.layout.fragment_industry_chooser) {
-
 
     private var _binding: FragmentIndustryChooserBinding? = null
     private val binding get() = _binding!!
 
+    private val viewModel: IndustryViewModel by viewModel()
 
     private val adapter = IndustryAdapter(onItemCheckedListener = { item ->
         if (item.isChecked) {
@@ -35,8 +39,6 @@ class IndustryChooserFragment : Fragment(R.layout.fragment_industry_chooser) {
 
     })
 
-//    private val viewModel by viewModel<FilterViewModel>()
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentIndustryChooserBinding.bind(view)
@@ -45,6 +47,12 @@ class IndustryChooserFragment : Fragment(R.layout.fragment_industry_chooser) {
             LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         binding.rvIndustry.adapter = adapter
         binding.rvIndustry.itemAnimator = null
+
+        lifecycleScope.launch {
+            viewModel.getIndustries().collect {
+                adapter.updateData(it)
+            }
+        }
 
         val textWatcher = object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
