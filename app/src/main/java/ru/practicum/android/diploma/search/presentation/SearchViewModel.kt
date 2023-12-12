@@ -7,7 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import ru.practicum.android.diploma.common.util.ErrorType
-import ru.practicum.android.diploma.common.util.Result
+import ru.practicum.android.diploma.common.util.NetworkResult
 import ru.practicum.android.diploma.common.util.debounce
 import ru.practicum.android.diploma.filter.domain.models.FilterParameters
 import ru.practicum.android.diploma.search.domain.api.SearchInteractor
@@ -76,9 +76,9 @@ class SearchViewModel(
         }
     }
 
-    private fun processResult(result: Result<VacancyListData>) {
+    private fun processResult(result: NetworkResult<VacancyListData>) {
         when (result) {
-            is Result.Success -> {
+            is NetworkResult.Success -> {
                 if (result.data?.items.isNullOrEmpty()) {
                     renderState(SearchScreenState.Empty)
                 } else {
@@ -91,7 +91,7 @@ class SearchViewModel(
                 }
             }
 
-            is Result.Error -> {
+            is NetworkResult.Error -> {
                 if (result.errorType == ErrorType.NO_INTERNET) {
                     if (currentPage > 0) {
                         renderState(SearchScreenState.ToastErrorInternet)

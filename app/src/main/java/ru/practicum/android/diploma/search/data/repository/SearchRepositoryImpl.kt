@@ -7,8 +7,7 @@ import ru.practicum.android.diploma.common.data.network.RetrofitNetworkClient.Co
 import ru.practicum.android.diploma.common.data.network.RetrofitNetworkClient.Companion.NO_INTERNET
 import ru.practicum.android.diploma.common.data.storage.FilterStorage
 import ru.practicum.android.diploma.common.data.storage.mapper.FilterMapper
-import ru.practicum.android.diploma.common.util.ErrorType
-import ru.practicum.android.diploma.common.util.Result
+import ru.practicum.android.diploma.common.util.NetworkResult
 import ru.practicum.android.diploma.filter.domain.models.FilterParameters
 import ru.practicum.android.diploma.search.data.dto.VacancySearchRequest
 import ru.practicum.android.diploma.search.data.dto.VacancySearchResponse
@@ -25,33 +24,9 @@ class SearchRepositoryImpl(
     private val filterMapper: FilterMapper
 ) : SearchRepository {
 
-    override fun searchVacancies(querySearch: QuerySearch, filter: FilterParameters): Flow<Result<VacancyListData>> =
-        flow {
-            val response = networkClient.doRequest(
-                VacancySearchRequest(prepareSearchQueryMap(querySearch, filter))
-            )
-            when (response.resultCode) {
-                NO_INTERNET -> {
-                    emit(Result.Error(ErrorType.NO_INTERNET))
-                }
-
-                CONTENT -> {
-                    emit(
-                        Result.Success(
-                            data = vacancyMapper.mapDtoToModel(response as VacancySearchResponse)
-                        )
-                    )
-                }
-
-                else -> {
-                    emit(Result.Error(ErrorType.SERVER_THROWABLE))
-                }
-            }
-        }
-
-    override fun getSimilarVacancies(vacancyId: String): Flow<Result<VacancyListData>> = flow {
+    override fun searchVacancies(querySearch: QuerySearch, filter: FilterParameters): Flow<Result<VacancyListData>> = flow {
         val response = networkClient.doRequest(
-            SimilarVacancyRequest(vacancyId)
+            VacancySearchRequest(prepareSearchQueryMap(querySearch, filter))
         )
         when (response.resultCode) {
             NO_INTERNET -> {
@@ -66,8 +41,24 @@ class SearchRepositoryImpl(
                 )
             }
 
-            else -> {
-                emit(Result.Error(ErrorType.SERVER_THROWABLE))
+            is NetworkResult.Error -> {
+                emit(NetworkResult.Error(result.errorType!!))
+            }
+        }
+    }
+
+    override fun getSimilarVacancies(vacancyId: String): Flow<NetworkResult<VacancyListData>> = flow {
+        val result = networkClient.doRequest(
+            SimilarVacancyRequest(vacancyId)
+        )
+        when (result) {
+            is NetworkResult.Success -> {
+                val data = vacancyMapper.mapDtoToModel(result.data as VacancySearchResponse)
+                emit(NetworkResult.Success(data))
+            }
+
+            is NetworkResult.Error -> {
+                emit(NetworkResult.Error(result.errorType!!))
             }
         }
     }
@@ -82,19 +73,20 @@ class SearchRepositoryImpl(
         map["page"] = querySearch.page.toString()
         map["per_page"] = querySearch.perPage.toString()
 
-//        if (filter.area != null) {
-//            map["area"] = filter.area.id
-//        }
-//        if (filter.industry != null) {
-//            map["industry"] = filter.industry.id
-//        }
-//        if (filter.salary != null) {
-//            map["salary"] = filter.salary.toString()
-//        }
-//        if (filter.onlyWithSalary != null) {
-//            map["only_with_salary"] = filter.onlyWithSalary.toString()
-//        }
 
+        if (filter.area != null) {
+            map["area"] = filter.area.id
+        }
+        if (filter.industry != null) {
+            map["industry"] = filter.industry.id
+        }
+        if (filter.salary != null) {
+            map["salary"] = filter.salary.toString()
+        }
+        if (filter.onlyWithSalary) {
+            map["only_with_salary"] = "true"
+        }
         return map
     }
+
 }
