@@ -95,11 +95,7 @@ class VacancyFragment : Fragment(R.layout.fragment_vacancy) {
             contactName.isVisible = false
             tvEmail.isVisible = false
             email.isVisible = false
-            tvPhone.isVisible = false
-            tvPhone.isVisible = false
             phoneList.isVisible = false
-            tvComment.isVisible = false
-            comment.isVisible = false
         }
     }
 
@@ -224,13 +220,10 @@ class VacancyFragment : Fragment(R.layout.fragment_vacancy) {
             }
 
             if (vacancy.contacts?.phones?.isNotEmpty() == true) {
-                tvPhone.isVisible = true
-
                 vacancy.contacts.phones.let {
                     phonesAdapter.updatePhones(it)
                 }
                 phoneList.adapter = phonesAdapter
-                tvPhone.isVisible = true
                 phoneList.isVisible = true
             }
         }

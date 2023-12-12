@@ -242,15 +242,6 @@
                 app:layout_constraintTop_toBottomOf="@id/tvEmail"
                 tools:text="i.lozgkina@yandex.ru" />
 
-            <TextView
-                android:id="@+id/tvPhone"
-                style="@style/vacancyTextViewMarginTop16"
-                android:fontFamily="@font/ys_display_medium"
-                android:text="@string/phone_number_tv"
-                app:layout_constraintEnd_toEndOf="@id/content_end"
-                app:layout_constraintStart_toStartOf="@id/content_start"
-                app:layout_constraintTop_toBottomOf="@id/email" />
-
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/phoneList"
                 android:layout_width="0dp"
@@ -259,26 +250,9 @@
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 app:layout_constraintEnd_toEndOf="@id/content_end"
                 app:layout_constraintStart_toStartOf="@id/content_start"
-                app:layout_constraintTop_toBottomOf="@id/tvPhone"
+                app:layout_constraintTop_toBottomOf="@id/email"
                 tools:itemCount="2"
                 tools:listitem="@layout/item_phone" />
-
-            <TextView
-                android:id="@+id/tvComment"
-                style="@style/vacancyTextViewMarginTop16"
-                android:fontFamily="@font/ys_display_medium"
-                android:text="@string/comment_tv"
-                app:layout_constraintEnd_toEndOf="@id/content_end"
-                app:layout_constraintStart_toStartOf="@id/content_start"
-                app:layout_constraintTop_toBottomOf="@id/phoneList" />
-
-            <TextView
-                android:id="@+id/comment"
-                style="@style/vacancyTextViewMarginTop4"
-                app:layout_constraintEnd_toEndOf="@id/content_end"
-                app:layout_constraintStart_toStartOf="@id/content_start"
-                app:layout_constraintTop_toBottomOf="@id/tvComment"
-                tools:text="Заполнить анкету по форме можно на нашем сайте" />
 
             <Button
                 android:id="@+id/gotoSimilarJobsFragmentBtn"
@@ -294,7 +268,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="@id/content_end"
                 app:layout_constraintStart_toStartOf="@id/content_start"
-                app:layout_constraintTop_toBottomOf="@id/comment" />
+                app:layout_constraintTop_toBottomOf="@id/phoneList" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </ScrollView>
