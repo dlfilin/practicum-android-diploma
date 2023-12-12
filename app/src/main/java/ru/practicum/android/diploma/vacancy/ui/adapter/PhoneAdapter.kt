@@ -2,6 +2,7 @@ package ru.practicum.android.diploma.vacancy.ui.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import ru.practicum.android.diploma.common.util.Formatter
@@ -57,6 +58,10 @@ class PhoneViewHolder(
         binding.apply {
             phoneValue.text = formattedNumber
             phoneComment.text = phone.comment
+        }
+        if (phone.comment != null) {
+            binding.tvComment.isVisible = true
+            binding.phoneComment.isVisible = true
         }
     }
 }
