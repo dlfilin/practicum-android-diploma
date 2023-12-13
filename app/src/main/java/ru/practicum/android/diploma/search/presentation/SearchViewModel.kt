@@ -19,6 +19,10 @@ class SearchViewModel(
     private val searchInteractor: SearchInteractor
 ) : ViewModel() {
 
+    private var currentPage = 0
+    private var maxPages = 2
+    private val searchQuery = QuerySearch(page = 0, text = "")
+
     private val _state = MutableLiveData<SearchScreenState>(SearchScreenState.Default)
     val state: LiveData<SearchScreenState> get() = _state
 

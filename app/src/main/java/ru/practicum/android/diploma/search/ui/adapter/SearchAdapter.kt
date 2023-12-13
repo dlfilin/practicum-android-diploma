@@ -15,7 +15,7 @@ import ru.practicum.android.diploma.search.domain.model.VacancyItem
 
 class SearchAdapter(private val clickListener: VacancyClickListener) :
     ListAdapter<VacancyItem, SearchViewHolder>(VacanciesDiffCallback()) {
-
+      
 //    private var vacancyList = listOf<VacancyItem>()
 
 //    fun setVacancyList(newList: List<VacancyItem>) {

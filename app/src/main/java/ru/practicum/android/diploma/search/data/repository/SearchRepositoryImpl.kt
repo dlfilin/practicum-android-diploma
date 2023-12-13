@@ -28,6 +28,7 @@ class SearchRepositoryImpl(
         val request = VacancySearchRequest(prepareSearchQueryMap(searchQuery, filter))
 
         when (val result = networkClient.doRequest(request)) {
+
             is NetworkResult.Success -> {
                 val data = vacancyMapper.mapDtoToModel(result.data as VacancySearchResponse)
                 emit(NetworkResult.Success(data))
