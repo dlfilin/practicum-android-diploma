@@ -157,7 +157,6 @@ class VacancyFragment : Fragment(R.layout.fragment_vacancy) {
 
     private fun fillCompanySection(vacancy: Vacancy) {
         binding.apply {
-
             Glide.with(requireContext())
                 .load(vacancy.employerLogoUrl)
                 .placeholder(R.drawable.vacancy_item_placeholder)

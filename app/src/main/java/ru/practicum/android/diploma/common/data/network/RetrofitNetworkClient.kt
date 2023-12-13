@@ -3,6 +3,7 @@ package ru.practicum.android.diploma.common.data.network
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
+import android.util.Log
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import retrofit2.HttpException
@@ -30,8 +31,10 @@ class RetrofitNetworkClient(
                 }
                 NetworkResult.Success(response)
             } catch (e1: IOException) {
+                Log.e("TAG", e1.toString())
                 NetworkResult.Error(ErrorType.SERVER_THROWABLE)
             } catch (e2: HttpException) {
+                Log.e("TAG", e2.toString())
                 NetworkResult.Error(ErrorType.NON_200_RESPONSE)
             }
         }
