@@ -12,7 +12,7 @@ import ru.practicum.android.diploma.filter.domain.models.Country
 class CountryAdapter(private val itemClickListenerCountry: ItemClickListenerCountry) :
     RecyclerView.Adapter<CountryAdapter.CountryHolder>() {
 
-    val listItem = ArrayList<Country>()
+    private val listItem = ArrayList<Country>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CountryHolder {
         val view = LayoutInflater.from(parent.context)

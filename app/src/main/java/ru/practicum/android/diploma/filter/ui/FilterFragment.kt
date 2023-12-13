@@ -31,6 +31,7 @@ class FilterFragment : Fragment(R.layout.fragment_filter) {
 
         lifecycle.coroutineScope.launch {
             viewModel.getIndustryAndSaveDb()
+            viewModel.getCountryAndSaveDb()
         }
 
         val args: FilterFragmentArgs by navArgs()
