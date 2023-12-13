@@ -5,16 +5,22 @@ import android.view.MotionEvent
 import android.view.View
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import kotlinx.coroutines.launch
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentAreaChooserBinding
+import ru.practicum.android.diploma.filter.presentation.AreaViewModel
 import ru.practicum.android.diploma.filter.ui.adapters.AreaAdapter
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class AreaChooserFragment : Fragment(R.layout.fragment_area_chooser) {
 
     private var _binding: FragmentAreaChooserBinding? = null
     private val binding get() = _binding!!
+
+    private val viewModel : AreaViewModel by viewModel()
 
     private val adapter = AreaAdapter {
         val action =
@@ -30,6 +36,13 @@ class AreaChooserFragment : Fragment(R.layout.fragment_area_chooser) {
 
         binding.rvArea.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         binding.rvArea.adapter = adapter
+
+        lifecycleScope.launch {
+            viewModel.getAreas().collect {areasList ->
+                val areasSortedByName = areasList.sortedBy { it.name }
+                adapter.updateData(areasSortedByName)
+            }
+        }
 
         binding.searchEditText.addTextChangedListener {
             adapter.filter(it.toString())
