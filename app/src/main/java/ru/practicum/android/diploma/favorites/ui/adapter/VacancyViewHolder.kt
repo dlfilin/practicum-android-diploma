@@ -2,6 +2,7 @@ package ru.practicum.android.diploma.favorites.ui.adapter
 
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.CenterInside
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.common.util.Formatter
@@ -12,15 +13,17 @@ class VacancyViewHolder(
     private val binding: VacancyViewItemBinding
 ) : RecyclerView.ViewHolder(binding.root) {
 
-    private val radiusForLogo = binding.root.resources.getDimensionPixelSize(R.dimen.size_12)
-
     fun bind(vacancy: Vacancy, onClickListener: VacancyAdapter.OnClickListener) {
         with(binding) {
             Glide.with(itemView)
                 .load(vacancy.employerLogoUrl)
                 .placeholder(R.drawable.vacancy_item_placeholder)
-                .centerCrop()
-                .transform(RoundedCorners(radiusForLogo))
+                .transform(
+                    CenterInside(),
+                    RoundedCorners(
+                        itemView.resources.getDimensionPixelSize(R.dimen.size_12)
+                    ),
+                )
                 .into(binding.employerLogoIv)
 
             vacancyNameAndCity.text = buildString {
