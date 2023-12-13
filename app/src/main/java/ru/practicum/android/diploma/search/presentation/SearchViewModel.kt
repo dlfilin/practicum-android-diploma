@@ -77,6 +77,7 @@ class SearchViewModel(
                 filterParameters
             ).collect {
                 processResult(result = it)
+                isNextPageLoading = false
             }
         }
     }
@@ -100,19 +101,14 @@ class SearchViewModel(
             }
 
             is NetworkResult.Error -> {
-                if (isNextPageLoading) {
+                if (currentPage > 0) {
                     _toastEvent.postValue(result.errorType!!)
                     renderState(SearchScreenState.NextPageLoading(false))
                 } else {
-                    if (result.errorType == ErrorType.NO_INTERNET) {
-                        renderState(SearchScreenState.InternetThrowable)
-                    } else {
-                        renderState(SearchScreenState.Error)
-                    }
+                    renderState(SearchScreenState.Error(result.errorType!!))
                 }
             }
         }
-        isNextPageLoading = false
     }
 
     private fun renderState(state: SearchScreenState) {

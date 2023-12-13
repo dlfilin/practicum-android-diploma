@@ -181,8 +181,7 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
             is SearchScreenState.InitialLoading -> showInitialLoading()
             is SearchScreenState.Content -> showFoundVacancy(it.vacancyData)
             is SearchScreenState.Empty -> showEmpty()
-            is SearchScreenState.InternetThrowable -> showInternetThrowable()
-            is SearchScreenState.Error -> showError()
+            is SearchScreenState.Error -> showError(it.error)
             is SearchScreenState.NextPageLoading -> showNextPageLoadingProgress(it.isLoading)
         }
     }
@@ -241,21 +240,14 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         )
     }
 
-    private fun showInternetThrowable() {
-        binding.placeholderImage.setImageResource(R.drawable.placeholder_no_internet)
-        binding.placeholderMessage.text = getString(R.string.internet_throwable_tv)
-        updateScreenViews(
-            isMainProgressVisible = false,
-            isSearchRvVisible = false,
-            isPlaceholderVisible = true,
-            isVacanciesFoundVisible = false,
-            isNextPageLoadingVisible = false
-        )
-    }
-
-    private fun showError() {
-        binding.placeholderImage.setImageResource(R.drawable.placeholder_error_server)
-        binding.placeholderMessage.text = getString(R.string.server_throwable_tv)
+    private fun showError(error: ErrorType) {
+        if (error == ErrorType.NO_INTERNET) {
+            binding.placeholderImage.setImageResource(R.drawable.placeholder_no_internet)
+            binding.placeholderMessage.text = getString(R.string.internet_throwable_tv)
+        } else {
+            binding.placeholderImage.setImageResource(R.drawable.placeholder_error_server)
+            binding.placeholderMessage.text = getString(R.string.server_throwable_tv)
+        }
         updateScreenViews(
             isMainProgressVisible = false,
             isSearchRvVisible = false,
