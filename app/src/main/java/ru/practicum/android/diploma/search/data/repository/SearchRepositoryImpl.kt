@@ -11,6 +11,7 @@ import ru.practicum.android.diploma.search.data.dto.VacancySearchRequest
 import ru.practicum.android.diploma.search.data.dto.VacancySearchResponse
 import ru.practicum.android.diploma.search.data.mapper.VacancyResponseMapper
 import ru.practicum.android.diploma.search.domain.api.SearchRepository
+import ru.practicum.android.diploma.search.domain.model.SearchQuery
 import ru.practicum.android.diploma.search.domain.model.VacancyListData
 import ru.practicum.android.diploma.vacancy.data.dto.SimilarVacancyRequest
 
@@ -22,13 +23,10 @@ class SearchRepositoryImpl(
 ) : SearchRepository {
 
     override fun searchVacanciesPaged(
-        text: String, pageIndex: Int, pageSize: Int, filter: FilterParameters
+        searchQuery: SearchQuery, filter: FilterParameters
     ): Flow<NetworkResult<VacancyListData>> = flow {
-        val request = VacancySearchRequest(
-            prepareSearchQueryMap(
-                text = text, pageIndex = pageIndex, pageSize = pageSize, filter = filter
-            )
-        )
+        val request = VacancySearchRequest(prepareSearchQueryMap(searchQuery, filter))
+
         when (val result = networkClient.doRequest(request)) {
             is NetworkResult.Success -> {
                 val data = vacancyMapper.mapDtoToModel(result.data as VacancySearchResponse)
@@ -62,12 +60,12 @@ class SearchRepositoryImpl(
     }
 
     private fun prepareSearchQueryMap(
-        text: String, pageIndex: Int = 0, pageSize: Int = 10, filter: FilterParameters
+        searchQuery: SearchQuery, filter: FilterParameters
     ): Map<String, String> {
         val map: HashMap<String, String> = HashMap()
-        map["text"] = text
-        map["page"] = pageIndex.toString()
-        map["per_page"] = pageSize.toString()
+        map["text"] = searchQuery.text
+        map["page"] = searchQuery.page.toString()
+        map["per_page"] = searchQuery.perPage.toString()
 
         if (filter.area != null) {
             map["area"] = filter.area.id

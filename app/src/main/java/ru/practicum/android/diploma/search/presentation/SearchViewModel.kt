@@ -11,6 +11,7 @@ import ru.practicum.android.diploma.common.util.SingleLiveEvent
 import ru.practicum.android.diploma.common.util.debounce
 import ru.practicum.android.diploma.filter.domain.models.FilterParameters
 import ru.practicum.android.diploma.search.domain.api.SearchInteractor
+import ru.practicum.android.diploma.search.domain.model.SearchQuery
 import ru.practicum.android.diploma.search.domain.model.VacancyItem
 import ru.practicum.android.diploma.search.domain.model.VacancyListData
 
@@ -68,9 +69,11 @@ class SearchViewModel(
     private fun searchRequest(page: Int) {
         viewModelScope.launch {
             searchInteractor.searchVacanciesPaged(
-                text = latestSearchText,
-                pageIndex = page,
-                pageSize = ITEMS_PER_PAGE,
+                SearchQuery(
+                    text = latestSearchText,
+                    page = page,
+                    perPage = ITEMS_PER_PAGE
+                ),
                 filterParameters
             ).collect {
                 processResult(result = it)
