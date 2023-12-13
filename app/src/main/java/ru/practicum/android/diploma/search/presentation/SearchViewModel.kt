@@ -22,9 +22,6 @@ class SearchViewModel(
     private val _state = MutableLiveData<SearchScreenState>(SearchScreenState.Default)
     val state: LiveData<SearchScreenState> get() = _state
 
-    private val _filterState = MutableLiveData(FilterState(false))
-    val filterState: LiveData<FilterState> get() = _filterState
-
     private val _toastEvent = SingleLiveEvent<ErrorType>()
     val toastEvent: LiveData<ErrorType> get() = _toastEvent
 
@@ -121,11 +118,6 @@ class SearchViewModel(
         totalFound = 0
         maxPages = 1
         vacanciesList = mutableListOf()
-    }
-
-    fun checkFilterState() {
-        filterParameters = searchInteractor.getFilterParameters()
-        _filterState.postValue(FilterState(filterParameters.isNotEmpty))
     }
 
     companion object {

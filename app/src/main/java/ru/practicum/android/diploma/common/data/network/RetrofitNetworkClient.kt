@@ -3,19 +3,13 @@ package ru.practicum.android.diploma.common.data.network
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
-import android.util.Log
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import retrofit2.HttpException
 import ru.practicum.android.diploma.common.data.network.dto.Response
 import ru.practicum.android.diploma.common.util.ErrorType
 import ru.practicum.android.diploma.common.util.NetworkResult
-import ru.practicum.android.diploma.filter.data.dto.AreaRequest
-import ru.practicum.android.diploma.filter.data.dto.CountryRequest
-import ru.practicum.android.diploma.filter.data.dto.IndustryRequest
-import ru.practicum.android.diploma.filter.data.dto.IndustryResponse
 import ru.practicum.android.diploma.search.data.dto.VacancySearchRequest
-import ru.practicum.android.diploma.vacancy.data.dto.SimilarVacancyRequest
 import ru.practicum.android.diploma.vacancy.data.dto.VacancyDetailRequest
 import java.io.IOException
 
@@ -32,18 +26,12 @@ class RetrofitNetworkClient(
                 val response = when (dto) {
                     is VacancySearchRequest -> hhApiService.searchVacancies(dto.options)
                     is VacancyDetailRequest -> hhApiService.getVacancyDetails(dto.vacancyId)
-                    is SimilarVacancyRequest -> hhApiService.searchSimilarVacancies(dto.vacancyId)
-                    is AreaRequest -> hhApiService.getAllAreas()
-                    is CountryRequest -> hhApiService.getCountries()
-                    is IndustryRequest -> IndustryResponse(hhApiService.getAllIndustries())
                     else -> Response()
                 }
                 NetworkResult.Success(response)
             } catch (e1: IOException) {
-                Log.e("TAG", e1.toString())
                 NetworkResult.Error(ErrorType.SERVER_THROWABLE)
             } catch (e2: HttpException) {
-                Log.e("TAG", e2.toString())
                 NetworkResult.Error(ErrorType.NON_200_RESPONSE)
             }
         }

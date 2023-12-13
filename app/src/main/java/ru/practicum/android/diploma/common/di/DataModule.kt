@@ -1,6 +1,5 @@
 package ru.practicum.android.diploma.common.di
 
-import android.content.Context
 import androidx.room.Room
 import com.google.gson.Gson
 import okhttp3.OkHttpClient
@@ -14,10 +13,6 @@ import ru.practicum.android.diploma.common.data.db.AppDataBase
 import ru.practicum.android.diploma.common.data.network.HhApiService
 import ru.practicum.android.diploma.common.data.network.NetworkClient
 import ru.practicum.android.diploma.common.data.network.RetrofitNetworkClient
-import ru.practicum.android.diploma.common.data.storage.FilterStorage
-import ru.practicum.android.diploma.common.data.storage.SharedPrefsFilterStorage
-import ru.practicum.android.diploma.common.data.storage.SharedPrefsFilterStorage.Companion.SEARCH_FILTER_PREFERENCES
-import ru.practicum.android.diploma.common.data.storage.mapper.FilterMapper
 import ru.practicum.android.diploma.search.data.mapper.VacancyResponseMapper
 
 val dataModule = module {
@@ -54,24 +49,6 @@ val dataModule = module {
     }
 
     factory {
-        FilterMapper()
-    }
-
-    single {
-        androidContext().getSharedPreferences(
-            SEARCH_FILTER_PREFERENCES,
-            Context.MODE_PRIVATE
-        )
-    }
-
-    factory {
         Gson()
-    }
-
-    single<FilterStorage> {
-        SharedPrefsFilterStorage(
-            sharedPrefs = get(),
-            gson = get()
-        )
     }
 }

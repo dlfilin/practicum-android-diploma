@@ -22,7 +22,6 @@ import ru.practicum.android.diploma.common.util.debounce
 import ru.practicum.android.diploma.databinding.FragmentSearchBinding
 import ru.practicum.android.diploma.search.domain.model.VacancyItem
 import ru.practicum.android.diploma.search.domain.model.VacancyListData
-import ru.practicum.android.diploma.search.presentation.FilterState
 import ru.practicum.android.diploma.search.presentation.SearchScreenState
 import ru.practicum.android.diploma.search.presentation.SearchViewModel
 import ru.practicum.android.diploma.search.ui.adapter.SearchAdapter
@@ -59,7 +58,6 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
 
         setListeners()
         setRvAdapter()
-        checkFilterState()
         setToolbarMenu()
         setObservables()
     }
@@ -68,12 +66,6 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         super.onDestroyView()
 
         _binding = null
-    }
-
-    override fun onResume() {
-        super.onResume()
-
-        viewmodel.checkFilterState()
     }
 
     private fun setListeners() {
@@ -115,7 +107,6 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
 
     private fun setRvAdapter() {
         binding.vacancyListRv.adapter = adapter
-        // для приятного скроллинга
         binding.vacancyListRv.setHasFixedSize(false)
         binding.vacancyListRv.isNestedScrollingEnabled = false
     }
@@ -137,7 +128,6 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
                 return when (menuItem.itemId) {
                     R.id.open_filter -> {
-                        findNavController().navigate(R.id.action_searchFragment_to_filterFragment)
                         true
                     }
 
@@ -147,17 +137,9 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         }, viewLifecycleOwner)
     }
 
-    private fun checkFilterState() {
-        viewmodel.checkFilterState()
-    }
-
     private fun setObservables() {
         viewmodel.state.observe(viewLifecycleOwner) { state ->
             renderState(state)
-        }
-
-        viewmodel.filterState.observe(viewLifecycleOwner) { filterState ->
-            renderFilterIcon(filterState)
         }
 
         viewmodel.toastEvent.observe(viewLifecycleOwner) { error ->
@@ -170,12 +152,6 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
 
     private fun showToast(message: String) {
         Toast.makeText(requireContext(), message, Toast.LENGTH_LONG).show()
-    }
-
-    private fun renderFilterIcon(filterState: FilterState) {
-        filterIsActive = filterState.isActive
-        // нужно дернуть тулбар в Activity, чтобы он перерисовался
-        requireActivity().invalidateOptionsMenu()
     }
 
     private fun renderState(it: SearchScreenState) {
