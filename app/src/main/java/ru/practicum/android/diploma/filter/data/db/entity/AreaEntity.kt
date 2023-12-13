@@ -9,5 +9,7 @@ data class AreaEntity(
     @PrimaryKey(autoGenerate = false)
     val id: String,
     @ColumnInfo("name")
-    val name: String
+    val name: String,
+    @ColumnInfo("parent_id")
+    val parentId: String
 )

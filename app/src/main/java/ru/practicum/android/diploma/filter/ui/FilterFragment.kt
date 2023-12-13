@@ -7,10 +7,8 @@ import androidx.core.view.isEmpty
 import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.coroutineScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import kotlinx.coroutines.launch
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentFilterBinding
 import ru.practicum.android.diploma.filter.presentation.FilterViewModel
@@ -29,10 +27,9 @@ class FilterFragment : Fragment(R.layout.fragment_filter) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentFilterBinding.bind(view)
 
-        lifecycle.coroutineScope.launch {
-            viewModel.getIndustryAndSaveDb()
-            viewModel.getCountryAndSaveDb()
-        }
+        viewModel.getIndustryAndSaveDb()
+        viewModel.getCountryAndSaveDb()
+        viewModel.getAreaAndSaveDb()
 
         val args: FilterFragmentArgs by navArgs()
         val countryName = args.countryArgs

@@ -3,6 +3,7 @@ package ru.practicum.android.diploma.common.di
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 import ru.practicum.android.diploma.favorites.presentation.FavoritesViewModel
+import ru.practicum.android.diploma.filter.presentation.AreaViewModel
 import ru.practicum.android.diploma.filter.presentation.CountryViewModel
 import ru.practicum.android.diploma.filter.presentation.FilterViewModel
 import ru.practicum.android.diploma.filter.presentation.IndustryViewModel
@@ -43,5 +44,9 @@ val viewModelModule = module {
 
     viewModel {
         CountryViewModel(interactor = get())
+    }
+
+    viewModel {
+        AreaViewModel(interactor = get())
     }
 }
