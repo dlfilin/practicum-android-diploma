@@ -15,6 +15,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.CenterInside
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
@@ -157,13 +158,16 @@ class VacancyFragment : Fragment(R.layout.fragment_vacancy) {
 
     private fun fillCompanySection(vacancy: Vacancy) {
         binding.apply {
-            val radiusForLogo = binding.root.resources.getDimensionPixelSize(R.dimen.size_12)
 
             Glide.with(requireContext())
                 .load(vacancy.employerLogoUrl)
                 .placeholder(R.drawable.vacancy_item_placeholder)
-                .centerCrop()
-                .transform(RoundedCorners(radiusForLogo))
+                .transform(
+                    CenterInside(),
+                    RoundedCorners(
+                        resources.getDimensionPixelSize(R.dimen.size_12)
+                    ),
+                )
                 .into(binding.image)
 
             companyName.text = vacancy.employerName
