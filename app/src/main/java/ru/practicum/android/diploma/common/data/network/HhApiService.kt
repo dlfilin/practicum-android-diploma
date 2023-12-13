@@ -6,6 +6,7 @@ import retrofit2.http.Path
 import retrofit2.http.QueryMap
 import ru.practicum.android.diploma.BuildConfig
 import ru.practicum.android.diploma.filter.data.dto.AreaResponse
+import ru.practicum.android.diploma.filter.data.dto.CountryDto
 import ru.practicum.android.diploma.filter.data.dto.IndustryDto
 import ru.practicum.android.diploma.search.data.dto.VacancySearchResponse
 import ru.practicum.android.diploma.vacancy.data.dto.VacancyDetailsResponse
@@ -24,8 +25,8 @@ interface HhApiService {
     suspend fun searchSimilarVacancies(@Path("vacancy_id") id: String): VacancySearchResponse
 
     @Headers(TOKEN_BEARER_STRING, USER_AGENT_STRING)
-    @GET("/countries")
-    suspend fun getCountries(): AreaResponse
+    @GET("/areas")
+    suspend fun getCountries(): List<CountryDto>
 
     @Headers(TOKEN_BEARER_STRING, USER_AGENT_STRING)
     @GET("/areas")

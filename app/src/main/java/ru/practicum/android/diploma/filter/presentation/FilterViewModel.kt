@@ -9,4 +9,8 @@ class FilterViewModel(private val interactor: FilterInteractor) : ViewModel() {
         interactor.getIndustryAndSaveDb()
     }
 
+    suspend fun getCountryAndSaveDb() {
+        interactor.getCountryAndSaveDb()
+    }
+
 }
