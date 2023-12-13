@@ -23,11 +23,11 @@ class SearchRepositoryImpl(
 ) : SearchRepository {
 
     override fun searchVacanciesPaged(
-        searchQuery: SearchQuery, filter: FilterParameters
+        searchQuery: SearchQuery,
+        filter: FilterParameters
     ): Flow<NetworkResult<VacancyListData>> = flow {
         val request = VacancySearchRequest(prepareSearchQueryMap(searchQuery, filter))
         when (val result = networkClient.doRequest(request)) {
-
             is NetworkResult.Success -> {
                 val data = vacancyMapper.mapDtoToModel(result.data as VacancySearchResponse)
                 emit(NetworkResult.Success(data))

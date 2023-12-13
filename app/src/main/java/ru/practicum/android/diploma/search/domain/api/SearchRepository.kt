@@ -8,8 +8,10 @@ import ru.practicum.android.diploma.search.domain.model.VacancyListData
 
 interface SearchRepository {
     fun searchVacanciesPaged(
-        searchQuery: SearchQuery, filter: FilterParameters
+        searchQuery: SearchQuery,
+        filter: FilterParameters
     ): Flow<NetworkResult<VacancyListData>>
+
     fun getSimilarVacancies(vacancyId: String): Flow<NetworkResult<VacancyListData>>
     fun getFilterParameters(): FilterParameters
 }
