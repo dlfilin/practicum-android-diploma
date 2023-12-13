@@ -36,7 +36,7 @@ class AddFilterRepositoryImpl(
             }
 
             is NetworkResult.Error -> {
-                Log.e("Error Area", "Error loading")
+                Log.e("Error Area", "Error loading Area")
             }
         }
     }
@@ -51,7 +51,7 @@ class AddFilterRepositoryImpl(
             }
 
             is NetworkResult.Error -> {
-                Log.e("Error Country", "Error loading")
+                Log.e("Error Country", "Error loading Country")
             }
         }
     }
@@ -66,7 +66,7 @@ class AddFilterRepositoryImpl(
             }
 
             is NetworkResult.Error -> {
-                Log.e("Error Industry", "Error loading")
+                Log.e("Error Industry", "Error loading Industry")
             }
         }
     }
