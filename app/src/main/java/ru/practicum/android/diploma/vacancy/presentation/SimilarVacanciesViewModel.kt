@@ -1,6 +1,5 @@
 package ru.practicum.android.diploma.vacancy.presentation
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -40,8 +39,6 @@ class SimilarVacanciesViewModel(
                     renderState(SimilarVacanciesScreenState.Empty)
                 } else {
                     renderState(SimilarVacanciesScreenState.Content(result.data!!))
-                    Log.e("SIZE", result.data.items.size.toString())
-                    Log.e("DATA", result.data.items.toString())
                 }
             }
 

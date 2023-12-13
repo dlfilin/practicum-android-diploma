@@ -1,7 +1,6 @@
 package ru.practicum.android.diploma.search.ui
 
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
@@ -104,7 +103,6 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
                 if (dy > 0) {
                     val pos = (binding.vacancyListRv.layoutManager as LinearLayoutManager).findLastVisibleItemPosition()
                     val itemsCount = adapter.itemCount
-                    Log.d("SCROLL", "dy=$dy, pos=$pos itemsCount=$itemsCount")
                     if (pos >= itemsCount - 1) {
                         viewmodel.onLastItemReached()
                     }
@@ -213,9 +211,6 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
             R.plurals.vacancy_number, foundVacancyData.found, foundVacancyData.found
         )
         binding.vacanciesFound.text = numOfVacancy
-        Log.e("showFoundVacancy", foundVacancyData.items.size.toString())
-        Log.e("showFoundVacancy", foundVacancyData.items.toString())
-
         adapter.submitList(foundVacancyData.items)
         if (foundVacancyData.page == 0) binding.vacancyListRv.scrollToPosition(0)
         updateScreenViews(
