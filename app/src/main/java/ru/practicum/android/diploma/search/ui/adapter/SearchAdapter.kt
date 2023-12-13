@@ -15,7 +15,6 @@ import ru.practicum.android.diploma.search.domain.model.VacancyItem
 
 class SearchAdapter(private val clickListener: VacancyClickListener) :
     ListAdapter<VacancyItem, SearchViewHolder>(VacanciesDiffCallback()) {
-      
 //    private var vacancyList = listOf<VacancyItem>()
 
 //    fun setVacancyList(newList: List<VacancyItem>) {
@@ -25,7 +24,9 @@ class SearchAdapter(private val clickListener: VacancyClickListener) :
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SearchViewHolder {
         val binding = VacancyViewItemBinding.inflate(
-            LayoutInflater.from(parent.context), parent, false
+            LayoutInflater.from(parent.context),
+            parent,
+            false
         )
         return SearchViewHolder(binding)
     }

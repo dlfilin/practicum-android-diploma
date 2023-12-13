@@ -9,7 +9,6 @@ import android.widget.Toast
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
 import androidx.core.view.isVisible
-import androidx.core.widget.NestedScrollView
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
@@ -47,7 +46,9 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         }
     })
     private val onTrackClickDebounce = debounce<Boolean>(
-        CLICK_DEBOUNCE_DELAY, lifecycleScope, false
+        CLICK_DEBOUNCE_DELAY,
+        lifecycleScope,
+        false
     ) { param ->
         isClickAllowed = param
     }
@@ -61,28 +62,6 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         checkFilterState()
         setToolbarMenu()
         setObservables()
-
-        val recyclerView = requireView().findViewById<RecyclerView>(R.id.vacancyListRv)
-        val nestedScrollView = requireView().findViewById<NestedScrollView>(R.id.nestedScrollRv)
-        var paginatedRv: RecyclerView? = null
-
-        nestedScrollView.viewTreeObserver?.addOnScrollChangedListener {
-            if (paginatedRv == null) {
-                val holder = nestedScrollView.getChildAt(0) as ViewGroup
-                for (i in 0 until holder.childCount) {
-                    if (holder.getChildAt(i).id == recyclerView.id) {
-                        paginatedRv = holder.getChildAt(i) as RecyclerView
-                        break
-                    }
-                }
-            }
-            paginatedRv?.let {
-                if (it.bottom - (nestedScrollView.height + nestedScrollView.scrollY) == 0) {
-                    binding.recyclerViewProgressBar.isVisible = true
-                    viewmodel.searchDebounce(binding.searchEditText.text.toString())
-                }
-            }
-        }
     }
 
     override fun onDestroyView() {
@@ -234,7 +213,9 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
 
     private fun showFoundVacancy(foundVacancyData: VacancyListData) {
         val numOfVacancy = resources.getQuantityString(
-            R.plurals.vacancy_number, foundVacancyData.found, foundVacancyData.found
+            R.plurals.vacancy_number,
+            foundVacancyData.found,
+            foundVacancyData.found
         )
         binding.vacanciesFound.text = numOfVacancy
         adapter.submitList(foundVacancyData.items)
