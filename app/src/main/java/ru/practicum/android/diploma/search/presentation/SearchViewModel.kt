@@ -29,10 +29,10 @@ class SearchViewModel(
     val toastEvent: LiveData<ErrorType> get() = _toastEvent
 
     private var currentPage: Int = 0
-    private var totalFound: Int = 0
     private var maxPages = 1
+    private var totalFound: Int = 0
     private var isNextPageLoading: Boolean = false
-    private val vacanciesList = mutableListOf<VacancyItem>()
+    private var vacanciesList = mutableListOf<VacancyItem>()
 
     private var latestSearchText: String = ""
     private var filterParameters: FilterParameters = FilterParameters()
@@ -120,7 +120,7 @@ class SearchViewModel(
         currentPage = 0
         totalFound = 0
         maxPages = 1
-        vacanciesList.clear()
+        vacanciesList = mutableListOf()
     }
 
     fun checkFilterState() {
