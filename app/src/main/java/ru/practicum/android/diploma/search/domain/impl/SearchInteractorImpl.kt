@@ -5,15 +5,15 @@ import ru.practicum.android.diploma.common.util.NetworkResult
 import ru.practicum.android.diploma.filter.domain.models.FilterParameters
 import ru.practicum.android.diploma.search.domain.api.SearchInteractor
 import ru.practicum.android.diploma.search.domain.api.SearchRepository
-import ru.practicum.android.diploma.search.domain.model.QuerySearch
+import ru.practicum.android.diploma.search.domain.model.SearchQuery
 import ru.practicum.android.diploma.search.domain.model.VacancyListData
 
 class SearchInteractorImpl(private val repository: SearchRepository) : SearchInteractor {
-    override fun searchVacancies(
-        querySearch: QuerySearch,
-        options: FilterParameters
+    override fun searchVacanciesPaged(
+        searchQuery: SearchQuery,
+        filter: FilterParameters
     ): Flow<NetworkResult<VacancyListData>> {
-        return repository.searchVacancies(querySearch, options)
+        return repository.searchVacanciesPaged(searchQuery, filter)
     }
 
     override fun getSimilarVacancies(vacancyId: String): Flow<NetworkResult<VacancyListData>> {

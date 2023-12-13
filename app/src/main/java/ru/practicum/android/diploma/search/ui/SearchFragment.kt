@@ -5,19 +5,19 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
-import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
 import androidx.core.view.isVisible
-import androidx.core.widget.NestedScrollView
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
+import ru.practicum.android.diploma.common.util.ErrorType
 import ru.practicum.android.diploma.common.util.debounce
 import ru.practicum.android.diploma.databinding.FragmentSearchBinding
 import ru.practicum.android.diploma.search.domain.model.VacancyItem
@@ -57,33 +57,11 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentSearchBinding.bind(view)
 
-        setTextWatcher()
+        setListeners()
         setRvAdapter()
         checkFilterState()
         setToolbarMenu()
         setObservables()
-
-        val recyclerView = requireView().findViewById<RecyclerView>(R.id.vacancyListRv)
-        val nestedScrollView = requireView().findViewById<NestedScrollView>(R.id.nestedScrollRv)
-        var paginatedRv: RecyclerView? = null
-
-        nestedScrollView.viewTreeObserver?.addOnScrollChangedListener {
-            if (paginatedRv == null) {
-                val holder = nestedScrollView.getChildAt(0) as ViewGroup
-                for (i in 0 until holder.childCount) {
-                    if (holder.getChildAt(i).id == recyclerView.id) {
-                        paginatedRv = holder.getChildAt(i) as RecyclerView
-                        break
-                    }
-                }
-            }
-            paginatedRv?.let {
-                if (it.bottom - (nestedScrollView.height + nestedScrollView.scrollY) == 0) {
-                    binding.recyclerViewProgressBar.isVisible = true
-                    viewmodel.searchDebounce(binding.searchEditText.text.toString())
-                }
-            }
-        }
     }
 
     override fun onDestroyView() {
@@ -98,7 +76,7 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         viewmodel.checkFilterState()
     }
 
-    private fun setTextWatcher() {
+    private fun setListeners() {
         binding.searchEditText.doOnTextChanged { text, _, _, _ ->
             if (text.isNullOrEmpty()) {
                 binding.searchLayoutField.apply {
@@ -111,7 +89,7 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
                     tag = R.drawable.ic_clear
                 }
             }
-            search()
+            viewmodel.searchTextChanged(text.toString())
         }
 
         binding.searchLayoutField.setEndIconOnClickListener {
@@ -119,10 +97,20 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
                 binding.searchEditText.text?.clear()
             }
         }
-    }
 
-    private fun search() {
-        viewmodel.searchDebounce(binding.searchEditText.text.toString())
+        binding.vacancyListRv.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+
+                if (dy > 0) {
+                    val pos = (binding.vacancyListRv.layoutManager as LinearLayoutManager).findLastVisibleItemPosition()
+                    val itemsCount = adapter.itemCount
+                    if (pos >= itemsCount - 1) {
+                        viewmodel.onLastItemReached()
+                    }
+                }
+            }
+        })
     }
 
     private fun setRvAdapter() {
@@ -138,8 +126,7 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
             override fun onPrepareMenu(menu: Menu) {
                 super.onPrepareMenu(menu)
                 val item = menu.findItem(R.id.open_filter)
-                val icon =
-                    if (filterIsActive) R.drawable.ic_filter_active else R.drawable.ic_filter_inactive
+                val icon = if (filterIsActive) R.drawable.ic_filter_active else R.drawable.ic_filter_inactive
                 item.setIcon(icon)
             }
 
@@ -172,6 +159,17 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         viewmodel.filterState.observe(viewLifecycleOwner) { filterState ->
             renderFilterIcon(filterState)
         }
+
+        viewmodel.toastEvent.observe(viewLifecycleOwner) { error ->
+            when (error) {
+                ErrorType.NO_INTERNET -> showToast(getString(R.string.toast_internet_throwable))
+                else -> showToast(getString(R.string.toast_unknown_error))
+            }
+        }
+    }
+
+    private fun showToast(message: String) {
+        Toast.makeText(requireContext(), message, Toast.LENGTH_LONG).show()
     }
 
     private fun renderFilterIcon(filterState: FilterState) {
@@ -183,84 +181,92 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
     private fun renderState(it: SearchScreenState) {
         when (it) {
             is SearchScreenState.Default -> showDefault()
-            is SearchScreenState.Loading -> showLoading()
+            is SearchScreenState.InitialLoading -> showInitialLoading()
             is SearchScreenState.Content -> showFoundVacancy(it.vacancyData)
             is SearchScreenState.Empty -> showEmpty()
-            is SearchScreenState.InternetThrowable -> showInternetThrowable()
-            is SearchScreenState.Error -> showError()
-            is SearchScreenState.MaxPage -> binding.recyclerViewProgressBar.isVisible = false
-            is SearchScreenState.ToastError -> showToast(getString(R.string.server_throwable_tv))
-            is SearchScreenState.ToastErrorInternet -> showToast(getString(R.string.internet_throwable_tv))
+            is SearchScreenState.Error -> showError(it.error)
+            is SearchScreenState.NextPageLoading -> showNextPageLoadingProgress(it.isLoading)
         }
     }
 
     private fun showDefault() {
-        hideAllView()
-        binding.placeholderImage.isVisible = true
         binding.placeholderImage.setImageResource(R.drawable.placeholder_start_of_search)
+        updateScreenViews(
+            isMainProgressVisible = false,
+            isSearchRvVisible = false,
+            isPlaceholderVisible = true,
+            isVacanciesFoundVisible = false,
+            isNextPageLoadingVisible = false
+        )
+        binding.placeholderMessage.isVisible = false
     }
 
-    private fun showLoading() {
-        hideAllView()
-        binding.newSearchProgressBar.isVisible = true
+    private fun showInitialLoading() {
+        updateScreenViews(
+            isMainProgressVisible = true,
+            isSearchRvVisible = false,
+            isPlaceholderVisible = false,
+            isVacanciesFoundVisible = false,
+            isNextPageLoadingVisible = false
+        )
     }
 
     private fun showFoundVacancy(foundVacancyData: VacancyListData) {
-        hideAllView()
         val numOfVacancy = resources.getQuantityString(
             R.plurals.vacancy_number,
             foundVacancyData.found,
             foundVacancyData.found
         )
         binding.vacanciesFound.text = numOfVacancy
-        binding.vacanciesFound.isVisible = true
-        if (foundVacancyData.page > 0) {
-            adapter.updateVacancyList(foundVacancyData.items, true)
-        } else {
-            adapter.updateVacancyList(foundVacancyData.items)
-            binding.vacancyListRv.scrollToPosition(0)
-            binding.nestedScrollRv.scrollTo(0, 0)
-        }
-        binding.nestedScrollRv.isVisible = true
-        binding.vacanciesFound.isVisible = true
+        adapter.submitList(foundVacancyData.items)
+        if (foundVacancyData.page == 0) binding.vacancyListRv.scrollToPosition(0)
+        updateScreenViews(
+            isMainProgressVisible = false,
+            isSearchRvVisible = true,
+            isPlaceholderVisible = false,
+            isVacanciesFoundVisible = true,
+            isNextPageLoadingVisible = false
+        )
     }
 
     private fun showEmpty() {
-        hideAllView()
-        binding.placeholderImage.isVisible = true
-        binding.placeholderMessage.isVisible = true
         binding.placeholderImage.setImageResource(R.drawable.placeholder_empty_result)
         binding.placeholderMessage.text = getString(R.string.load_vacancy_throwable_tv)
+        binding.vacanciesFound.text = getString(R.string.no_vacancies_found_title)
+        updateScreenViews(
+            isMainProgressVisible = false,
+            isSearchRvVisible = false,
+            isPlaceholderVisible = true,
+            isVacanciesFoundVisible = true,
+            isNextPageLoadingVisible = false
+        )
     }
 
-    private fun showInternetThrowable() {
-        hideAllView()
-        binding.placeholderImage.isVisible = true
-        binding.placeholderMessage.isVisible = true
-        binding.placeholderImage.setImageResource(R.drawable.placeholder_no_internet)
-        binding.placeholderMessage.text = getString(R.string.internet_throwable_tv)
+    private fun showError(error: ErrorType) {
+        if (error == ErrorType.NO_INTERNET) {
+            binding.placeholderImage.setImageResource(R.drawable.placeholder_no_internet)
+            binding.placeholderMessage.text = getString(R.string.internet_throwable_tv)
+        } else {
+            binding.placeholderImage.setImageResource(R.drawable.placeholder_error_server)
+            binding.placeholderMessage.text = getString(R.string.server_throwable_tv)
+        }
+        updateScreenViews(
+            isMainProgressVisible = false,
+            isSearchRvVisible = false,
+            isPlaceholderVisible = true,
+            isVacanciesFoundVisible = false,
+            isNextPageLoadingVisible = false
+        )
     }
 
-    private fun showError() {
-        hideAllView()
-        binding.placeholderImage.isVisible = true
-        binding.placeholderMessage.isVisible = true
-        binding.placeholderImage.setImageResource(R.drawable.placeholder_error_server)
-        binding.placeholderMessage.text = getString(R.string.server_throwable_tv)
-    }
-
-    private fun showToast(message: String) {
-        binding.recyclerViewProgressBar.isVisible = false
-        Toast.makeText(requireContext(), message, Toast.LENGTH_LONG).show()
-    }
-
-    private fun hideAllView() {
-        binding.vacanciesFound.isVisible = false
-        binding.newSearchProgressBar.isVisible = false
-        binding.placeholderImage.isVisible = false
-        binding.placeholderMessage.isVisible = false
-        binding.nestedScrollRv.isVisible = false
-        binding.recyclerViewProgressBar.isVisible = false
+    private fun showNextPageLoadingProgress(isLoading: Boolean) {
+        updateScreenViews(
+            isMainProgressVisible = false,
+            isSearchRvVisible = true,
+            isPlaceholderVisible = false,
+            isVacanciesFoundVisible = true,
+            isNextPageLoadingVisible = isLoading
+        )
     }
 
     private fun clickDebounce(): Boolean {
@@ -270,6 +276,23 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
             onTrackClickDebounce(true)
         }
         return current
+    }
+
+    private fun updateScreenViews(
+        isMainProgressVisible: Boolean,
+        isSearchRvVisible: Boolean,
+        isPlaceholderVisible: Boolean,
+        isVacanciesFoundVisible: Boolean,
+        isNextPageLoadingVisible: Boolean
+    ) {
+        with(binding) {
+            vacanciesFound.isVisible = isVacanciesFoundVisible
+            mainProgressBar.isVisible = isMainProgressVisible
+            placeholderImage.isVisible = isPlaceholderVisible
+            placeholderMessage.isVisible = isPlaceholderVisible
+            vacancyListRv.isVisible = isSearchRvVisible
+            recyclerViewProgressBar.isVisible = isNextPageLoadingVisible
+        }
     }
 
     companion object {

@@ -11,7 +11,7 @@ import ru.practicum.android.diploma.search.data.dto.VacancySearchRequest
 import ru.practicum.android.diploma.search.data.dto.VacancySearchResponse
 import ru.practicum.android.diploma.search.data.mapper.VacancyResponseMapper
 import ru.practicum.android.diploma.search.domain.api.SearchRepository
-import ru.practicum.android.diploma.search.domain.model.QuerySearch
+import ru.practicum.android.diploma.search.domain.model.SearchQuery
 import ru.practicum.android.diploma.search.domain.model.VacancyListData
 import ru.practicum.android.diploma.vacancy.data.dto.SimilarVacancyRequest
 
@@ -22,14 +22,12 @@ class SearchRepositoryImpl(
     private val filterMapper: FilterMapper
 ) : SearchRepository {
 
-    override fun searchVacancies(
-        querySearch: QuerySearch,
+    override fun searchVacanciesPaged(
+        searchQuery: SearchQuery,
         filter: FilterParameters
     ): Flow<NetworkResult<VacancyListData>> = flow {
-        val result = networkClient.doRequest(
-            VacancySearchRequest(prepareSearchQueryMap(querySearch, filter))
-        )
-        when (result) {
+        val request = VacancySearchRequest(prepareSearchQueryMap(searchQuery, filter))
+        when (val result = networkClient.doRequest(request)) {
             is NetworkResult.Success -> {
                 val data = vacancyMapper.mapDtoToModel(result.data as VacancySearchResponse)
                 emit(NetworkResult.Success(data))
@@ -61,12 +59,14 @@ class SearchRepositoryImpl(
         return filterMapper.mapDtoToFilterParameters(filterStorage.getFilterParameters())
     }
 
-    private fun prepareSearchQueryMap(querySearch: QuerySearch, filter: FilterParameters): Map<String, String> {
+    private fun prepareSearchQueryMap(
+        searchQuery: SearchQuery,
+        filter: FilterParameters
+    ): Map<String, String> {
         val map: HashMap<String, String> = HashMap()
-        map["text"] = querySearch.text
-        map["page"] = querySearch.page.toString()
-        map["per_page"] = querySearch.perPage.toString()
-
+        map["text"] = searchQuery.text
+        map["page"] = searchQuery.page.toString()
+        map["per_page"] = searchQuery.perPage.toString()
 
         if (filter.area != null) {
             map["area"] = filter.area.id

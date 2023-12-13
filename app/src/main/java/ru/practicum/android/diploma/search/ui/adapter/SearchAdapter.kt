@@ -3,6 +3,7 @@ package ru.practicum.android.diploma.search.ui.adapter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterInside
@@ -12,40 +13,14 @@ import ru.practicum.android.diploma.common.util.Formatter
 import ru.practicum.android.diploma.databinding.VacancyViewItemBinding
 import ru.practicum.android.diploma.search.domain.model.VacancyItem
 
-class SearchAdapter(private val clickListener: VacancyClickListener) : RecyclerView.Adapter<SearchViewHolder>() {
+class SearchAdapter(private val clickListener: VacancyClickListener) :
+    ListAdapter<VacancyItem, SearchViewHolder>(VacanciesDiffCallback()) {
+//    private var vacancyList = listOf<VacancyItem>()
 
-    private var vacancyList = arrayListOf<VacancyItem>()
-
-    fun updateVacancyList(newList: List<VacancyItem>, isPaging: Boolean = false) {
-        if (isPaging) {
-            val newListForCompare = vacancyList.map { it } as ArrayList<VacancyItem>
-            newListForCompare.addAll(newList)
-            val diffResult =
-                DiffUtil.calculateDiff(
-                    VacancyDiffCallback(
-                        vacancyList,
-                        newListForCompare as List<VacancyItem>
-                    )
-                )
-            vacancyList.addAll(newList)
-            diffResult.dispatchUpdatesTo(this)
-        } else {
-            /* с диспатчером мигает!
-            val diffResult = DiffUtil.calculateDiff(
-                VacancyDiffCallback(
-                    vacancyList,
-                    newList
-                )
-                )
-            vacancyList.clear()
-            vacancyList.addAll(newList)
-            diffResult.dispatchUpdatesTo(this)*/
-
-            vacancyList.clear()
-            vacancyList.addAll(newList)
-            notifyDataSetChanged()
-        }
-    }
+//    fun setVacancyList(newList: List<VacancyItem>) {
+//        vacancyList = newList
+//        notifyDataSetChanged()
+//    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SearchViewHolder {
         val binding = VacancyViewItemBinding.inflate(
@@ -57,11 +32,17 @@ class SearchAdapter(private val clickListener: VacancyClickListener) : RecyclerV
     }
 
     override fun onBindViewHolder(holder: SearchViewHolder, position: Int) {
-        holder.bind(vacancyList[position])
-        holder.itemView.setOnClickListener { clickListener.onVacancyClick(vacancyList[position]) }
+        holder.bind(getItem(position))
+        holder.itemView.setOnClickListener { clickListener.onVacancyClick(getItem(position)) }
     }
 
-    override fun getItemCount(): Int = vacancyList.size
+//    fun updateListItems(newList: List<VacancyItem>) {
+//        val diffCallback = ListDiffCallback(oldList = items, newList = newList)
+//        val diffResult = DiffUtil.calculateDiff(diffCallback)
+//        items = newList
+//        diffResult.dispatchUpdatesTo(this)
+//    }
+
     interface VacancyClickListener {
         fun onVacancyClick(vacancy: VacancyItem)
     }
@@ -76,14 +57,9 @@ class SearchViewHolder(
                 itemView.resources.getString(R.string.vacancy_item_title, vacancy.vacancyName, vacancy.area)
             companyName.text = vacancy.employerName
             salary.text = Formatter.formatSalary(
-                itemView.context,
-                vacancy.salaryFrom,
-                vacancy.salaryTo,
-                vacancy.salaryCurrency
+                itemView.context, vacancy.salaryFrom, vacancy.salaryTo, vacancy.salaryCurrency
             )
-            Glide.with(itemView)
-                .load(vacancy.employerLogoUrl)
-                .placeholder(R.drawable.vacancy_item_placeholder)
+            Glide.with(itemView).load(vacancy.employerLogoUrl).placeholder(R.drawable.vacancy_item_placeholder)
                 .transform(
                     CenterInside(),
                     RoundedCorners(
@@ -91,5 +67,15 @@ class SearchViewHolder(
                     ),
                 ).into(employerLogoIv)
         }
+    }
+}
+
+class VacanciesDiffCallback : DiffUtil.ItemCallback<VacancyItem>() {
+    override fun areItemsTheSame(oldItem: VacancyItem, newItem: VacancyItem): Boolean {
+        return oldItem.id == newItem.id
+    }
+
+    override fun areContentsTheSame(oldItem: VacancyItem, newItem: VacancyItem): Boolean {
+        return oldItem == newItem
     }
 }
