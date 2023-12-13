@@ -20,7 +20,7 @@ class AreaChooserFragment : Fragment(R.layout.fragment_area_chooser) {
     private var _binding: FragmentAreaChooserBinding? = null
     private val binding get() = _binding!!
 
-    private val viewModel : AreaViewModel by viewModel()
+    private val viewModel: AreaViewModel by viewModel()
 
     private val adapter = AreaAdapter {
         val action =
@@ -38,7 +38,7 @@ class AreaChooserFragment : Fragment(R.layout.fragment_area_chooser) {
         binding.rvArea.adapter = adapter
 
         lifecycleScope.launch {
-            viewModel.getAreas().collect {areasList ->
+            viewModel.getAreas().collect { areasList ->
                 val areasSortedByName = areasList.sortedBy { it.name }
                 adapter.updateData(areasSortedByName)
             }

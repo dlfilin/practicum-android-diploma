@@ -11,5 +11,5 @@ data class AreaEntity(
     @ColumnInfo("name")
     val name: String,
     @ColumnInfo("parent_id")
-    val parentId : String
+    val parentId: String
 )

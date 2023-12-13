@@ -46,7 +46,7 @@ val viewModelModule = module {
         CountryViewModel(interactor = get())
     }
 
-    viewModel{
+    viewModel {
         AreaViewModel(interactor = get())
     }
 }

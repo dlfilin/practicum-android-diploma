@@ -82,7 +82,7 @@ class AddFilterRepositoryImpl(
     }
 
     override fun getCountries(): Flow<List<Country>> = database.filterDao().getCountries()
-        .map { list -> list.map { mup(it) } }
+        .map { list -> list.map { mup(it) }.sortedBy { it.name } }
 
     private fun mup(countryItem: CountryEntity): Country {
         return Country(
@@ -92,7 +92,7 @@ class AddFilterRepositoryImpl(
     }
 
     override fun getIndustries(): Flow<List<Industry>> = database.filterDao().getIndustries()
-        .map { list -> list.map { mup(it) } }
+        .map { list -> list.map { mup(it) }.sortedBy { it.name } }
 
     private fun mup(industryItem: IndustryEntity): Industry {
         return Industry(

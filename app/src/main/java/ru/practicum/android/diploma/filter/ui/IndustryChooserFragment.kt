@@ -49,8 +49,8 @@ class IndustryChooserFragment : Fragment(R.layout.fragment_industry_chooser) {
         binding.rvIndustry.itemAnimator = null
 
         lifecycleScope.launch {
-            viewModel.getIndustries().collect {
-                adapter.updateData(it)
+            viewModel.getIndustries().collect {industriesList ->
+                adapter.updateData(industriesList)
             }
         }
 
