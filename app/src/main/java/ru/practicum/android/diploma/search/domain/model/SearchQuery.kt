@@ -1,7 +1,7 @@
 package ru.practicum.android.diploma.search.domain.model
 
-data class SearchQuery(
-    var text: String,
+class SearchQuery(
     var page: Int,
-    val perPage: Int
+    var text: String,
+    val perPage: Int = 20
 )

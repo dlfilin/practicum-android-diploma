@@ -26,7 +26,6 @@ class SearchRepositoryImpl(
         searchQuery: SearchQuery, filter: FilterParameters
     ): Flow<NetworkResult<VacancyListData>> = flow {
         val request = VacancySearchRequest(prepareSearchQueryMap(searchQuery, filter))
-
         when (val result = networkClient.doRequest(request)) {
 
             is NetworkResult.Success -> {
@@ -61,7 +60,8 @@ class SearchRepositoryImpl(
     }
 
     private fun prepareSearchQueryMap(
-        searchQuery: SearchQuery, filter: FilterParameters
+        searchQuery: SearchQuery,
+        filter: FilterParameters
     ): Map<String, String> {
         val map: HashMap<String, String> = HashMap()
         map["text"] = searchQuery.text
