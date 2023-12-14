@@ -116,7 +116,7 @@ class VacancyMapper {
 
     private fun getSalaryTo(salary: String): Int? {
         val salaryArray = salary.split("__").toTypedArray()
-        if (salaryArray[1] != "null") return salaryArray[0].toInt()
+        if (salaryArray[1] != "null") return salaryArray[1].toInt()
         return null
     }
 
