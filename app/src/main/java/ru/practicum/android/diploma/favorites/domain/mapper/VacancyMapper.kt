@@ -80,7 +80,8 @@ class VacancyMapper {
         return gson.toJson(city)
     }
 
-    private fun convertToGsonPhones(phones: List<Phone?>?): String {
+    private fun convertToGsonPhones(phones: List<Phone?>?): String? {
+        if (phones == null) return null
         return gson.toJson(phones)
     }
 
@@ -115,7 +116,7 @@ class VacancyMapper {
 
     private fun getSalaryTo(salary: String): Int? {
         val salaryArray = salary.split("__").toTypedArray()
-        if (salaryArray[1] != "null") return salaryArray[0].toInt()
+        if (salaryArray[1] != "null") return salaryArray[1].toInt()
         return null
     }
 
@@ -124,12 +125,14 @@ class VacancyMapper {
         return strs[2]
     }
 
-    private fun transformContactsToContactPerson(contacts: Contacts?): String {
-        return contacts?.name.toString()
+    private fun transformContactsToContactPerson(contacts: Contacts?): String? {
+        if (contacts?.name != null) return contacts.name.toString()
+        return null
     }
 
-    private fun transformContactsToContactEmail(contacts: Contacts?): String {
-        return contacts?.email.toString()
+    private fun transformContactsToContactEmail(contacts: Contacts?): String? {
+        if (contacts?.email != null) return contacts.email.toString()
+        return null
     }
 
     private fun transformContactsFromFavorites(person: String?, email: String?, phones: String?): Contacts {
