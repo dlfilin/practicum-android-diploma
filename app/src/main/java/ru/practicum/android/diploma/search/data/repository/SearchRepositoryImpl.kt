@@ -4,7 +4,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import ru.practicum.android.diploma.common.data.network.NetworkClient
 import ru.practicum.android.diploma.common.data.storage.FilterStorage
-import ru.practicum.android.diploma.common.data.storage.mapper.FilterMapper
+import ru.practicum.android.diploma.common.mappers.FilterMapper
 import ru.practicum.android.diploma.common.util.NetworkResult
 import ru.practicum.android.diploma.filter.domain.models.FilterParameters
 import ru.practicum.android.diploma.search.data.dto.VacancySearchRequest
