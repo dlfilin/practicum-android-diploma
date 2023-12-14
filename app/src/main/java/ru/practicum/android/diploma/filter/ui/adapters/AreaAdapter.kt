@@ -21,8 +21,8 @@ class AreaAdapter(private val itemClickListener: ItemClickListener) : RecyclerVi
     }
 
     override fun onBindViewHolder(holder: AreaHolder, position: Int) {
-        holder.bind(listItem[position])
-        holder.itemView.setOnClickListener { itemClickListener.onItemListener(listItem[position]) }
+        holder.bind(listItem[holder.adapterPosition])
+        holder.itemView.setOnClickListener { itemClickListener.onItemListener(listItem[holder.adapterPosition]) }
     }
 
     override fun getItemCount(): Int = listItem.size
@@ -42,35 +42,31 @@ class AreaAdapter(private val itemClickListener: ItemClickListener) : RecyclerVi
             return oldList[oldItemPosition].id == newList[newItemPosition].id
         }
 
-        override fun getOldListSize(): Int {
-            return oldList.size
-        }
+        override fun getOldListSize(): Int = oldList.size
 
-        override fun getNewListSize(): Int {
-            return newList.size
-        }
+        override fun getNewListSize(): Int = newList.size
 
         override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-            return oldList[oldItemPosition] == newList[newItemPosition]
+            return oldList[oldItemPosition].name == newList[newItemPosition].name
         }
     }
 
     fun updateData(newData: List<Area>) {
         val diffCallback = MyDiffCallback(listItem, newData)
-        val diffRisult = DiffUtil.calculateDiff(diffCallback)
+        val diffResult = DiffUtil.calculateDiff(diffCallback)
         listItem.clear()
         listItem.addAll(newData)
-        diffRisult.dispatchUpdatesTo(this)
+        diffResult.dispatchUpdatesTo(this)
         originalListItem.clear()
         originalListItem.addAll(newData)
     }
 
     private fun updateDisplayList(updateList: List<Area>) {
         val diffCallback = MyDiffCallback(listItem, updateList)
-        val diffRisult = DiffUtil.calculateDiff(diffCallback)
+        val diffResult = DiffUtil.calculateDiff(diffCallback)
         listItem.clear()
         listItem.addAll(updateList)
-        diffRisult.dispatchUpdatesTo(this)
+        diffResult.dispatchUpdatesTo(this)
     }
 
     fun filter(searchQuery: String?) {
