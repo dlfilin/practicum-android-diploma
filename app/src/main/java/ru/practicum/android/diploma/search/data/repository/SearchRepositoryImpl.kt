@@ -14,7 +14,6 @@ import ru.practicum.android.diploma.search.domain.api.SearchRepository
 import ru.practicum.android.diploma.search.domain.model.SearchQuery
 import ru.practicum.android.diploma.search.domain.model.VacancyListData
 import ru.practicum.android.diploma.vacancy.data.dto.SimilarVacancyRequest
-import kotlin.random.Random
 
 class SearchRepositoryImpl(
     private val networkClient: NetworkClient,
@@ -58,8 +57,7 @@ class SearchRepositoryImpl(
     }
 
     override fun isFilterActive(): Boolean {
-//        return filterStorage.isFilterActive()
-        return Random.nextBoolean()
+        return filterStorage.isFilterActive()
     }
 
     private fun prepareSearchQueryMap(
