@@ -20,9 +20,9 @@ import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.common.util.ErrorType
 import ru.practicum.android.diploma.common.util.debounce
 import ru.practicum.android.diploma.databinding.FragmentSearchBinding
+import ru.practicum.android.diploma.filter.ui.FilterFragment
 import ru.practicum.android.diploma.search.domain.model.VacancyItem
 import ru.practicum.android.diploma.search.domain.model.VacancyListData
-import ru.practicum.android.diploma.search.presentation.FilterState
 import ru.practicum.android.diploma.search.presentation.SearchScreenState
 import ru.practicum.android.diploma.search.presentation.SearchViewModel
 import ru.practicum.android.diploma.search.ui.adapter.SearchAdapter
@@ -35,7 +35,7 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
     private val viewmodel by viewModel<SearchViewModel>()
 
     private var isClickAllowed = true
-    private var filterIsActive = false
+    private var isFilterActive = false
 
     private val adapter = SearchAdapter(object : SearchAdapter.VacancyClickListener {
         override fun onVacancyClick(vacancy: VacancyItem) {
@@ -66,14 +66,7 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
 
     override fun onDestroyView() {
         super.onDestroyView()
-
         _binding = null
-    }
-
-    override fun onResume() {
-        super.onResume()
-
-        viewmodel.checkFilterState()
     }
 
     private fun setListeners() {
@@ -117,16 +110,14 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         binding.vacancyListRv.adapter = adapter
         // для приятного скроллинга
         binding.vacancyListRv.setHasFixedSize(false)
-        binding.vacancyListRv.isNestedScrollingEnabled = false
     }
 
     private fun setToolbarMenu() {
-        menuHost.invalidateMenu()
         menuHost.addMenuProvider(object : MenuProvider {
             override fun onPrepareMenu(menu: Menu) {
                 super.onPrepareMenu(menu)
                 val item = menu.findItem(R.id.open_filter)
-                val icon = if (filterIsActive) R.drawable.ic_filter_active else R.drawable.ic_filter_inactive
+                val icon = if (isFilterActive) R.drawable.ic_filter_active else R.drawable.ic_filter_inactive
                 item.setIcon(icon)
             }
 
@@ -156,8 +147,8 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
             renderState(state)
         }
 
-        viewmodel.filterState.observe(viewLifecycleOwner) { filterState ->
-            renderFilterIcon(filterState)
+        viewmodel.isFilterActiveState.observe(viewLifecycleOwner) { isActive ->
+            renderFilterIcon(isActive)
         }
 
         viewmodel.toastEvent.observe(viewLifecycleOwner) { error ->
@@ -166,14 +157,23 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
                 else -> showToast(getString(R.string.toast_unknown_error))
             }
         }
+
+        val backStackLiveData = findNavController().currentBackStackEntry
+            ?.savedStateHandle?.getLiveData<Boolean>(FilterFragment.REAPPLY_FILTER)
+        backStackLiveData?.observe(viewLifecycleOwner) { reapplyEvent ->
+            if (reapplyEvent != null) {
+                viewmodel.applyFilter()
+                backStackLiveData.value = null
+            }
+        }
     }
 
     private fun showToast(message: String) {
         Toast.makeText(requireContext(), message, Toast.LENGTH_LONG).show()
     }
 
-    private fun renderFilterIcon(filterState: FilterState) {
-        filterIsActive = filterState.isActive
+    private fun renderFilterIcon(isActive: Boolean) {
+        isFilterActive = isActive
         // нужно дернуть тулбар в Activity, чтобы он перерисовался
         requireActivity().invalidateOptionsMenu()
     }
