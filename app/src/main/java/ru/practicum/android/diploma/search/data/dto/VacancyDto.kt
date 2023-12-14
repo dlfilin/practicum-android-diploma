@@ -9,7 +9,7 @@ data class VacancyDto(
     val salary: SalaryDto?,
     val employer: EmployerDto
 ) {
-    fun mapDtoToModel(): VacancyItem {
+    fun toVacancyItem(): VacancyItem {
         return VacancyItem(
             id = id,
             vacancyName = name,

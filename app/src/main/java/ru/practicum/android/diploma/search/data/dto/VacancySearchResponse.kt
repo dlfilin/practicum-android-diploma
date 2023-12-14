@@ -12,10 +12,10 @@ data class VacancySearchResponse(
     @SerializedName("per_page")
     val perPage: Int
 ) : Response() {
-    fun mapDtoToModel(): VacancyListData {
+    fun toVacancyListData(): VacancyListData {
         return VacancyListData(
             found = found,
-            items = items.map {it.mapDtoToModel()},
+            items = items.map { it.toVacancyItem() },
             page = page,
             pages = pages,
             perPage = perPage

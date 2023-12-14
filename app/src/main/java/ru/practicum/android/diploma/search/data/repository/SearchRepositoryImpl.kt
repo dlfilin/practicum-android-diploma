@@ -29,7 +29,7 @@ class SearchRepositoryImpl(
 
         when (val result = networkClient.doRequest(request)) {
             is NetworkResult.Success -> {
-                val data = (result.data as VacancySearchResponse).mapDtoToModel()
+                val data = (result.data as VacancySearchResponse).toVacancyListData()
                 emit(NetworkResult.Success(data))
             }
 
@@ -45,7 +45,7 @@ class SearchRepositoryImpl(
         )
         when (result) {
             is NetworkResult.Success -> {
-                val data = (result.data as VacancySearchResponse).mapDtoToModel()
+                val data = (result.data as VacancySearchResponse).toVacancyListData()
                 emit(NetworkResult.Success(data))
             }
 

@@ -160,7 +160,7 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
 
         val backStackLiveData = findNavController().currentBackStackEntry
             ?.savedStateHandle?.getLiveData<Boolean>(FilterFragment.REAPPLY_FILTER)
-        backStackLiveData?.observe(viewLifecycleOwner) {reapplyEvent ->
+        backStackLiveData?.observe(viewLifecycleOwner) { reapplyEvent ->
             if (reapplyEvent != null) {
                 viewmodel.applyFilter()
                 backStackLiveData.value = null
