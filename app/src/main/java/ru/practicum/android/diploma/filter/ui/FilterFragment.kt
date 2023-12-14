@@ -203,4 +203,8 @@ class FilterFragment : Fragment(R.layout.fragment_filter) {
 
         _binding = null
     }
+
+    companion object {
+        const val REAPPLY_FILTER = "REAPPLY_FILTER"
+    }
 }

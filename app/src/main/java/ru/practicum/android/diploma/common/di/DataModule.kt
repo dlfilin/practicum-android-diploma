@@ -18,7 +18,6 @@ import ru.practicum.android.diploma.common.data.storage.FilterStorage
 import ru.practicum.android.diploma.common.data.storage.SharedPrefsFilterStorage
 import ru.practicum.android.diploma.common.data.storage.SharedPrefsFilterStorage.Companion.SEARCH_FILTER_PREFERENCES
 import ru.practicum.android.diploma.common.data.storage.mapper.FilterMapper
-import ru.practicum.android.diploma.search.data.mapper.VacancyResponseMapper
 
 val dataModule = module {
 
@@ -47,10 +46,6 @@ val dataModule = module {
             context = androidContext(),
             hhApiService = get()
         )
-    }
-
-    factory {
-        VacancyResponseMapper()
     }
 
     factory {
