@@ -206,7 +206,7 @@ class VacancyFragment : Fragment(R.layout.fragment_vacancy) {
             if (
                 vacancy.contacts?.name?.isNotEmpty() == true ||
                 vacancy.contacts?.email?.isNotEmpty() == true ||
-                vacancy.contacts?.phones?.toString()?.isNotEmpty() == true
+                vacancy.contacts?.phones?.isNotEmpty() == true
             ) {
                 tvContacts.isVisible = true
             }
