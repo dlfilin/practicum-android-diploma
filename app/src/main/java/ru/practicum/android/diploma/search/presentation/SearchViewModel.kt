@@ -53,9 +53,8 @@ class SearchViewModel(
             clearPagingInfo()
             latestSearchText = ""
             renderState(SearchScreenState.Default)
-        } else {
-            searchDebounced(changedText)
         }
+        searchDebounced(changedText)
     }
 
     fun onLastItemReached() {
