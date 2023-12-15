@@ -25,7 +25,7 @@ class SearchRepositoryImpl(
     override fun searchVacanciesPaged(
         searchQuery: SearchQuery
     ): Flow<NetworkResult<VacancyListData>> = flow {
-        val filter = filterMapper.mapDtoToFilterParameters(filterStorage.getFilterParameters())
+        val filter = filterMapper.mapToDomainModel(filterStorage.getFilterParameters())
         val request = VacancySearchRequest(prepareSearchQueryMap(searchQuery, filter))
 
         when (val result = networkClient.doRequest(request)) {

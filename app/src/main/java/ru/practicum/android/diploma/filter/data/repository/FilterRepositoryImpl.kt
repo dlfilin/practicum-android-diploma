@@ -5,6 +5,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import ru.practicum.android.diploma.common.data.db.AppDataBase
 import ru.practicum.android.diploma.common.data.network.NetworkClient
+import ru.practicum.android.diploma.common.data.storage.FilterStorage
 import ru.practicum.android.diploma.common.mappers.FilterMapper
 import ru.practicum.android.diploma.common.util.NetworkResult
 import ru.practicum.android.diploma.filter.data.dto.AreaRequest
@@ -13,16 +14,18 @@ import ru.practicum.android.diploma.filter.data.dto.CountryRequest
 import ru.practicum.android.diploma.filter.data.dto.CountryResponse
 import ru.practicum.android.diploma.filter.data.dto.IndustryRequest
 import ru.practicum.android.diploma.filter.data.dto.IndustryResponse
-import ru.practicum.android.diploma.filter.domain.api.AddFilterRepository
+import ru.practicum.android.diploma.filter.domain.api.FilterRepository
 import ru.practicum.android.diploma.filter.domain.models.Area
 import ru.practicum.android.diploma.filter.domain.models.Country
+import ru.practicum.android.diploma.filter.domain.models.FilterParameters
 import ru.practicum.android.diploma.filter.domain.models.Industry
 
 class FilterRepositoryImpl(
     private val networkClient: NetworkClient,
     private val database: AppDataBase,
+    private val filterStorage: FilterStorage,
     private val filterMapper: FilterMapper
-) : AddFilterRepository {
+) : FilterRepository {
 
     override suspend fun getAreaAndSaveDb() {
         when (val result = networkClient.doRequest(AreaRequest())) {
@@ -78,6 +81,13 @@ class FilterRepositoryImpl(
     override fun getIndustries(): Flow<List<Industry>> = database.filterDao().getIndustries()
         .map { list -> list.map { filterMapper.mapEntityToDomainModel(it) }.sortedBy { it.name } }
 
+    override fun getCurrentFilter(): FilterParameters {
+        return filterMapper.mapToDomainModel(filterStorage.getFilterParameters())
+    }
+
+    override fun updateFilter(filter: FilterParameters) {
+        filterStorage.saveFilterParameters(filterMapper.mapToDto(filter))
+    }
 }
 
 

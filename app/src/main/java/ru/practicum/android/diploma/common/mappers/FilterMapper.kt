@@ -14,11 +14,18 @@ import ru.practicum.android.diploma.filter.domain.models.Industry
 
 class FilterMapper {
 
-    fun mapDtoToFilterParameters(dto: FilterParametersDto) = FilterParameters(
+    fun mapToDomainModel(dto: FilterParametersDto) = FilterParameters(
         area = dto.area,
         industry = dto.industry,
         salary = dto.salary,
         onlyWithSalary = dto.onlyWithSalary
+    )
+
+    fun mapToDto(model: FilterParameters) = FilterParametersDto(
+        area = model.area,
+        industry = model.industry,
+        salary = model.salary,
+        onlyWithSalary = model.onlyWithSalary
     )
 
     fun mapEntityToDomainModel(countryItem: AreaEntity): Area {

@@ -10,5 +10,4 @@ data class FilterParametersDto(
     val onlyWithSalary: Boolean
 ) {
     val isNotEmpty: Boolean get() = area != null || industry != null || salary != null || onlyWithSalary
-
 }

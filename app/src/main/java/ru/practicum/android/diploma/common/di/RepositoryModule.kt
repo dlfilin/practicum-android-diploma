@@ -5,7 +5,7 @@ import ru.practicum.android.diploma.favorites.data.mapper.FavoriteMapper
 import ru.practicum.android.diploma.favorites.data.repository.FavoriteRepositoryImpl
 import ru.practicum.android.diploma.favorites.domain.repository.FavoriteRepository
 import ru.practicum.android.diploma.filter.data.repository.FilterRepositoryImpl
-import ru.practicum.android.diploma.filter.domain.api.AddFilterRepository
+import ru.practicum.android.diploma.filter.domain.api.FilterRepository
 import ru.practicum.android.diploma.search.data.repository.SearchRepositoryImpl
 import ru.practicum.android.diploma.search.domain.api.SearchRepository
 import ru.practicum.android.diploma.sharing.data.repository.ExternalNavigatorImpl
@@ -34,7 +34,7 @@ val repositoryModule = module {
     single<ExternalNavigator> {
         ExternalNavigatorImpl(context = get())
     }
-    single<AddFilterRepository> {
-        FilterRepositoryImpl(networkClient = get(), database = get(), filterMapper = get())
+    single<FilterRepository> {
+        FilterRepositoryImpl(networkClient = get(), database = get(), filterStorage = get(), filterMapper = get())
     }
 }
