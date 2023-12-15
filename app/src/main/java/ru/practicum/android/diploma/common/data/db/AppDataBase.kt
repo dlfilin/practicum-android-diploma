@@ -10,7 +10,7 @@ import ru.practicum.android.diploma.filter.data.db.entity.CountryEntity
 import ru.practicum.android.diploma.filter.data.db.entity.IndustryEntity
 
 @Database(
-    version = 1010,
+    version = 1,
     entities = [FavoriteEntity::class, IndustryEntity::class, AreaEntity::class, CountryEntity::class],
 )
 abstract class AppDataBase : RoomDatabase() {
