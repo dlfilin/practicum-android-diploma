@@ -27,40 +27,39 @@ class FilterFragment : Fragment(R.layout.fragment_filter) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentFilterBinding.bind(view)
 
-//        viewModel.getIndustryAndSaveDb()
-//        viewModel.getCountryAndSaveDb()
-//        viewModel.getAreaAndSaveDb()
-
-//        val countryName = args.countryArgs
-//        val areaName = args.areaArgs
-//        if (countryName == "" && areaName == "") {
-//            binding.edWorkPlace.setText("")
-//        } else if (countryName != "" && areaName == "") {
-//            binding.edWorkPlace.setText(countryName)
-//        } else if (countryName != "") {
-//            val textWorkPlace = "$countryName, $areaName"
-//            binding.edWorkPlace.setText(textWorkPlace)
-//        }
-
-//        listenSalaryEditText()
-//        checkBoxSalary()
-
-
-//        val industryName = args.industryArgs
-//        binding.edIndustry.setText(industryName)
-//
-//        addWorkPlace()
-//        addIndustry()
-
+        setListeners()
 
         viewModel.state.observe(viewLifecycleOwner) { state ->
             renderState(state)
         }
-
-        setListeners()
     }
 
     private fun setListeners() {
+        setWorkPlaceListeners()
+        setIndustryListeners()
+        setSalaryListeners()
+
+        with(binding) {
+
+            checkBoxSalary.setOnClickListener {
+                viewModel.onlyWithSalaryPressed(checkBoxSalary.isChecked)
+            }
+
+            btApply.setOnClickListener {
+                findNavController().previousBackStackEntry?.savedStateHandle?.set(
+                    REAPPLY_FILTER,
+                    true
+                )
+                findNavController().navigateUp()
+            }
+
+            btClear.setOnClickListener {
+                viewModel.clearAll()
+            }
+        }
+    }
+
+    private fun setWorkPlaceListeners() {
         with(binding) {
             edWorkPlace.setOnClickListener {
                 findNavController().navigate(directionWorkPlace)
@@ -86,6 +85,11 @@ class FilterFragment : Fragment(R.layout.fragment_filter) {
                 }
             }
 
+        }
+    }
+
+    private fun setIndustryListeners() {
+        with(binding) {
             edIndustry.setOnClickListener {
                 findNavController().navigate(directionWorkPlace)
             }
@@ -109,7 +113,11 @@ class FilterFragment : Fragment(R.layout.fragment_filter) {
                     findNavController().navigate(directionIndustry)
                 }
             }
+        }
+    }
 
+    private fun setSalaryListeners() {
+        with(binding) {
             textInputEditTextSalary.doOnTextChanged { text, _, _, _ ->
                 textInputLayoutSalary.apply {
                     if (text.isNullOrEmpty()) {
@@ -124,22 +132,6 @@ class FilterFragment : Fragment(R.layout.fragment_filter) {
 
             textInputLayoutSalary.setEndIconOnClickListener {
                 viewModel.clearSalary()
-            }
-
-            checkBoxSalary.setOnClickListener {
-                viewModel.onlyWithSalaryPressed(checkBoxSalary.isChecked)
-            }
-
-            btApply.setOnClickListener {
-                findNavController().previousBackStackEntry?.savedStateHandle?.set(
-                    REAPPLY_FILTER,
-                    true
-                )
-                findNavController().navigateUp()
-            }
-
-            btClear.setOnClickListener {
-                viewModel.clearAll()
             }
         }
     }
