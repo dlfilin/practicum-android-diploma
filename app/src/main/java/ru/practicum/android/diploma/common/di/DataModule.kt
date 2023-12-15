@@ -23,7 +23,9 @@ import ru.practicum.android.diploma.search.data.mapper.VacancyResponseMapper
 val dataModule = module {
 
     single {
-        Room.databaseBuilder(androidContext(), AppDataBase::class.java, "dataBase.db").build()
+        Room.databaseBuilder(androidContext(), AppDataBase::class.java, "dataBase.db")
+            .fallbackToDestructiveMigration()
+            .build()
     }
 
     single<HhApiService> {

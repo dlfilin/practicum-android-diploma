@@ -4,8 +4,11 @@ import ru.practicum.android.diploma.common.data.storage.dto.FilterParametersDto
 import ru.practicum.android.diploma.filter.data.db.entity.AreaEntity
 import ru.practicum.android.diploma.filter.data.db.entity.CountryEntity
 import ru.practicum.android.diploma.filter.data.db.entity.IndustryEntity
+import ru.practicum.android.diploma.filter.data.dto.AreaDto
 import ru.practicum.android.diploma.filter.data.dto.AreaResponse
+import ru.practicum.android.diploma.filter.data.dto.CountryDto
 import ru.practicum.android.diploma.filter.data.dto.CountryResponse
+import ru.practicum.android.diploma.filter.data.dto.IndustryDto
 import ru.practicum.android.diploma.filter.data.dto.IndustryResponse
 import ru.practicum.android.diploma.filter.domain.models.Area
 import ru.practicum.android.diploma.filter.domain.models.Country
@@ -15,23 +18,26 @@ import ru.practicum.android.diploma.filter.domain.models.Industry
 class FilterMapper {
 
     fun mapToDomainModel(dto: FilterParametersDto) = FilterParameters(
-        area = dto.area,
-        industry = dto.industry,
+        area = mapDtoToArea(dto.area),
+        country = mapDtoToCountry(dto.country),
+        industry = mapDtoToIndustry(dto.industry),
         salary = dto.salary,
         onlyWithSalary = dto.onlyWithSalary
     )
 
     fun mapToDto(model: FilterParameters) = FilterParametersDto(
-        area = model.area,
-        industry = model.industry,
+        area = mapAreaToDto(model.area),
+        country = mapCountryToDto(model.country),
+        industry = mapIndustryToDto(model.industry),
         salary = model.salary,
         onlyWithSalary = model.onlyWithSalary
     )
 
-    fun mapEntityToDomainModel(countryItem: AreaEntity): Area {
+    fun mapEntityToDomainModel(areaItem: AreaEntity): Area {
         return Area(
-            id = countryItem.id,
-            name = countryItem.name,
+            id = areaItem.id,
+            name = areaItem.name,
+            parentId = areaItem.parentId
         )
     }
 
@@ -87,5 +93,74 @@ class FilterMapper {
             }
         }
         return areaList
+    }
+
+    private fun mapDtoToArea(dto: AreaDto?): Area? {
+        return if (dto != null) {
+            Area(
+                id = dto.id,
+                name = dto.name,
+                parentId = dto.parentId
+            )
+        } else {
+            null
+        }
+    }
+
+    private fun mapDtoToCountry(dto: CountryDto?): Country? {
+        return if (dto != null) {
+            Country(
+                id = dto.id,
+                name = dto.name
+            )
+        } else {
+            null
+        }
+    }
+
+    private fun mapDtoToIndustry(dto: IndustryDto?): Industry? {
+        return if (dto != null) {
+            Industry(
+                id = dto.id,
+                name = dto.name,
+                isChecked = false
+            )
+        } else {
+            null
+        }
+    }
+
+    private fun mapAreaToDto(model: Area?): AreaDto? {
+        return if (model != null) {
+            AreaDto(
+                id = model.id,
+                name = model.name,
+                parentId = model.parentId
+            )
+        } else {
+            null
+        }
+    }
+
+    private fun mapCountryToDto(model: Country?): CountryDto? {
+        return if (model != null) {
+            CountryDto(
+                id = model.id,
+                name = model.name
+            )
+        } else {
+            null
+        }
+    }
+
+    private fun mapIndustryToDto(model: Industry?): IndustryDto? {
+        return if (model != null) {
+            IndustryDto(
+                id = model.id,
+                name = model.name
+            )
+        } else {
+            null
+        }
     }
 }

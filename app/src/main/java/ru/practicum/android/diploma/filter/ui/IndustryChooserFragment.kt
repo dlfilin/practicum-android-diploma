@@ -11,12 +11,12 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.coroutines.launch
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentIndustryChooserBinding
 import ru.practicum.android.diploma.filter.domain.models.Industry
 import ru.practicum.android.diploma.filter.presentation.IndustryViewModel
 import ru.practicum.android.diploma.filter.ui.adapters.IndustryAdapter
-import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class IndustryChooserFragment : Fragment(R.layout.fragment_industry_chooser) {
 
