@@ -8,11 +8,10 @@ import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.fragment.navArgs
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentFilterBinding
 import ru.practicum.android.diploma.filter.presentation.FilterViewModel
-import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class FilterFragment : Fragment(R.layout.fragment_filter) {
 
@@ -31,24 +30,23 @@ class FilterFragment : Fragment(R.layout.fragment_filter) {
         viewModel.getCountryAndSaveDb()
         viewModel.getAreaAndSaveDb()
 
-        val args: FilterFragmentArgs by navArgs()
-        val countryName = args.countryArgs
-        val areaName = args.areaArgs
-        if (countryName == "" && areaName == "") {
-            binding.edWorkPlace.setText("")
-        } else if (countryName != "" && areaName == "") {
-            binding.edWorkPlace.setText(countryName)
-        } else if (countryName != "") {
-            val textWorkPlace = "$countryName, $areaName"
-            binding.edWorkPlace.setText(textWorkPlace)
-        }
+//        val countryName = args.countryArgs
+//        val areaName = args.areaArgs
+//        if (countryName == "" && areaName == "") {
+//            binding.edWorkPlace.setText("")
+//        } else if (countryName != "" && areaName == "") {
+//            binding.edWorkPlace.setText(countryName)
+//        } else if (countryName != "") {
+//            val textWorkPlace = "$countryName, $areaName"
+//            binding.edWorkPlace.setText(textWorkPlace)
+//        }
 
         listenSalaryEditText()
         checkBoxSalary()
 
 
-        val industryName = args.industryArgs
-        binding.edIndustry.setText(industryName)
+//        val industryName = args.industryArgs
+//        binding.edIndustry.setText(industryName)
 
         addWorkPlace()
         addIndustry()
