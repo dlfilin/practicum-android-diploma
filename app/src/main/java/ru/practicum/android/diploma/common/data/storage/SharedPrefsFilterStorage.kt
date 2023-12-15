@@ -29,6 +29,27 @@ class SharedPrefsFilterStorage(
         return gson.fromJson(json, FilterParametersDto::class.java)
     }
 
+    override fun saveEditFilterParameters(editFilterParam: FilterParametersDto) {
+        val json = gson.toJson(editFilterParam)
+        sharedPrefs.edit()
+            .putString(EDIT_FILTER_PARAMETERS_KEY, json)
+            .apply()
+    }
+
+    override fun getEditFilterParameters(): FilterParametersDto {
+        val json =
+            sharedPrefs.getString(
+                EDIT_FILTER_PARAMETERS_KEY, null
+            ) ?: return FilterParametersDto(
+                area = null,
+                country = null,
+                industry = null,
+                salary = null,
+                onlyWithSalary = false
+            )
+        return gson.fromJson(json, FilterParametersDto::class.java)
+    }
+
     override fun isFilterActive(): Boolean {
         val filter = getFilterParameters()
         return filter.isNotEmpty
@@ -37,5 +58,6 @@ class SharedPrefsFilterStorage(
     companion object {
         const val SEARCH_FILTER_PREFERENCES = "search_filter_preferences"
         const val FILTER_PARAMETERS_KEY = "filter_parameters_key"
+        const val EDIT_FILTER_PARAMETERS_KEY = "edit_filter_parameters_key"
     }
 }
