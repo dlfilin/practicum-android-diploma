@@ -163,6 +163,7 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         backStackLiveData?.observe(viewLifecycleOwner) { reapplyEvent ->
             if (reapplyEvent != null) {
                 viewmodel.applyFilter()
+                showToast("REAPPLY_FILTER")
                 backStackLiveData.value = null
             }
         }

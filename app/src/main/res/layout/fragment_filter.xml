@@ -29,11 +29,13 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/edWorkPlace"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/white_day_night"
+                android:layout_height="match_parent"
                 android:focusable="false"
-                android:fontFamily="@font/ys_display_regular"
+                android:cursorVisible="false"
                 android:longClickable="false"
+                android:inputType="none"
+                android:background="@color/white_day_night"
+                android:fontFamily="@font/ys_display_regular"
                 android:textColor="@color/black_day_night"
                 android:textSize="16sp" />
 
@@ -85,7 +87,7 @@
         android:layout_marginTop="@dimen/space_24"
         android:hint="@string/expected_salary_hint_et"
         app:endIconDrawable="@drawable/ic_clear"
-        app:endIconMode="clear_text"
+        app:endIconMode="custom"
         app:endIconTint="@color/black_universal"
         app:expandedHintEnabled="false"
         app:hintTextAppearance="@style/hintStyleForTextInputLayout"
@@ -128,7 +130,7 @@
         app:layout_constraintTop_toTopOf="@id/tvSalaryNotShow" />
 
     <Button
-        android:id="@+id/btAdd"
+        android:id="@+id/btApply"
         style="@style/bigBlueButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
