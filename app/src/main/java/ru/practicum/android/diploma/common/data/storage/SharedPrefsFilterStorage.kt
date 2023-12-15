@@ -21,6 +21,7 @@ class SharedPrefsFilterStorage(
                 FILTER_PARAMETERS_KEY, null
             ) ?: return FilterParametersDto(
                 area = null,
+                country = null,
                 industry = null,
                 salary = null,
                 onlyWithSalary = false

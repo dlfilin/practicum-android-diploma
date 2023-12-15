@@ -9,11 +9,11 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.coroutines.launch
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentAreaChooserBinding
 import ru.practicum.android.diploma.filter.presentation.AreaViewModel
 import ru.practicum.android.diploma.filter.ui.adapters.AreaAdapter
-import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class AreaChooserFragment : Fragment(R.layout.fragment_area_chooser) {
 

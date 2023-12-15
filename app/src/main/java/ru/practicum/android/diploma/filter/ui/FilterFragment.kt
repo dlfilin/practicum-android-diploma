@@ -40,7 +40,6 @@ class FilterFragment : Fragment(R.layout.fragment_filter) {
         setSalaryListeners()
 
         with(binding) {
-
             checkBoxSalary.setOnClickListener {
                 viewModel.onlyWithSalaryPressed(checkBoxSalary.isChecked)
             }
