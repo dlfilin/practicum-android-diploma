@@ -21,7 +21,7 @@ class CountryChooserFragment : Fragment(R.layout.fragment_country_chooser) {
     private val viewModel: CountryViewModel by viewModel()
 
     private val adapter = CountryAdapter {
-        //записываем выбор в шаред префс и идем назад
+        // записываем выбор в шаред префс и идем назад
         findNavController().navigateUp()
     }
 

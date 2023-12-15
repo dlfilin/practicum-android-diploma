@@ -31,7 +31,7 @@ class WorkPlaceFragment : Fragment(R.layout.fragment_work_place) {
         addArea()
 
         binding.btAdd.setOnClickListener {
-            //записываем выбор в шаред префс и идем назад
+            // записываем выбор в шаред префс и идем назад
             findNavController().navigateUp()
         }
     }

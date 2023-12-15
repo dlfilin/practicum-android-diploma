@@ -29,7 +29,7 @@ class IndustryChooserFragment : Fragment(R.layout.fragment_industry_chooser) {
         if (item.isChecked) {
             binding.btAdd.visibility = View.VISIBLE
             binding.btAdd.setOnClickListener {
-                //записываем выбор в шаред префс и идем назад
+                // записываем выбор в шаред префс и идем назад
                 findNavController().navigateUp()
             }
         }
