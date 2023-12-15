@@ -165,11 +165,11 @@ class FilterFragment : Fragment(R.layout.fragment_filter) {
 
     private fun renderState(state: FilterScreenState) {
         with(binding) {
-            // TODO получение строки потом переделать
+            // получение строки потом переделать
             val place = if (state.editableFilter.country != null) {
                 (state.editableFilter.country?.name ?: "") + ", " + (state.editableFilter.area?.name ?: "")
             } else {
-                (state.editableFilter.area?.name ?: "")
+                state.editableFilter.area?.name ?: ""
             }
             val industry = state.editableFilter.industry?.name ?: ""
             val salary = state.editableFilter.salary?.toString() ?: ""

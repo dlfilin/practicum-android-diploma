@@ -8,7 +8,7 @@ import ru.practicum.android.diploma.filter.domain.api.FilterInteractor
 import ru.practicum.android.diploma.filter.domain.models.Industry
 
 class IndustryViewModel(private val interactor: FilterInteractor) : ViewModel() {
-    // TODO для теста
+    // для теста
     init {
         viewModelScope.launch {
             interactor.getIndustryAndSaveDb()
