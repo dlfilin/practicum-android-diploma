@@ -5,7 +5,6 @@ import android.view.View
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.fragment.navArgs
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentWorkPlaceBinding
 
@@ -22,21 +21,18 @@ class WorkPlaceFragment : Fragment(R.layout.fragment_work_place) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentWorkPlaceBinding.bind(view)
 
-        val args: WorkPlaceFragmentArgs by navArgs()
-        val textCountry = args.countryArgs
-        val textArea = args.areaArgs
+//        val args: WorkPlaceFragmentArgs by navArgs()
+//        val textCountry = args.countryArgs
+//        val textArea = args.areaArgs
 
-        binding.edTextNameCountryNameInput.setText(textCountry)
-        binding.edTextNameAreaNameInput.setText(textArea)
+//        binding.edTextNameCountryNameInput.setText(textCountry)
+//        binding.edTextNameAreaNameInput.setText(textArea)
         addCountry()
         addArea()
 
         binding.btAdd.setOnClickListener {
-            val action = WorkPlaceFragmentDirections.actionWorkPlaceFragmentToFilterFragment(
-                countryArgs = binding.edTextNameCountryNameInput.text.toString(),
-                industryArgs = binding.edTextNameAreaNameInput.text.toString()
-            )
-            findNavController().navigate(action)
+            // записываем выбор в шаред префс и идем назад
+            findNavController().navigateUp()
         }
     }
 
