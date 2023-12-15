@@ -130,7 +130,7 @@ class FilterMapper {
         }
     }
 
-    private fun mapAreaToDto(model: Area?): AreaDto? {
+    fun mapAreaToDto(model: Area?): AreaDto? {
         return if (model != null) {
             AreaDto(
                 id = model.id,
@@ -142,7 +142,7 @@ class FilterMapper {
         }
     }
 
-    private fun mapCountryToDto(model: Country?): CountryDto? {
+    fun mapCountryToDto(model: Country?): CountryDto? {
         return if (model != null) {
             CountryDto(
                 id = model.id,
@@ -153,7 +153,7 @@ class FilterMapper {
         }
     }
 
-    private fun mapIndustryToDto(model: Industry?): IndustryDto? {
+    fun mapIndustryToDto(model: Industry?): IndustryDto? {
         return if (model != null) {
             IndustryDto(
                 id = model.id,

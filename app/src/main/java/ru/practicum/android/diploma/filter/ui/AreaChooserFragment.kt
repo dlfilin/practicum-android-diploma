@@ -24,6 +24,7 @@ class AreaChooserFragment : Fragment(R.layout.fragment_area_chooser) {
 
     private val adapter = AreaAdapter {
         // записываем выбор в шаред префс и идем назад
+        viewModel.saveArea(it)
         findNavController().navigateUp()
     }
 

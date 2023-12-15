@@ -27,7 +27,7 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/ed_text_name_countryName_input"
+                android:id="@+id/edTextNameCountryNameInput"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/white_day_night"
@@ -63,7 +63,7 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/ed_text_name_areaName_input"
+                android:id="@+id/edTextNameAreaNameInput"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/white_day_night"

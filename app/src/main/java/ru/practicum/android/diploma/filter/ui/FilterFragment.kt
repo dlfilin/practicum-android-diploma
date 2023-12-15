@@ -2,10 +2,12 @@ package ru.practicum.android.diploma.filter.ui
 
 import android.os.Bundle
 import android.view.View
+import androidx.activity.OnBackPressedCallback
 import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.textfield.TextInputLayout.END_ICON_CUSTOM
 import com.google.android.material.textfield.TextInputLayout.END_ICON_NONE
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -27,6 +29,8 @@ class FilterFragment : Fragment(R.layout.fragment_filter) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentFilterBinding.bind(view)
 
+        viewModel.getFilterParameters()
+
         setListeners()
 
         viewModel.state.observe(viewLifecycleOwner) { state ->
@@ -34,10 +38,16 @@ class FilterFragment : Fragment(R.layout.fragment_filter) {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        viewModel.getFilterParameters()
+    }
+
     private fun setListeners() {
         setWorkPlaceListeners()
         setIndustryListeners()
         setSalaryListeners()
+        setOnBackPressed()
 
         with(binding) {
             checkBoxSalary.setOnClickListener {
@@ -45,10 +55,7 @@ class FilterFragment : Fragment(R.layout.fragment_filter) {
             }
 
             btApply.setOnClickListener {
-                findNavController().previousBackStackEntry?.savedStateHandle?.set(
-                    REAPPLY_FILTER,
-                    true
-                )
+                viewModel.saveEditableInMainFilter()
                 findNavController().navigateUp()
             }
 
@@ -90,7 +97,7 @@ class FilterFragment : Fragment(R.layout.fragment_filter) {
     private fun setIndustryListeners() {
         with(binding) {
             edIndustry.setOnClickListener {
-                findNavController().navigate(directionWorkPlace)
+                findNavController().navigate(directionIndustry)
             }
 
             edIndustry.doOnTextChanged { text, _, _, _ ->
@@ -135,150 +142,48 @@ class FilterFragment : Fragment(R.layout.fragment_filter) {
         }
     }
 
+    private fun setOnBackPressed() {
+        // переопределяем нажатие кнопки назад в тулбаре
+        val toolbar: MaterialToolbar = requireActivity().findViewById(R.id.toolbar)
+        toolbar.setNavigationOnClickListener {
+            viewModel.saveMainInEditableFilter()
+            findNavController().navigateUp()
+            activity?.onBackPressed()
+        }
+
+        // переопределяем нажатие системной кнопки назад
+        requireActivity().onBackPressedDispatcher.addCallback(
+            viewLifecycleOwner,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    viewModel.saveMainInEditableFilter()
+                    findNavController().navigateUp()
+                }
+            }
+        )
+    }
+
     private fun renderState(state: FilterScreenState) {
         with(binding) {
-            val place = state.currentFilter.area?.name ?: ""
-            val industry = state.currentFilter.industry?.name ?: ""
-            val salary = state.currentFilter.salary?.toString() ?: ""
+            // TODO получение строки потом переделать
+            val place = if (state.editableFilter.country != null) {
+                (state.editableFilter.country?.name ?: "") + ", " + (state.editableFilter.area?.name ?: "")
+            } else {
+                (state.editableFilter.area?.name ?: "")
+            }
+            val industry = state.editableFilter.industry?.name ?: ""
+            val salary = state.editableFilter.salary?.toString() ?: ""
             edWorkPlace.setText(place)
             edIndustry.setText(industry)
             textInputEditTextSalary.setText(salary)
-            checkBoxSalary.isChecked = state.currentFilter.onlyWithSalary
+            checkBoxSalary.isChecked = state.editableFilter.onlyWithSalary
             btApply.isVisible = state.isApplyBtnVisible
             btClear.isVisible = state.isClearBtnVisible
         }
     }
 
-//    private fun addArrowWorkPlace() = with(binding) {
-//        AppCompatResources.getColorStateList(requireContext(), R.color.gray)
-//            ?.let {
-//                edWorkPlaceLayout.setBoxStrokeColorStateList(it)
-//                edWorkPlaceLayout.defaultHintTextColor = it
-//            }
-//        edWorkPlaceLayout.setEndIconDrawable(R.drawable.ic_arrow_forward)
-//
-//    }
-
-//    private fun addWorkPlace() = with(binding) {
-//        if (edWorkPlace.text.isNullOrBlank()) {
-//            addArrowWorkPlace()
-//        } else {
-//            AppCompatResources.getColorStateList(requireContext(), R.color.black_universal)
-//                ?.let {
-//                    edWorkPlaceLayout.setBoxStrokeColorStateList(it)
-//                    edWorkPlaceLayout.defaultHintTextColor = it
-//                }
-//            edWorkPlaceLayout.apply {
-//                setEndIconDrawable(R.drawable.ic_clear)
-//                tag = R.drawable.ic_clear
-//                btClear.isVisible = true
-//                btAdd.isVisible = true
-//            }
-//        }
-//
-//    }
-
-//    private fun addArrowIndustry() = with(binding) {
-//        AppCompatResources.getColorStateList(requireContext(), R.color.gray)
-//            ?.let {
-//                edIndustryLayout.setBoxStrokeColorStateList(it)
-//                edIndustryLayout.defaultHintTextColor = it
-//            }
-//        edIndustryLayout.setEndIconDrawable(R.drawable.ic_arrow_forward)
-//        edIndustry.setOnClickListener {
-//            findNavController().navigate(directionIndustry)
-//        }
-//        edIndustry.setOnClickListener {
-//            findNavController().navigate(directionIndustry)
-//        }
-//    }
-//
-//    private fun addIndustry() = with(binding) {
-//        if (edIndustry.text.isNullOrBlank()) {
-//            addArrowIndustry()
-//        } else {
-//            AppCompatResources.getColorStateList(requireContext(), R.color.black_universal)
-//                ?.let {
-//                    edIndustryLayout.setBoxStrokeColorStateList(it)
-//                    edIndustryLayout.defaultHintTextColor = it
-//                }
-//            edIndustryLayout.apply {
-//                setEndIconDrawable(R.drawable.ic_clear)
-//                tag = R.drawable.ic_clear
-//                btClear.isVisible = true
-//                btAdd.isVisible = true
-//            }
-//        }
-//        edIndustryLayout.setEndIconOnClickListener {
-//            if (edIndustryLayout.tag == R.drawable.ic_clear) {
-//                edIndustry.text?.clear()
-//                edIndustryLayout.setEndIconDrawable(R.drawable.ic_arrow_forward)
-//                AppCompatResources.getColorStateList(requireContext(), R.color.gray)
-//                    ?.let {
-//                        edIndustryLayout.setBoxStrokeColorStateList(it)
-//                        edIndustryLayout.defaultHintTextColor = it
-//                    }
-//                edIndustry.setOnClickListener {
-//                    findNavController().navigate(directionIndustry)
-//                }
-//                edIndustryLayout.setEndIconOnClickListener {
-//                    findNavController().navigate(directionIndustry)
-//                }
-//            }
-//        }
-//    }
-
-//    private fun showDefault() = with(binding) {
-//        edWorkPlace.text?.clear()
-//        edIndustry.text?.clear()
-//        textInputEditTextSalary.text?.clear()
-//        checkBoxSalary.isChecked = false
-//        btClear.isVisible = false
-//        btAdd.isVisible = false
-//    }
-
-//    private fun listenSalaryEditText() = with(binding) {
-//        textInputEditTextSalary.addTextChangedListener {
-//            if (!edIndustryLayout.isEmpty()) {
-//                btClear.isVisible = true
-//                btAdd.isVisible = true
-//            }
-//        }
-//
-//        textInputLayoutSalary.setEndIconOnClickListener {
-//            textInputEditTextSalary.text?.clear()
-//            if (edIndustry.text.isNullOrEmpty() && edWorkPlace.text.isNullOrEmpty()
-//                && textInputEditTextSalary.text.isNullOrEmpty()
-//            ) {
-//                btClear.isVisible = false
-//                btAdd.isVisible = false
-//            }
-//
-//        }
-//    }
-
-//    private fun checkBoxSalary() = with(binding) {
-//        checkBoxSalary.setOnClickListener {
-//            if (checkBoxSalary.isChecked) {
-//                btClear.isVisible = true
-//                btAdd.isVisible = true
-//            }
-//        }
-//    }
-
     override fun onDestroyView() {
         super.onDestroyView()
-
         _binding = null
-    }
-
-    override fun onStop() {
-        super.onStop()
-        viewModel.saveFilter()
-    }
-
-
-    companion object {
-        const val REAPPLY_FILTER = "REAPPLY_FILTER"
     }
 }

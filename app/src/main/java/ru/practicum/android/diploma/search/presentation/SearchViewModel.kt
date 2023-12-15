@@ -65,10 +65,11 @@ class SearchViewModel(
         }
     }
 
-
     fun applyFilter() {
-        clearPagingInfo()
-        searchRequest(currentPage)
+        if (latestSearchText.isNotBlank()) {
+            clearPagingInfo()
+            searchRequest(currentPage)
+        }
     }
 
     private fun searchRequest(page: Int) {

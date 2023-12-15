@@ -10,15 +10,19 @@ import ru.practicum.android.diploma.filter.domain.models.FilterParameters
 
 class FilterViewModel(private val interactor: FilterInteractor) : ViewModel() {
 
+    private var editableFilter: FilterParameters = FilterParameters()
+    private var isApplyBtnVisible = false
+
     private val _state = MutableLiveData<FilterScreenState>()
     val state: LiveData<FilterScreenState> get() = _state
 
     init {
-        val filter = interactor.getCurrentFilter()
+        getFilterParameters()
+        checkApplyBtnVisible()
         _state.postValue(
             FilterScreenState(
-                entryFilter = filter,
-                currentFilter = filter
+                editableFilter = editableFilter,
+                isApplyBtnVisible = isApplyBtnVisible
             )
         )
     }
@@ -33,28 +37,39 @@ class FilterViewModel(private val interactor: FilterInteractor) : ViewModel() {
         } else {
             text.toInt()
         }
-        val filter = state.value!!.currentFilter.copy(salary = salary)
-        updateState(filter)
+        editableFilter = editableFilter.copy(salary = salary)
+        saveEditableFilter()
+        checkApplyBtnVisible()
+        updateState()
     }
 
     fun clearWorkplace() {
-        val filter = state.value!!.currentFilter.copy(area = null)
-        updateState(filter)
+        editableFilter = editableFilter.copy(area = null)
+        saveEditableFilter()
+        checkApplyBtnVisible()
+        updateState()
     }
 
     fun clearIndustry() {
-        val filter = state.value!!.currentFilter.copy(industry = null)
-        updateState(filter)
+        editableFilter = editableFilter.copy(industry = null)
+        saveEditableFilter()
+        checkApplyBtnVisible()
+        updateState()
     }
 
     fun clearSalary() {
-        val filter = state.value!!.currentFilter.copy(salary = null)
-        updateState(filter)
+        editableFilter = editableFilter.copy(salary = null)
+        saveEditableFilter()
+        checkApplyBtnVisible()
+        updateState()
     }
 
     fun clearAll() {
-        val filter = FilterParameters()
-        updateState(filter)
+        editableFilter = FilterParameters()
+        saveEditableFilter()
+        saveEditableInMainFilter()
+        checkApplyBtnVisible()
+        updateState()
     }
 
     fun updateSalary(text: String) {
@@ -62,40 +77,41 @@ class FilterViewModel(private val interactor: FilterInteractor) : ViewModel() {
     }
 
     fun onlyWithSalaryPressed(isChecked: Boolean) {
-        val filter = state.value!!.currentFilter.copy(onlyWithSalary = isChecked)
-        updateState(filter)
+        editableFilter = editableFilter.copy(onlyWithSalary = isChecked)
+        saveEditableFilter()
+        checkApplyBtnVisible()
+        updateState()
     }
 
-    private fun updateState(filter: FilterParameters) {
-        val st = state.value!!.copy(currentFilter = filter)
-        _state.postValue(st)
+    fun saveEditableInMainFilter() {
+        interactor.saveEditableInMainFilter()
     }
 
-    fun saveFilter() {
-        val filter = state.value!!.currentFilter
-        interactor.updateFilter(filter)
+    fun saveMainInEditableFilter() {
+        interactor.saveMainInEditableFilter()
     }
-//
-//    fun getIndustryAndSaveDb() {
-//        viewModelScope.launch {
-//            interactor.getIndustryAndSaveDb()
-//        }
-//    }
-//
-//    fun getCountryAndSaveDb() {
-//        viewModelScope.launch {
-//            interactor.getCountryAndSaveDb()
-//        }
-//    }
-//
-//    fun getAreaAndSaveDb() {
-//        viewModelScope.launch {
-//            interactor.getAreaAndSaveDb()
-//        }
-//    }
+
+    fun getFilterParameters() {
+        editableFilter = interactor.getEditableFilter()
+    }
+
+    private fun checkApplyBtnVisible() {
+        if (interactor.checkApplyBtnVisible() || editableFilter.isNotEmpty) {
+            isApplyBtnVisible = true
+        } else {
+            false
+        }
+    }
+
+    private fun updateState() {
+        _state.postValue(FilterScreenState(isApplyBtnVisible, editableFilter))
+    }
+
+    private fun saveEditableFilter() {
+        interactor.updateEditableFilter(editableFilter)
+    }
 
     companion object {
         private const val SALARY_UPDATE_DELAY_IN_MILLIS = 1000L
     }
-
 }

@@ -75,18 +75,70 @@ class FilterRepositoryImpl(
     override fun getAreas(): Flow<List<Area>> = database.filterDao().getAreas()
         .map { list -> list.map { filterMapper.mapEntityToDomainModel(it) } }
 
+    override fun checkApplyBtnVisible(): Boolean {
+        val mainFilterParam = filterStorage.getMainFilterParameters()
+        val editableFilterParam = filterStorage.getEditableFilterParameters()
+        return mainFilterParam != editableFilterParam
+    }
+
     override fun getCountries(): Flow<List<Country>> = database.filterDao().getCountries()
         .map { list -> list.map { filterMapper.mapEntityToDomainModel(it) }.sortedBy { it.id } }
 
     override fun getIndustries(): Flow<List<Industry>> = database.filterDao().getIndustries()
         .map { list -> list.map { filterMapper.mapEntityToDomainModel(it) }.sortedBy { it.name } }
 
-    override fun getCurrentFilter(): FilterParameters {
-        return filterMapper.mapToDomainModel(filterStorage.getFilterParameters())
+    override fun getEditableFilter(): FilterParameters {
+        return filterMapper.mapToDomainModel(filterStorage.getEditableFilterParameters())
     }
 
-    override fun updateFilter(filter: FilterParameters) {
-        filterStorage.saveFilterParameters(filterMapper.mapToDto(filter))
+    override fun updateEditableFilter(filter: FilterParameters) {
+        filterStorage.saveEditableFilterParameters(filterMapper.mapToDto(filter))
+    }
+
+    override fun saveIndustry(industry: Industry) {
+        val editableFilterParam = filterStorage.getEditableFilterParameters()
+        val newEditableFilterParam = editableFilterParam.copy(
+            industry = filterMapper.mapIndustryToDto(
+                industry
+            )
+        )
+        filterStorage.saveEditableFilterParameters(
+            newEditableFilterParam
+        )
+    }
+
+    override fun saveCountry(country: Country) {
+        val editableFilterParam = filterStorage.getEditableFilterParameters()
+        val newEditableFilterParam = editableFilterParam.copy(
+            country = filterMapper.mapCountryToDto(
+                country
+            )
+        )
+        filterStorage.saveEditableFilterParameters(
+            newEditableFilterParam
+        )
+    }
+
+    override fun saveArea(area: Area) {
+        val editableFilterParam = filterStorage.getEditableFilterParameters()
+        val newEditableFilterParam = editableFilterParam.copy(
+            area = filterMapper.mapAreaToDto(
+                area
+            )
+        )
+        filterStorage.saveEditableFilterParameters(
+            newEditableFilterParam
+        )
+    }
+
+    override fun saveEditableInMainFilter() {
+        val editableFilterParam = filterStorage.getEditableFilterParameters()
+        filterStorage.saveMainFilterParameters(editableFilterParam)
+    }
+
+    override fun saveMainInEditableFilter() {
+        val mainFilterParam = filterStorage.getMainFilterParameters()
+        filterStorage.saveEditableFilterParameters(mainFilterParam)
     }
 }
 

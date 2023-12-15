@@ -16,6 +16,14 @@ interface FilterRepository {
     fun getCountries(): Flow<List<Country>>
     fun getAreas(): Flow<List<Area>>
 
-    fun getCurrentFilter(): FilterParameters
-    fun updateFilter(filter: FilterParameters)
+    fun checkApplyBtnVisible(): Boolean
+    fun getEditableFilter(): FilterParameters
+    fun updateEditableFilter(filter: FilterParameters)
+
+    fun saveIndustry(industry: Industry)
+    fun saveCountry(country: Country)
+    fun saveArea(area: Area)
+
+    fun saveEditableInMainFilter()
+    fun saveMainInEditableFilter()
 }

@@ -8,14 +8,14 @@ class SharedPrefsFilterStorage(
     private val sharedPrefs: SharedPreferences,
     private val gson: Gson
 ) : FilterStorage {
-    override fun saveFilterParameters(filterParam: FilterParametersDto) {
-        val json = gson.toJson(filterParam)
+    override fun saveMainFilterParameters(mainFilterParam: FilterParametersDto) {
+        val json = gson.toJson(mainFilterParam)
         sharedPrefs.edit()
             .putString(FILTER_PARAMETERS_KEY, json)
             .apply()
     }
 
-    override fun getFilterParameters(): FilterParametersDto {
+    override fun getMainFilterParameters(): FilterParametersDto {
         val json =
             sharedPrefs.getString(
                 FILTER_PARAMETERS_KEY, null
@@ -29,14 +29,14 @@ class SharedPrefsFilterStorage(
         return gson.fromJson(json, FilterParametersDto::class.java)
     }
 
-    override fun saveEditFilterParameters(editFilterParam: FilterParametersDto) {
-        val json = gson.toJson(editFilterParam)
+    override fun saveEditableFilterParameters(editableFilterParam: FilterParametersDto) {
+        val json = gson.toJson(editableFilterParam)
         sharedPrefs.edit()
             .putString(EDIT_FILTER_PARAMETERS_KEY, json)
             .apply()
     }
 
-    override fun getEditFilterParameters(): FilterParametersDto {
+    override fun getEditableFilterParameters(): FilterParametersDto {
         val json =
             sharedPrefs.getString(
                 EDIT_FILTER_PARAMETERS_KEY, null
@@ -51,7 +51,7 @@ class SharedPrefsFilterStorage(
     }
 
     override fun isFilterActive(): Boolean {
-        val filter = getFilterParameters()
+        val filter = getMainFilterParameters()
         return filter.isNotEmpty
     }
 

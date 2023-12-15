@@ -30,12 +30,12 @@
                 android:id="@+id/edWorkPlace"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:focusable="false"
-                android:cursorVisible="false"
-                android:longClickable="false"
-                android:inputType="none"
                 android:background="@color/white_day_night"
+                android:cursorVisible="false"
+                android:focusable="false"
                 android:fontFamily="@font/ys_display_regular"
+                android:inputType="none"
+                android:longClickable="false"
                 android:textColor="@color/black_day_night"
                 android:textSize="16sp" />
 

@@ -3,10 +3,15 @@ package ru.practicum.android.diploma.filter.ui
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.content.res.AppCompatResources
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.appbar.MaterialToolbar
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentWorkPlaceBinding
+import ru.practicum.android.diploma.filter.presentation.FilterScreenState
+import ru.practicum.android.diploma.filter.presentation.WorkPlaceViewModel
 
 class WorkPlaceFragment : Fragment(R.layout.fragment_work_place) {
 
@@ -16,23 +21,36 @@ class WorkPlaceFragment : Fragment(R.layout.fragment_work_place) {
     private val actionArea = WorkPlaceFragmentDirections.actionWorkPlaceFragmentToAreaChooserFragment()
     private val actionCountry = WorkPlaceFragmentDirections.actionWorkPlaceFragmentToCountryChooserFragment()
 
-    //    private val viewModel by viewModel<FilterViewModel>()
+    private val viewModel by viewModel<WorkPlaceViewModel>()
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentWorkPlaceBinding.bind(view)
 
-//        val args: WorkPlaceFragmentArgs by navArgs()
-//        val textCountry = args.countryArgs
-//        val textArea = args.areaArgs
+        viewModel.getFilterParameters()
 
-//        binding.edTextNameCountryNameInput.setText(textCountry)
-//        binding.edTextNameAreaNameInput.setText(textArea)
         addCountry()
         addArea()
 
         binding.btAdd.setOnClickListener {
-            // записываем выбор в шаред префс и идем назад
             findNavController().navigateUp()
+        }
+
+        viewModel.state.observe(viewLifecycleOwner) { state ->
+            renderState(state)
+        }
+
+        // переопределяем нажатие кнопки назад в тулбаре чтобы возвращаться только на один экран назад
+        val toolbar: MaterialToolbar = requireActivity().findViewById(R.id.toolbar)
+        toolbar.setNavigationOnClickListener {
+            activity?.onBackPressed()
+        }
+    }
+
+    private fun renderState(state: FilterScreenState) {
+        with(binding) {
+            edTextNameCountryNameInput.setText(state.editableFilter.country?.name ?: "")
+            edTextNameAreaNameInput.setText(state.editableFilter.area?.name ?: "")
+            btAdd.isVisible = state.isApplyBtnVisible
         }
     }
 

@@ -23,14 +23,38 @@ class FilterInteractorImpl(private val repository: FilterRepository) : FilterInt
     }
 
     override fun getAreas(): Flow<List<Area>> = repository.getAreas()
+    override fun checkApplyBtnVisible(): Boolean {
+        return repository.checkApplyBtnVisible()
+    }
+
     override fun getIndustries(): Flow<List<Industry>> = repository.getIndustries()
     override fun getCountries(): Flow<List<Country>> = repository.getCountries()
 
-    override fun getCurrentFilter(): FilterParameters {
-        return repository.getCurrentFilter()
+    override fun getEditableFilter(): FilterParameters {
+        return repository.getEditableFilter()
     }
 
-    override fun updateFilter(filter: FilterParameters) {
-        repository.updateFilter(filter)
+    override fun updateEditableFilter(filter: FilterParameters) {
+        repository.updateEditableFilter(filter)
+    }
+
+    override fun saveIndustry(industry: Industry) {
+        repository.saveIndustry(industry)
+    }
+
+    override fun saveCountry(country: Country) {
+        repository.saveCountry(country)
+    }
+
+    override fun saveArea(area: Area) {
+        repository.saveArea(area)
+    }
+
+    override fun saveEditableInMainFilter() {
+        repository.saveEditableInMainFilter()
+    }
+
+    override fun saveMainInEditableFilter() {
+        repository.saveMainInEditableFilter()
     }
 }

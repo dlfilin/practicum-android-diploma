@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.appbar.MaterialToolbar
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
@@ -30,10 +31,10 @@ class IndustryChooserFragment : Fragment(R.layout.fragment_industry_chooser) {
             binding.btAdd.visibility = View.VISIBLE
             binding.btAdd.setOnClickListener {
                 // записываем выбор в шаред префс и идем назад
+                viewModel.saveIndustry(item)
                 findNavController().navigateUp()
             }
         }
-
     })
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -83,6 +84,12 @@ class IndustryChooserFragment : Fragment(R.layout.fragment_industry_chooser) {
             }
         }
         binding.searchEditText.addTextChangedListener(textWatcher)
+
+        // переопределяем нажатие кнопки назад в тулбаре чтобы возвращаться только на один экран назад
+        val toolbar: MaterialToolbar = requireActivity().findViewById(R.id.toolbar)
+        toolbar.setNavigationOnClickListener {
+            activity?.onBackPressed()
+        }
     }
 
     fun visibleBtAdd(list: List<Industry>) {

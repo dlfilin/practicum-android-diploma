@@ -20,7 +20,6 @@ import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.common.util.ErrorType
 import ru.practicum.android.diploma.common.util.debounce
 import ru.practicum.android.diploma.databinding.FragmentSearchBinding
-import ru.practicum.android.diploma.filter.ui.FilterFragment
 import ru.practicum.android.diploma.search.domain.model.VacancyItem
 import ru.practicum.android.diploma.search.domain.model.VacancyListData
 import ru.practicum.android.diploma.search.presentation.SearchScreenState
@@ -62,6 +61,13 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         checkFilterState()
         setToolbarMenu()
         setObservables()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (!binding.searchEditText.text.isNullOrBlank()) {
+            viewmodel.applyFilter()
+        }
     }
 
     override fun onDestroyView() {
@@ -155,16 +161,6 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
             when (error) {
                 ErrorType.NO_INTERNET -> showToast(getString(R.string.toast_internet_throwable))
                 else -> showToast(getString(R.string.toast_unknown_error))
-            }
-        }
-
-        val backStackLiveData = findNavController().currentBackStackEntry
-            ?.savedStateHandle?.getLiveData<Boolean>(FilterFragment.REAPPLY_FILTER)
-        backStackLiveData?.observe(viewLifecycleOwner) { reapplyEvent ->
-            if (reapplyEvent != null) {
-                viewmodel.applyFilter()
-                showToast("REAPPLY_FILTER")
-                backStackLiveData.value = null
             }
         }
     }
