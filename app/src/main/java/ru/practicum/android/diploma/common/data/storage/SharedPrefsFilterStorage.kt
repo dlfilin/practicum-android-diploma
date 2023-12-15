@@ -9,26 +9,28 @@ class SharedPrefsFilterStorage(
     private val gson: Gson
 ) : FilterStorage {
     override fun saveFilterParameters(filterParam: FilterParametersDto) {
-        writeHistoryToJson(filterParam)
-    }
-
-    override fun getFilterParameters(): FilterParametersDto {
-        return readHistoryFromJson()
-    }
-
-    private fun readHistoryFromJson(): FilterParametersDto {
-        val json =
-            sharedPrefs.getString(
-                FILTER_PARAMETERS_KEY, null
-            ) ?: return FilterParametersDto(null, null, null, false)
-        return gson.fromJson(json, FilterParametersDto::class.java)
-    }
-
-    private fun writeHistoryToJson(filterParam: FilterParametersDto) {
         val json = gson.toJson(filterParam)
         sharedPrefs.edit()
             .putString(FILTER_PARAMETERS_KEY, json)
             .apply()
+    }
+
+    override fun getFilterParameters(): FilterParametersDto {
+        val json =
+            sharedPrefs.getString(
+                FILTER_PARAMETERS_KEY, null
+            ) ?: return FilterParametersDto(
+                area = null,
+                industry = null,
+                salary = null,
+                onlyWithSalary = false
+            )
+        return gson.fromJson(json, FilterParametersDto::class.java)
+    }
+
+    override fun isFilterActive(): Boolean {
+        val filter = getFilterParameters()
+        return filter.isNotEmpty
     }
 
     companion object {

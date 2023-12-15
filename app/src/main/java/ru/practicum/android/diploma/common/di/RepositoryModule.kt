@@ -4,7 +4,7 @@ import org.koin.dsl.module
 import ru.practicum.android.diploma.favorites.data.mapper.FavoriteMapper
 import ru.practicum.android.diploma.favorites.data.repository.FavoriteRepositoryImpl
 import ru.practicum.android.diploma.favorites.domain.repository.FavoriteRepository
-import ru.practicum.android.diploma.filter.data.repository.AddFilterRepositoryImpl
+import ru.practicum.android.diploma.filter.data.repository.FilterRepositoryImpl
 import ru.practicum.android.diploma.filter.domain.api.AddFilterRepository
 import ru.practicum.android.diploma.search.data.repository.SearchRepositoryImpl
 import ru.practicum.android.diploma.search.domain.api.SearchRepository
@@ -35,6 +35,6 @@ val repositoryModule = module {
         ExternalNavigatorImpl(context = get())
     }
     single<AddFilterRepository> {
-        AddFilterRepositoryImpl(networkClient = get(), database = get())
+        FilterRepositoryImpl(networkClient = get(), database = get(), filterMapper = get())
     }
 }
