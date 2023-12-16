@@ -1,6 +1,7 @@
 package ru.practicum.android.diploma.filter.domain.impl
 
 import kotlinx.coroutines.flow.Flow
+import ru.practicum.android.diploma.common.util.NetworkResult
 import ru.practicum.android.diploma.filter.domain.api.FilterInteractor
 import ru.practicum.android.diploma.filter.domain.api.FilterRepository
 import ru.practicum.android.diploma.filter.domain.models.Area
@@ -22,9 +23,9 @@ class FilterInteractorImpl(private val repository: FilterRepository) : FilterInt
         repository.getAreaAndSaveDb()
     }
 
-    override fun getAreas(): Flow<List<Area>> = repository.getAreas()
-    override fun getIndustries(): Flow<List<Industry>> = repository.getIndustries()
-    override fun getCountries(): Flow<List<Country>> = repository.getCountries()
+    override fun getAreas(): Flow<NetworkResult<List<Area>>> = repository.getAreas()
+    override fun getIndustries(): Flow<NetworkResult<List<Industry>>> = repository.getIndustries()
+    override fun getCountries(): Flow<NetworkResult<List<Country>>> = repository.getCountries()
 
     override fun getCurrentFilter(): FilterParameters {
         return repository.getCurrentFilter()

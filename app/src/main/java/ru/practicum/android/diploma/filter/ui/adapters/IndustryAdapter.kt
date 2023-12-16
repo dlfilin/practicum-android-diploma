@@ -7,17 +7,17 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.ItemIndustryChooserBinding
-import ru.practicum.android.diploma.filter.domain.models.Industry
+import ru.practicum.android.diploma.filter.presentation.models.IndustryUi
 
 class IndustryAdapter(
-    private val onItemCheckedListener: ((item: Industry) -> Unit)? = null
+    private val itemClickListener: ItemClickListener
 ) : RecyclerView.Adapter<IndustryAdapter.IndustryHolder>() {
 
     private var mSelectedItem = -1
 
-    var listItem: MutableList<Industry> = ArrayList()
-    private var originalListItem: MutableList<Industry> = ArrayList()
-    private val filterListItem: MutableList<Industry> = ArrayList()
+    var listItem: MutableList<IndustryUi> = ArrayList()
+    private var originalListItem: MutableList<IndustryUi> = ArrayList()
+    private val filterListItem: MutableList<IndustryUi> = ArrayList()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): IndustryHolder {
         val view =
@@ -27,20 +27,22 @@ class IndustryAdapter(
 
     override fun onBindViewHolder(holder: IndustryHolder, position: Int) {
         holder.bind(listItem[position])
-
-        holder.radioButton.isChecked = listItem[position].isChecked
-        holder.radioButton.setOnClickListener {
-            mSelectedItem = holder.adapterPosition
-            val listNew = listItem.mapIndexed { index, industry ->
-                if (index == mSelectedItem) {
-                    industry.copy(isChecked = true)
-                } else {
-                    industry.copy(isChecked = false)
-                }
-            }
-            updateDisplayList(listNew)
-            onItemCheckedListener?.invoke(listNew[mSelectedItem])
+        holder.itemView.setOnClickListener {
+            itemClickListener.onItemListener(listItem[position])
         }
+//        holder.radioButton.isChecked = listItem[position].isChecked
+//        holder.radioButton.setOnClickListener {
+//            mSelectedItem = holder.adapterPosition
+//            val listNew = listItem.mapIndexed { index, industry ->
+//                if (index == mSelectedItem) {
+//                    industry.copy(isChecked = true)
+//                } else {
+//                    industry.copy(isChecked = false)
+//                }
+//            }
+//            updateDisplayList(listNew)
+//            onItemCheckedListener?.invoke(listNew[mSelectedItem])
+//        }
     }
 
     override fun getItemCount(): Int = listItem.size
@@ -50,15 +52,15 @@ class IndustryAdapter(
         private val binding = ItemIndustryChooserBinding.bind(item)
         val radioButton = binding.radioButton
 
-        fun bind(industry: Industry) = with(binding) {
+        fun bind(industry: IndustryUi) = with(binding) {
             industryName.text = industry.name
             radioButton.isChecked = industry.isChecked
         }
     }
 
     private class MyDiffCallback(
-        private val oldList: List<Industry>,
-        private val newList: List<Industry>
+        private val oldList: List<IndustryUi>,
+        private val newList: List<IndustryUi>
     ) : DiffUtil.Callback() {
         override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
             return oldList[oldItemPosition].id == newList[newItemPosition].id
@@ -77,7 +79,7 @@ class IndustryAdapter(
         }
     }
 
-    fun updateData(newData: List<Industry>) {
+    fun updateData(newData: List<IndustryUi>) {
         val diffCallback = MyDiffCallback(listItem, newData)
         val diffResult = DiffUtil.calculateDiff(diffCallback)
         listItem.clear()
@@ -87,7 +89,7 @@ class IndustryAdapter(
         originalListItem.addAll(newData)
     }
 
-    private fun updateDisplayList(updateList: List<Industry>) {
+    private fun updateDisplayList(updateList: List<IndustryUi>) {
         val diffCallback = MyDiffCallback(listItem, updateList)
         val diffResult = DiffUtil.calculateDiff(diffCallback)
         listItem.clear()
@@ -110,4 +112,7 @@ class IndustryAdapter(
         }
     }
 
+    fun interface ItemClickListener {
+        fun onItemListener(item: IndustryUi)
+    }
 }

@@ -33,13 +33,20 @@ class FilterMapper {
         onlyWithSalary = model.onlyWithSalary
     )
 
-    fun mapEntityToDomainModel(areaItem: AreaEntity): Area {
-        return Area(
-            id = areaItem.id,
-            name = areaItem.name,
-            parentId = areaItem.parentId
-        )
-    }
+    fun mapToDomainModel(dto: IndustryDto) = Industry(
+        id = dto.id,
+        name = dto.name,
+    )
+    fun mapToDomainModel(dto: CountryDto) = Country(
+        id = dto.id,
+        name = dto.name
+    )
+
+    fun mapToDomainModel(dto: AreaDto) = Area(
+        id = dto.id,
+        name = dto.name,
+        parentId = dto.parentId
+    )
 
     fun mapEntityToDomainModel(countryItem: CountryEntity): Country {
         return Country(
@@ -52,7 +59,6 @@ class FilterMapper {
         return Industry(
             id = industryItem.id,
             name = industryItem.name,
-            isChecked = false
         )
     }
 
@@ -95,6 +101,21 @@ class FilterMapper {
         return areaList
     }
 
+    fun mapResponseToDomain(areaDto: AreaResponse): List<Area> {
+        val areaList = mutableListOf<Area>()
+        areaDto.areas.forEach {
+            for (item in it.areas) {
+                val area = Area(
+                    id = item.id,
+                    parentId = item.parentId,
+                    name = item.name
+                )
+                areaList.add(area)
+            }
+        }
+        return areaList
+    }
+
     private fun mapDtoToArea(dto: AreaDto?): Area? {
         return if (dto != null) {
             Area(
@@ -107,7 +128,7 @@ class FilterMapper {
         }
     }
 
-    private fun mapDtoToCountry(dto: CountryDto?): Country? {
+    fun mapDtoToCountry(dto: CountryDto?): Country? {
         return if (dto != null) {
             Country(
                 id = dto.id,
@@ -123,7 +144,6 @@ class FilterMapper {
             Industry(
                 id = dto.id,
                 name = dto.name,
-                isChecked = false
             )
         } else {
             null

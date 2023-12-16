@@ -1,6 +1,7 @@
 package ru.practicum.android.diploma.filter.ui
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
@@ -9,7 +10,7 @@ import androidx.navigation.fragment.findNavController
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentFilterBinding
-import ru.practicum.android.diploma.filter.presentation.FilterScreenState
+import ru.practicum.android.diploma.filter.domain.models.FilterParameters
 import ru.practicum.android.diploma.filter.presentation.FilterViewModel
 
 class FilterFragment : Fragment(R.layout.fragment_filter) {
@@ -27,8 +28,10 @@ class FilterFragment : Fragment(R.layout.fragment_filter) {
 
         setListeners()
 
-        viewModel.state.observe(viewLifecycleOwner) { state ->
-            renderState(state)
+        viewModel.loadFilterFromPrefs()
+
+        viewModel.state.observe(viewLifecycleOwner) { filter ->
+            renderScreen(filter)
         }
     }
 
@@ -122,25 +125,36 @@ class FilterFragment : Fragment(R.layout.fragment_filter) {
                     viewModel.updateSalary(text.toString())
                 }
             }
-
             textInputLayoutSalary.setEndIconOnClickListener {
                 viewModel.clearSalary()
             }
         }
     }
 
-    private fun renderState(state: FilterScreenState) {
+    private fun renderScreen(filter: FilterParameters) {
+        Log.e("renderScreen", filter.toString())
         with(binding) {
-            val place = state.currentFilter.area?.name ?: ""
-            val industry = state.currentFilter.industry?.name ?: ""
-            val salary = state.currentFilter.salary?.toString() ?: ""
+            // НАПИСАТЬ КОНВЕРТЕР СТРОКИ
+            val country = filter.country?.name
+            val area = filter.area?.name
+            var place = ""
+            if (country != null) {
+                place = if (area != null) {
+                    "$country, $area"
+                } else {
+                    "$country"
+                }
+            }
+            // НАПИСАТЬ КОНВЕРТЕР СТРОКИ
+
+            val industry = filter.industry?.name ?: ""
+            val salary = filter.salary?.toString() ?: ""
             edWorkPlace.setText(place)
             edIndustry.setText(industry)
             textInputEditTextSalary.setText(salary)
-            textInputEditTextSalary.setSelection(salary.length)
-            checkBoxSalary.isChecked = state.currentFilter.onlyWithSalary
-            btApply.isVisible = state.isApplyBtnVisible
-            btClear.isVisible = state.isClearBtnVisible
+            checkBoxSalary.isChecked = filter.onlyWithSalary
+            btApply.isVisible = filter.isNotEmpty
+            btClear.isVisible = filter.isNotEmpty
         }
     }
 
@@ -263,15 +277,13 @@ class FilterFragment : Fragment(R.layout.fragment_filter) {
 
     override fun onDestroyView() {
         super.onDestroyView()
-
         _binding = null
     }
 
     override fun onStop() {
         super.onStop()
-        viewModel.saveFilter()
+        viewModel.saveFilterToPrefs()
     }
-
 
     companion object {
         const val REAPPLY_FILTER = "REAPPLY_FILTER"

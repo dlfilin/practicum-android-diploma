@@ -1,17 +1,15 @@
 package ru.practicum.android.diploma.filter.ui
 
 import android.os.Bundle
-import android.view.MotionEvent
 import android.view.View
-import androidx.core.widget.addTextChangedListener
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentAreaChooserBinding
+import ru.practicum.android.diploma.filter.presentation.AreaChooserScreenState
 import ru.practicum.android.diploma.filter.presentation.AreaViewModel
 import ru.practicum.android.diploma.filter.ui.adapters.AreaAdapter
 
@@ -23,11 +21,9 @@ class AreaChooserFragment : Fragment(R.layout.fragment_area_chooser) {
     private val viewModel: AreaViewModel by viewModel()
 
     private val adapter = AreaAdapter {
-        // записываем выбор в шаред префс и идем назад
+        viewModel.saveFilterToPrefs(it)
         findNavController().navigateUp()
     }
-
-//    private val viewModel by viewModel<FilterViewModel>()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -36,44 +32,56 @@ class AreaChooserFragment : Fragment(R.layout.fragment_area_chooser) {
         binding.rvArea.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         binding.rvArea.adapter = adapter
 
-        lifecycleScope.launch {
-            viewModel.getAreas().collect { areasList ->
-                val areasSortedByName = areasList.sortedBy { it.name }
-                adapter.updateData(areasSortedByName)
-            }
+        viewModel.state.observe(viewLifecycleOwner) { state ->
+            renderState(state)
         }
 
-        binding.searchEditText.addTextChangedListener {
-            adapter.filter(it.toString())
-            if (adapter.listItem.isEmpty()) {
-                binding.imageNotRegion.visibility = View.VISIBLE
-                binding.textNotRegion.visibility = View.VISIBLE
-            } else {
-                binding.imageNotRegion.visibility = View.GONE
-                binding.textNotRegion.visibility = View.GONE
+//        binding.searchEditText.addTextChangedListener {
+//            adapter.filter(it.toString())
+//            if (adapter.listItem.isEmpty()) {
+//                binding.imageNotRegion.visibility = View.VISIBLE
+//                binding.textNotRegion.visibility = View.VISIBLE
+//            } else {
+//                binding.imageNotRegion.visibility = View.GONE
+//                binding.textNotRegion.visibility = View.GONE
+//            }
+//            val edText = binding.searchEditText
+//            if (!it.isNullOrEmpty()) {
+//                edText.setCompoundDrawablesRelativeWithIntrinsicBounds(0, 0, R.drawable.ic_clear, 0)
+//                edText.setOnTouchListener { v, event ->
+//                    val iconBoundries = edText.compoundDrawables[2].bounds.width()
+//                    if (event.action == MotionEvent.ACTION_UP &&
+//                        event.rawX >= edText.right - iconBoundries * 2
+//                    ) {
+//                        edText.setText("")
+//                    }
+//                    view.performClick()
+//                    false
+//                }
+//            } else {
+//                edText.setCompoundDrawablesRelativeWithIntrinsicBounds(0, 0, R.drawable.ic_search, 0)
+//            }
+//        }
+    }
+
+    private fun renderState(state: AreaChooserScreenState) {
+        when (state) {
+            is AreaChooserScreenState.Content -> {
+                adapter.updateData(state.items)
+                binding.rvArea.isVisible = true
+                binding.placeholderImage.isVisible = false
+                binding.placeholderMessage.isVisible = false
             }
-            val edText = binding.searchEditText
-            if (!it.isNullOrEmpty()) {
-                edText.setCompoundDrawablesRelativeWithIntrinsicBounds(0, 0, R.drawable.ic_clear, 0)
-                edText.setOnTouchListener { v, event ->
-                    val iconBoundries = edText.compoundDrawables[2].bounds.width()
-                    if (event.action == MotionEvent.ACTION_UP &&
-                        event.rawX >= edText.right - iconBoundries * 2
-                    ) {
-                        edText.setText("")
-                    }
-                    view.performClick()
-                    false
-                }
-            } else {
-                edText.setCompoundDrawablesRelativeWithIntrinsicBounds(0, 0, R.drawable.ic_search, 0)
+            is AreaChooserScreenState.Error -> {
+                binding.rvArea.isVisible = false
+                binding.placeholderImage.isVisible = true
+                binding.placeholderMessage.isVisible = true
             }
         }
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
-
         _binding = null
     }
 }

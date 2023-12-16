@@ -71,6 +71,10 @@ class SearchRepositoryImpl(
 
         if (filter.area != null) {
             map["area"] = filter.area.id
+        } else {
+            if (filter.country != null) {
+                map["area"] = filter.country.id
+            }
         }
         if (filter.industry != null) {
             map["industry"] = filter.industry.id
