@@ -117,11 +117,9 @@ class FilterFragment : Fragment(R.layout.fragment_filter) {
         var prevText = ""
         with(binding) {
             textInputEditTextSalary.doOnTextChanged { text, _, _, _ ->
-                if (!textInputEditTextSalary.text.isNullOrEmpty()) {
-                    if (text.toString() != prevText) {
-                        prevText = text.toString()
-                        viewModel.updateSalary(text.toString())
-                    }
+                if (!textInputEditTextSalary.text.isNullOrEmpty() && text.toString() != prevText) {
+                    prevText = text.toString()
+                    viewModel.updateSalary(text.toString())
                 }
             }
 
