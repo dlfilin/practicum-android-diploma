@@ -7,6 +7,7 @@ import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.appbar.MaterialToolbar
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentFilterBinding
@@ -170,7 +171,7 @@ class FilterFragment : Fragment(R.layout.fragment_filter) {
             edIndustry.setText(industry)
             textInputEditTextSalary.setText(salary)
             textInputEditTextSalary.setSelection(salary.length)
-            checkBoxSalary.isChecked = state.currentFilter.onlyWithSalary
+            checkBoxSalary.isChecked = state.editableFilter.onlyWithSalary
             btApply.isVisible = state.isApplyBtnVisible
             btClear.isVisible = state.isClearBtnVisible
         }
