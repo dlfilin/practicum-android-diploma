@@ -117,19 +117,14 @@ class FilterFragment : Fragment(R.layout.fragment_filter) {
     }
 
     private fun setSalaryListeners() {
+        var prevText = ""
         with(binding) {
-//            textInputEditTextSalary.doOnTextChanged { text, _, _, _ ->
-//                textInputLayoutSalary.apply {
-//                    if (text.isNullOrEmpty()) {
-//                        endIconMode = END_ICON_NONE
-//                    } else {
-//                        endIconMode = END_ICON_CUSTOM
-//                        setEndIconDrawable(R.drawable.ic_clear)
-//                    }
-//                }
-//                viewModel.updateSalary(text.toString())
-//            }
-
+            textInputEditTextSalary.doOnTextChanged { text, _, _, _ ->
+                if (!textInputEditTextSalary.text.isNullOrEmpty() && text.toString() != prevText) {
+                    prevText = text.toString()
+                    viewModel.updateSalary(text.toString())
+                }
+            }
             textInputLayoutSalary.setEndIconOnClickListener {
                 viewModel.clearSalary()
             }

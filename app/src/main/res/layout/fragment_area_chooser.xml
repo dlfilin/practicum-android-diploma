@@ -9,8 +9,8 @@
     <EditText
         android:id="@+id/searchEditText"
         style="@style/editText"
-        android:autofillHints="@string/hint_search_vacancy_et"
-        android:hint="@string/hint_search_vacancy_et"
+        android:autofillHints="@string/hint_choosing_area_et"
+        android:hint="@string/hint_choosing_area_et"
         android:textCursorDrawable="@drawable/custom_cursor"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -32,6 +32,7 @@
         android:layout_height="wrap_content"
         android:src="@drawable/search_fail_placeholder"
         android:visibility="gone"
+        android:contentDescription="@string/nothing_found_choosing_area_tv"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
