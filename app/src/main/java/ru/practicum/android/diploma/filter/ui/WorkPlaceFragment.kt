@@ -59,7 +59,7 @@ class WorkPlaceFragment : Fragment(R.layout.fragment_work_place) {
             }
         binding.edCountryName.setEndIconDrawable(R.drawable.ic_arrow_forward)
         binding.btAdd.visibility = View.GONE
-        binding.gotoCountryChooserFragmentBtn.setOnClickListener {
+        binding.edCountryName.setOnClickListener {
             findNavController().navigate(actionCountry)
         }
         binding.edTextNameCountryNameInput.setOnClickListener {

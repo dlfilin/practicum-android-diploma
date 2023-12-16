@@ -34,6 +34,7 @@
     <string name="choosing_country_title_tv">Выбор страны</string>
     <!--    choosing area fragment-->
     <string name="choosing_area_title_tv">Выбор региона</string>
+    <string name="hint_choosing_area_et">Введите регион</string>
     <string name="nothing_found_choosing_area_tv">Такого региона нет</string>
     <string name="search_throwable_choosing_area_tv">Не удалось получить\nсписок</string>
     <!--    choosing industry fragment-->

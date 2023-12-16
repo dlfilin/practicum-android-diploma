@@ -6,8 +6,6 @@ import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
-import com.google.android.material.textfield.TextInputLayout.END_ICON_CUSTOM
-import com.google.android.material.textfield.TextInputLayout.END_ICON_NONE
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentFilterBinding
@@ -90,7 +88,7 @@ class FilterFragment : Fragment(R.layout.fragment_filter) {
     private fun setIndustryListeners() {
         with(binding) {
             edIndustry.setOnClickListener {
-                findNavController().navigate(directionWorkPlace)
+                findNavController().navigate(directionIndustry)
             }
 
             edIndustry.doOnTextChanged { text, _, _, _ ->
@@ -116,17 +114,15 @@ class FilterFragment : Fragment(R.layout.fragment_filter) {
     }
 
     private fun setSalaryListeners() {
+        var prevText = ""
         with(binding) {
             textInputEditTextSalary.doOnTextChanged { text, _, _, _ ->
-                textInputLayoutSalary.apply {
-                    if (text.isNullOrEmpty()) {
-                        endIconMode = END_ICON_NONE
-                    } else {
-                        endIconMode = END_ICON_CUSTOM
-                        setEndIconDrawable(R.drawable.ic_clear)
+                if (!textInputEditTextSalary.text.isNullOrEmpty()) {
+                    if (text.toString() != prevText) {
+                        prevText = text.toString()
+                        viewModel.updateSalary(text.toString())
                     }
                 }
-                viewModel.updateSalary(text.toString())
             }
 
             textInputLayoutSalary.setEndIconOnClickListener {
@@ -143,6 +139,7 @@ class FilterFragment : Fragment(R.layout.fragment_filter) {
             edWorkPlace.setText(place)
             edIndustry.setText(industry)
             textInputEditTextSalary.setText(salary)
+            textInputEditTextSalary.setSelection(salary.length)
             checkBoxSalary.isChecked = state.currentFilter.onlyWithSalary
             btApply.isVisible = state.isApplyBtnVisible
             btClear.isVisible = state.isClearBtnVisible
