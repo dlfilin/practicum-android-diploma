@@ -10,18 +10,8 @@ import ru.practicum.android.diploma.filter.domain.models.FilterParameters
 
 class FilterViewModel(private val interactor: FilterInteractor) : ViewModel() {
 
-    private val _state = MutableLiveData<FilterScreenState>()
-    val state: LiveData<FilterScreenState> get() = _state
-
-    init {
-        val filter = interactor.getCurrentFilter()
-        _state.postValue(
-            FilterScreenState(
-                entryFilter = filter,
-                currentFilter = filter
-            )
-        )
-    }
+    private val _state = MutableLiveData<FilterParameters>()
+    val state: LiveData<FilterParameters> get() = _state
 
     private val salaryDebounced = debounce<String>(
         SALARY_UPDATE_DELAY_IN_MILLIS,
@@ -33,28 +23,28 @@ class FilterViewModel(private val interactor: FilterInteractor) : ViewModel() {
         } else {
             text.toInt()
         }
-        val filter = state.value!!.currentFilter.copy(salary = salary)
-        updateState(filter)
+        val filter = state.value!!.copy(salary = salary)
+        _state.postValue(filter)
     }
 
     fun clearWorkplace() {
-        val filter = state.value!!.currentFilter.copy(area = null)
-        updateState(filter)
+        val filter = state.value!!.copy(area = null, country = null)
+        _state.postValue(filter)
     }
 
     fun clearIndustry() {
-        val filter = state.value!!.currentFilter.copy(industry = null)
-        updateState(filter)
+        val filter = state.value!!.copy(industry = null)
+        _state.postValue(filter)
     }
 
     fun clearSalary() {
-        val filter = state.value!!.currentFilter.copy(salary = null)
-        updateState(filter)
+        val filter = state.value!!.copy(salary = null)
+        _state.postValue(filter)
     }
 
     fun clearAll() {
         val filter = FilterParameters()
-        updateState(filter)
+        _state.postValue(filter)
     }
 
     fun updateSalary(text: String) {
@@ -62,37 +52,19 @@ class FilterViewModel(private val interactor: FilterInteractor) : ViewModel() {
     }
 
     fun onlyWithSalaryPressed(isChecked: Boolean) {
-        val filter = state.value!!.currentFilter.copy(onlyWithSalary = isChecked)
-        updateState(filter)
+        val filter = state.value!!.copy(onlyWithSalary = isChecked)
+        _state.postValue(filter)
     }
 
-    private fun updateState(filter: FilterParameters) {
-        val st = state.value!!.copy(currentFilter = filter)
-        _state.postValue(st)
-    }
-
-    fun saveFilter() {
-        val filter = state.value!!.currentFilter
+    fun saveFilterToPrefs() {
+        val filter = state.value!!
         interactor.updateFilter(filter)
     }
-//
-//    fun getIndustryAndSaveDb() {
-//        viewModelScope.launch {
-//            interactor.getIndustryAndSaveDb()
-//        }
-//    }
-//
-//    fun getCountryAndSaveDb() {
-//        viewModelScope.launch {
-//            interactor.getCountryAndSaveDb()
-//        }
-//    }
-//
-//    fun getAreaAndSaveDb() {
-//        viewModelScope.launch {
-//            interactor.getAreaAndSaveDb()
-//        }
-//    }
+
+    fun loadFilterFromPrefs() {
+        val filter = interactor.getCurrentFilter()
+        _state.postValue(filter)
+    }
 
     companion object {
         private const val SALARY_UPDATE_DELAY_IN_MILLIS = 1000L

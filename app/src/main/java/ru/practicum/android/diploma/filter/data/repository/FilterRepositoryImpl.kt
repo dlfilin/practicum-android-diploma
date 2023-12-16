@@ -2,7 +2,7 @@ package ru.practicum.android.diploma.filter.data.repository
 
 import android.util.Log
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.flow
 import ru.practicum.android.diploma.common.data.db.AppDataBase
 import ru.practicum.android.diploma.common.data.network.NetworkClient
 import ru.practicum.android.diploma.common.data.storage.FilterStorage
@@ -72,14 +72,48 @@ class FilterRepositoryImpl(
         }
     }
 
-    override fun getAreas(): Flow<List<Area>> = database.filterDao().getAreas()
-        .map { list -> list.map { filterMapper.mapEntityToDomainModel(it) } }
+    override fun getAreas(): Flow<NetworkResult<List<Area>>> = flow {
+        when (val result = networkClient.doRequest(AreaRequest())) {
+            is NetworkResult.Success -> {
+                val data = filterMapper.mapResponseToDomain(result.data as AreaResponse).sortedBy { it.name }
+                emit(NetworkResult.Success(data))
+            }
 
-    override fun getCountries(): Flow<List<Country>> = database.filterDao().getCountries()
-        .map { list -> list.map { filterMapper.mapEntityToDomainModel(it) }.sortedBy { it.id } }
+            is NetworkResult.Error -> {
+                emit(NetworkResult.Error(result.errorType!!))
+            }
+        }
+    }
 
-    override fun getIndustries(): Flow<List<Industry>> = database.filterDao().getIndustries()
-        .map { list -> list.map { filterMapper.mapEntityToDomainModel(it) }.sortedBy { it.name } }
+    override fun getCountries(): Flow<NetworkResult<List<Country>>> = flow {
+        when (val result = networkClient.doRequest(CountryRequest())) {
+            is NetworkResult.Success -> {
+                val data = (result.data as CountryResponse).areas.map {
+                    filterMapper.mapToDomainModel(it)
+                }
+                emit(NetworkResult.Success(data))
+            }
+
+            is NetworkResult.Error -> {
+                emit(NetworkResult.Error(result.errorType!!))
+            }
+        }
+    }
+
+    override fun getIndustries(): Flow<NetworkResult<List<Industry>>> = flow {
+        when (val result = networkClient.doRequest(IndustryRequest())) {
+            is NetworkResult.Success -> {
+                val data = (result.data as IndustryResponse).industry.map {
+                    filterMapper.mapToDomainModel(it)
+                }
+                emit(NetworkResult.Success(data))
+            }
+
+            is NetworkResult.Error -> {
+                emit(NetworkResult.Error(result.errorType!!))
+            }
+        }
+    }
 
     override fun getCurrentFilter(): FilterParameters {
         return filterMapper.mapToDomainModel(filterStorage.getFilterParameters())

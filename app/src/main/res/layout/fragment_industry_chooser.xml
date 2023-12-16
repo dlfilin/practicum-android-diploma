@@ -27,7 +27,7 @@
         app:layout_constraintTop_toBottomOf="@id/searchEditText" />
 
     <Button
-        android:id="@+id/btAdd"
+        android:id="@+id/btApply"
         style="@style/bigBlueButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -39,5 +39,27 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <ImageView
+        android:id="@+id/placeholderImage"
+        style="@style/placeholderImage"
+        android:contentDescription="@string/search_throwable_choosing_area_tv"
+        android:src="@drawable/region_search_fail_placeholder"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/searchEditText"
+        tools:visibility="gone" />
+
+    <TextView
+        android:id="@+id/placeholderMessage"
+        style="@style/placeholderText"
+        android:text="@string/search_throwable_choosing_area_tv"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/placeholderImage"
+        tools:visibility="gone" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
