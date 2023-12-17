@@ -85,6 +85,28 @@
             app:hintTextAppearance="@style/hintStyleForTextInputEditText" />
     </com.google.android.material.textfield.TextInputLayout>
 
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/textInputLayoutSalary1"
+        style="@style/Widget.App.SalaryInputLayout"
+        android:layout_width="match_parent"
+        android:layout_height="51dp"
+        android:layout_marginHorizontal="@dimen/space_16"
+        android:layout_marginVertical="8dp"
+        android:hint="@string/expected_salary_hint_et"
+        app:endIconDrawable="@drawable/ic_clear"
+        app:endIconMode="clear_text"
+        app:expandedHintEnabled="false"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/textInputLayoutSalary"
+        app:placeholderText="@string/amount_hint_et">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/textInputEditTextSalary1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </com.google.android.material.textfield.TextInputLayout>
+
     <TextView
         android:id="@+id/tvSalaryNotShow"
         android:layout_width="0dp"
@@ -97,7 +119,7 @@
         android:textSize="@dimen/font_16"
         app:layout_constraintEnd_toStartOf="@id/checkBoxSalary"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/textInputLayoutSalary" />
+        app:layout_constraintTop_toBottomOf="@id/textInputLayoutSalary1" />
 
     <CheckBox
         android:id="@+id/checkBoxSalary"

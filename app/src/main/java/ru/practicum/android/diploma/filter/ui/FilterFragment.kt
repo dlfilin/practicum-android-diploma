@@ -1,8 +1,10 @@
 package ru.practicum.android.diploma.filter.ui
 
+import android.content.res.ColorStateList
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
@@ -21,10 +23,15 @@ class FilterFragment : Fragment(R.layout.fragment_filter) {
     val viewModel: FilterViewModel by viewModel()
     private val directionWorkPlace = FilterFragmentDirections.actionFilterFragmentToWorkPlaceFragment()
     private val directionIndustry = FilterFragmentDirections.actionFilterFragmentToIndustryChooserFragment()
+    private var colorStateEmpty: ColorStateList? = null
+    private var colorStateFilled: ColorStateList? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentFilterBinding.bind(view)
+
+        colorStateEmpty = AppCompatResources.getColorStateList(requireContext(), R.color.salary_field_empty)
+        colorStateFilled = AppCompatResources.getColorStateList(requireContext(), R.color.salary_field_filled)
 
         setListeners()
 
@@ -117,6 +124,7 @@ class FilterFragment : Fragment(R.layout.fragment_filter) {
     }
 
     private fun setSalaryListeners() {
+        // СТАРЫЙ ВАРИАНТ
         var prevText = ""
         with(binding) {
             textInputEditTextSalary.doOnTextChanged { text, _, _, _ ->
@@ -127,6 +135,20 @@ class FilterFragment : Fragment(R.layout.fragment_filter) {
             }
             textInputLayoutSalary.setEndIconOnClickListener {
                 viewModel.clearSalary()
+            }
+
+            // НОВЫЙ ВАРИАНТ
+            var prevText1 = ""
+            textInputEditTextSalary1.doOnTextChanged { text, _, _, _ ->
+                if (text.toString() != prevText1) {
+                    if (text.isNullOrEmpty()) {
+                        textInputLayoutSalary1.defaultHintTextColor = colorStateEmpty
+                    } else {
+                        textInputLayoutSalary1.defaultHintTextColor = colorStateFilled
+                    }
+                    viewModel.updateSalary(text.toString())
+                    prevText1 = text.toString()
+                }
             }
         }
     }
