@@ -65,7 +65,7 @@
         android:layout_width="match_parent"
         android:layout_height="51dp"
         android:layout_marginHorizontal="@dimen/space_16"
-        android:layout_marginVertical="@dimen/space_16"
+        android:layout_marginTop="@dimen/space_24"
         android:hint="@string/expected_salary_hint_et"
         app:endIconDrawable="@drawable/ic_clear"
         app:endIconMode="clear_text"
