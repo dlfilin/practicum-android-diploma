@@ -61,48 +61,22 @@
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/textInputLayoutSalary"
-        style="@style/textInputLayout"
-        android:layout_marginHorizontal="@dimen/space_16"
-        android:layout_marginVertical="@dimen/space_16"
-        android:layout_marginTop="@dimen/space_24"
-        android:hint="@string/expected_salary_hint_et"
-        app:endIconDrawable="@drawable/ic_clear"
-        app:endIconMode="clear_text"
-        app:endIconTint="@color/black_universal"
-        app:expandedHintEnabled="false"
-        app:hintTextAppearance="@style/hintStyleForTextInputLayout"
-        app:hintTextColor="?attr/colorPrimary"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edIndustryLayout">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/textInputEditTextSalary"
-            style="@style/textInputEditText"
-            android:autofillHints="@string/amount_hint_et"
-            android:hint="@string/amount_hint_et"
-            android:inputType="number"
-            app:hintTextAppearance="@style/hintStyleForTextInputEditText" />
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/textInputLayoutSalary1"
         style="@style/Widget.App.SalaryInputLayout"
         android:layout_width="match_parent"
         android:layout_height="51dp"
         android:layout_marginHorizontal="@dimen/space_16"
-        android:layout_marginVertical="8dp"
+        android:layout_marginVertical="@dimen/space_16"
         android:hint="@string/expected_salary_hint_et"
         app:endIconDrawable="@drawable/ic_clear"
         app:endIconMode="clear_text"
         app:expandedHintEnabled="false"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/textInputLayoutSalary"
+        app:layout_constraintTop_toBottomOf="@id/edIndustryLayout"
         app:placeholderText="@string/amount_hint_et">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/textInputEditTextSalary1"
+            android:id="@+id/textInputEditTextSalary"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
     </com.google.android.material.textfield.TextInputLayout>
@@ -119,7 +93,7 @@
         android:textSize="@dimen/font_16"
         app:layout_constraintEnd_toStartOf="@id/checkBoxSalary"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/textInputLayoutSalary1" />
+        app:layout_constraintTop_toBottomOf="@id/textInputLayoutSalary" />
 
     <CheckBox
         android:id="@+id/checkBoxSalary"

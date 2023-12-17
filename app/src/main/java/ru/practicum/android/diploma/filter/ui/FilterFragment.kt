@@ -124,30 +124,17 @@ class FilterFragment : Fragment(R.layout.fragment_filter) {
     }
 
     private fun setSalaryListeners() {
-        // СТАРЫЙ ВАРИАНТ
         var prevText = ""
         with(binding) {
             textInputEditTextSalary.doOnTextChanged { text, _, _, _ ->
-                if (!textInputEditTextSalary.text.isNullOrEmpty() && text.toString() != prevText) {
-                    prevText = text.toString()
-                    viewModel.updateSalary(text.toString())
-                }
-            }
-            textInputLayoutSalary.setEndIconOnClickListener {
-                viewModel.clearSalary()
-            }
-
-            // НОВЫЙ ВАРИАНТ
-            var prevText1 = ""
-            textInputEditTextSalary1.doOnTextChanged { text, _, _, _ ->
-                if (text.toString() != prevText1) {
+                if (text.toString() != prevText) {
                     if (text.isNullOrEmpty()) {
-                        textInputLayoutSalary1.defaultHintTextColor = colorStateEmpty
+                        textInputLayoutSalary.defaultHintTextColor = colorStateEmpty
                     } else {
-                        textInputLayoutSalary1.defaultHintTextColor = colorStateFilled
+                        textInputLayoutSalary.defaultHintTextColor = colorStateFilled
                     }
-                    viewModel.updateSalary(text.toString())
-                    prevText1 = text.toString()
+                    prevText = text.toString()
+                    viewModel.updateSalary(prevText)
                 }
             }
         }
