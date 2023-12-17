@@ -75,7 +75,12 @@ class FilterRepositoryImpl(
     override fun getAreas(): Flow<NetworkResult<List<Area>>> = flow {
         when (val result = networkClient.doRequest(AreaRequest())) {
             is NetworkResult.Success -> {
-                val data = filterMapper.mapResponseToDomain(result.data as AreaResponse).sortedBy { it.name }
+                val list = (result.data as AreaResponse).areas
+                val flat = filterMapper.flattenAreas(list, emptyList())
+                val data = flat
+                    .filterNot { it.parentId == null }
+                    .map { filterMapper.mapToDomain(it) }
+                    .sortedBy { it.name }
                 emit(NetworkResult.Success(data))
             }
 
@@ -89,7 +94,7 @@ class FilterRepositoryImpl(
         when (val result = networkClient.doRequest(CountryRequest())) {
             is NetworkResult.Success -> {
                 val data = (result.data as CountryResponse).areas.map {
-                    filterMapper.mapToDomainModel(it)
+                    filterMapper.mapToDomain(it)
                 }
                 emit(NetworkResult.Success(data))
             }
@@ -103,9 +108,8 @@ class FilterRepositoryImpl(
     override fun getIndustries(): Flow<NetworkResult<List<Industry>>> = flow {
         when (val result = networkClient.doRequest(IndustryRequest())) {
             is NetworkResult.Success -> {
-                val data = (result.data as IndustryResponse).industry.map {
-                    filterMapper.mapToDomainModel(it)
-                }
+                val list = (result.data as IndustryResponse).industry
+                val data = filterMapper.flattenIndustries(list)
                 emit(NetworkResult.Success(data))
             }
 
@@ -116,7 +120,7 @@ class FilterRepositoryImpl(
     }
 
     override fun getCurrentFilter(): FilterParameters {
-        return filterMapper.mapToDomainModel(filterStorage.getFilterParameters())
+        return filterMapper.mapToDomain(filterStorage.getFilterParameters())
     }
 
     override fun updateFilter(filter: FilterParameters) {
