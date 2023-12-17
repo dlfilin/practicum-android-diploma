@@ -25,7 +25,6 @@ class WorkPlaceFragment : Fragment(R.layout.fragment_work_place) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentWorkPlaceBinding.bind(view)
 
-
         setListeners()
 
         viewModel.loadFilterFromPrefs()

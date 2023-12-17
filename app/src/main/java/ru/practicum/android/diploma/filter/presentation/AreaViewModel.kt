@@ -1,5 +1,6 @@
 package ru.practicum.android.diploma.filter.presentation
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -22,13 +23,13 @@ class AreaViewModel(private val interactor: FilterInteractor) : ViewModel() {
     val state: LiveData<AreaChooserScreenState> get() = _state
 
     init {
-        loadedFilter = interactor.getCurrentFilter()
-
         viewModelScope.launch {
             interactor.getAreas().collect {
                 loadAreaProcessResult(result = it)
             }
         }
+
+        loadedFilter = interactor.getCurrentFilter()
 
         if (loadedFilter.country == null) {
             viewModelScope.launch {
@@ -45,7 +46,11 @@ class AreaViewModel(private val interactor: FilterInteractor) : ViewModel() {
         val newList = areaList.filter { area ->
             area.name.lowercase().trim().contains(text.lowercase().trim())
         }
-        _state.postValue(AreaChooserScreenState.Content(newList))
+        if (newList.isEmpty()) {
+            _state.postValue(AreaChooserScreenState.Empty)
+        } else {
+            _state.postValue(AreaChooserScreenState.Content(newList))
+        }
     }
 
     fun saveFilterToPrefs(area: Area) {
@@ -55,6 +60,7 @@ class AreaViewModel(private val interactor: FilterInteractor) : ViewModel() {
             loadedFilter = loadedFilter.copy(country = country)
         }
         val filter = loadedFilter.copy(area = area)
+        Log.d("algo", "saratov: ${filter.area.toString()}")
         interactor.updateFilter(filter)
     }
 
@@ -65,12 +71,14 @@ class AreaViewModel(private val interactor: FilterInteractor) : ViewModel() {
                 if (data.isEmpty()) {
                     _state.postValue(AreaChooserScreenState.Empty)
                 } else {
+                    Log.d("area1", data.toString())
                     areaList = if (countryIsNotEmpty) {
                         filterAreaByCountry(data)
                     } else {
                         data
                     }
-                    _state.postValue(AreaChooserScreenState.Content(areaList))
+                    Log.d("area1", areaList.size.toString())
+                    _state.postValue(AreaChooserScreenState.Content(areaList.sortedBy { it.name }))
                 }
             }
 
@@ -93,14 +101,16 @@ class AreaViewModel(private val interactor: FilterInteractor) : ViewModel() {
     }
 
     private fun getCountryIdFromArea(selectedArea: Area): String {
+        val countriesId = mutableListOf<String>()
+        for (country in countriesList) {
+            countriesId.add(country.id)
+        }
         var parentId = selectedArea.parentId
         while (true) {
-            for (area in areaList) {
-                if (area.id == parentId) {
-                    parentId = area.parentId
-                } else {
-                    return parentId
-                }
+            if (countriesId.contains(parentId)) {
+                return parentId
+            } else {
+                parentId = areaList.firstOrNull { it.id == parentId }?.parentId ?: ""
             }
         }
     }
@@ -115,20 +125,36 @@ class AreaViewModel(private val interactor: FilterInteractor) : ViewModel() {
     }
 
     private fun filterAreaByCountry(areas: List<Area>): List<Area> {
-        val countryId = loadedFilter.country?.id
-        val newAreaList = mutableListOf<Area>()
-        for (area in areas) {
-            if (area.parentId == countryId) {
-                newAreaList.add(area)
-            }
-        }
-        for (area in newAreaList) {
-            for (item in areas) {
-                if (area.id == item.parentId) {
-                    newAreaList.add(item)
+        val finalAreaList = mutableListOf<Area>()
+        var id = loadedFilter.country?.id
+        val areasId = mutableListOf<String>()
+
+        while (finalAreaList.size < 8000) {
+            Log.d("algo", "finalAreaList: ${finalAreaList.size.toString()}")
+            for (area in areas) {
+                if (area.parentId == id) {
+                    if (!finalAreaList.contains(area)) {
+                        finalAreaList.add(area)
+                    }
                 }
             }
+
+            Log.d("algo", "finalAreaList: ${finalAreaList.size.toString()}")
+
+            for (item in finalAreaList) {
+                if (!areasId.contains(item.id)) {
+                    id = item.id
+                    areasId.add(id)
+                    Log.d("algo", areasId.size.toString())
+                    break
+                } else {
+                    Log.d("algo", "contains: ")
+
+                }
+            }
+            Log.d("algo", "parentId: ${id.toString()}")
         }
-        return newAreaList.toList()
+
+        return finalAreaList.toList()
     }
 }
