@@ -125,33 +125,33 @@ class AreaViewModel(private val interactor: FilterInteractor) : ViewModel() {
     }
 
     private fun filterAreaByCountry(areas: List<Area>): List<Area> {
-        val finalAreaList = mutableListOf<Area>()
-        var id = loadedFilter.country?.id
-        val areasId = mutableListOf<String>()
-        var finalAreaSize = 0
-
-        while (true) {
-            finalAreaSize = finalAreaList.size
-            for (area in areas) {
-                if (area.parentId == id) {
-                    if (!finalAreaList.contains(area)) {
-                        finalAreaList.add(area)
-                    }
-                }
-            }
-
-            if (finalAreaSize == finalAreaList.size) {
-                break
-            }
-
-            for (item in finalAreaList) {
-                if (!areasId.contains(item.id)) {
-                    id = item.id
-                    areasId.add(id)
-                    break
-                }
-            }
-        }
-        return finalAreaList.toList()
+//        val finalAreaList = mutableListOf<Area>()
+//        var id = loadedFilter.country?.id
+//        val areasId = mutableListOf<String>()
+//        var finalAreaSize = 0
+//
+//        while (true) {
+//            finalAreaSize = finalAreaList.size
+//            for (area in areas) {
+//                if (area.parentId == id) {
+//                    if (!finalAreaList.contains(area)) {
+//                        finalAreaList.add(area)
+//                    }
+//                }
+//            }
+//
+//            if (finalAreaSize == finalAreaList.size) {
+//                break
+//            }
+//
+//            for (item in finalAreaList) {
+//                if (!areasId.contains(item.id)) {
+//                    id = item.id
+//                    areasId.add(id)
+//                    break
+//                }
+//            }
+//        }
+        return areas
     }
 }
