@@ -128,9 +128,10 @@ class AreaViewModel(private val interactor: FilterInteractor) : ViewModel() {
         val finalAreaList = mutableListOf<Area>()
         var id = loadedFilter.country?.id
         val areasId = mutableListOf<String>()
+        var finalAreaSize = 0
 
-        while (finalAreaList.size < 8000) {
-            Log.d("algo", "finalAreaList: ${finalAreaList.size.toString()}")
+        while (true) {
+            finalAreaSize = finalAreaList.size
             for (area in areas) {
                 if (area.parentId == id) {
                     if (!finalAreaList.contains(area)) {
@@ -139,22 +140,18 @@ class AreaViewModel(private val interactor: FilterInteractor) : ViewModel() {
                 }
             }
 
-            Log.d("algo", "finalAreaList: ${finalAreaList.size.toString()}")
+            if (finalAreaSize == finalAreaList.size) {
+                break
+            }
 
             for (item in finalAreaList) {
                 if (!areasId.contains(item.id)) {
                     id = item.id
                     areasId.add(id)
-                    Log.d("algo", areasId.size.toString())
                     break
-                } else {
-                    Log.d("algo", "contains: ")
-
                 }
             }
-            Log.d("algo", "parentId: ${id.toString()}")
         }
-
         return finalAreaList.toList()
     }
 }

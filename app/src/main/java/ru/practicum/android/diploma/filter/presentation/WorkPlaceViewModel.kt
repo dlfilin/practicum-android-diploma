@@ -31,6 +31,8 @@ class WorkPlaceViewModel(private val interactor: FilterInteractor) : ViewModel()
         _state.postValue(filter)
         // _state.postValue(checkAreaBelongsCountry(filter))
     }
+//Если у Area будет поле countryId то можно будет проверить соответствует ли регион
+// выбранному городу и если не соответствует, то очистить регион
 
 //    private fun checkAreaBelongsCountry(filter: FilterParameters): FilterParameters {
 //        return if (filter.country?.id != filter.area?.countryId) {
