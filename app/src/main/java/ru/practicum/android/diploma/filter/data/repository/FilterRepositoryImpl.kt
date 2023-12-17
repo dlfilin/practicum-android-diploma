@@ -103,9 +103,8 @@ class FilterRepositoryImpl(
     override fun getIndustries(): Flow<NetworkResult<List<Industry>>> = flow {
         when (val result = networkClient.doRequest(IndustryRequest())) {
             is NetworkResult.Success -> {
-                val data = (result.data as IndustryResponse).industry.map {
-                    filterMapper.mapToDomainModel(it)
-                }
+                val list = (result.data as IndustryResponse).industry
+                val data = filterMapper.flattenIndustries(list)
                 emit(NetworkResult.Success(data))
             }
 
