@@ -1,6 +1,5 @@
 package ru.practicum.android.diploma.filter.presentation
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -60,7 +59,6 @@ class AreaViewModel(private val interactor: FilterInteractor) : ViewModel() {
             loadedFilter = loadedFilter.copy(country = country)
         }
         val filter = loadedFilter.copy(area = area)
-        Log.d("algo", "saratov: ${filter.area.toString()}")
         interactor.updateFilter(filter)
     }
 
@@ -71,13 +69,11 @@ class AreaViewModel(private val interactor: FilterInteractor) : ViewModel() {
                 if (data.isEmpty()) {
                     _state.postValue(AreaChooserScreenState.Empty)
                 } else {
-                    Log.d("area1", data.toString())
                     areaList = if (countryIsNotEmpty) {
                         filterAreaByCountry(data)
                     } else {
                         data
                     }
-                    Log.d("area1", areaList.size.toString())
                     _state.postValue(AreaChooserScreenState.Content(areaList.sortedBy { it.name }))
                 }
             }
