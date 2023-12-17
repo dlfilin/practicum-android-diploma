@@ -9,6 +9,7 @@ import ru.practicum.android.diploma.filter.data.dto.AreaResponse
 import ru.practicum.android.diploma.filter.data.dto.CountryDto
 import ru.practicum.android.diploma.filter.data.dto.CountryResponse
 import ru.practicum.android.diploma.filter.data.dto.IndustryDto
+import ru.practicum.android.diploma.filter.data.dto.IndustryListDto
 import ru.practicum.android.diploma.filter.data.dto.IndustryResponse
 import ru.practicum.android.diploma.filter.domain.models.Area
 import ru.practicum.android.diploma.filter.domain.models.Country
@@ -41,26 +42,6 @@ class FilterMapper {
         id = dto.id,
         name = dto.name
     )
-
-    fun mapToDomainModel(dto: AreaDto) = Area(
-        id = dto.id,
-        name = dto.name,
-        parentId = dto.parentId
-    )
-
-    fun mapEntityToDomainModel(countryItem: CountryEntity): Country {
-        return Country(
-            id = countryItem.id,
-            name = countryItem.name,
-        )
-    }
-
-    fun mapEntityToDomainModel(industryItem: IndustryEntity): Industry {
-        return Industry(
-            id = industryItem.id,
-            name = industryItem.name,
-        )
-    }
 
     fun mapIndustryToEntity(industryDto: IndustryResponse): List<IndustryEntity> {
         val industryList = mutableListOf<IndustryEntity>()
@@ -182,5 +163,14 @@ class FilterMapper {
         } else {
             null
         }
+    }
+
+    fun flattenIndustries(list: List<IndustryListDto>): List<Industry> {
+        val result = mutableListOf<Industry>()
+        list.forEach { item ->
+            result += Industry(item.id, item.name)
+            result.addAll(item.industries.map { mapToDomainModel(it) })
+        }
+        return result.sortedBy { it.name }
     }
 }
