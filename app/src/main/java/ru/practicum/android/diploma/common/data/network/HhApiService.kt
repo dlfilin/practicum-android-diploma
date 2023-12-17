@@ -3,54 +3,42 @@ package ru.practicum.android.diploma.common.data.network
 import retrofit2.http.GET
 import retrofit2.http.Headers
 import retrofit2.http.Path
-import retrofit2.http.Query
+import retrofit2.http.QueryMap
 import ru.practicum.android.diploma.BuildConfig
 import ru.practicum.android.diploma.filter.data.dto.AreaResponse
-import ru.practicum.android.diploma.filter.data.dto.IndustryResponse
+import ru.practicum.android.diploma.filter.data.dto.IndustryDto
 import ru.practicum.android.diploma.search.data.dto.VacancySearchResponse
-import ru.practicum.android.diploma.vacancy.data.dto.VacancyDetailResponse
+import ru.practicum.android.diploma.vacancy.data.dto.VacancyDetailsResponse
 
 interface HhApiService {
-    @Headers(
-        "Authorization: Bearer ${BuildConfig.HH_ACCESS_TOKEN}",
-        "HH-User-Agent: Application Мои_hh_вакансии (danila.filin@gmail.com)"
-    )
+    @Headers(TOKEN_BEARER_STRING, USER_AGENT_STRING)
     @GET("/vacancies")
-    suspend fun searchVacancy(@Query("text") text: String): VacancySearchResponse
+    suspend fun searchVacancies(@QueryMap options: Map<String, String>): VacancySearchResponse
 
-    // Запрос на поиск вакансий когда будут фильтры
-//    @Headers(
-//        "Authorization: Bearer YOUR_TOKEN",
-//        "HH-User-Agent: Application Name (name@example.com)"
-//    )
-//    @GET("/vacancies")
-//    suspend fun searchVacancy(@QueryMap options: Map<String, String>): VacancySearchResponse
-
-    @Headers(
-        "Authorization: Bearer ${BuildConfig.HH_ACCESS_TOKEN}",
-        "HH-User-Agent: Application Мои_hh_вакансии (danila.filin@gmail.com)"
-    )
+    @Headers(TOKEN_BEARER_STRING, USER_AGENT_STRING)
     @GET("/vacancies/{vacancy_id}")
-    suspend fun getVacancyDetail(@Path("vacancy_id") id: String): VacancyDetailResponse
+    suspend fun getVacancyDetails(@Path("vacancy_id") id: String): VacancyDetailsResponse
 
-    @Headers(
-        "Authorization: Bearer ${BuildConfig.HH_ACCESS_TOKEN}",
-        "HH-User-Agent: Application Мои_hh_вакансии (danila.filin@gmail.com)"
-    )
+    @Headers(TOKEN_BEARER_STRING, USER_AGENT_STRING)
     @GET("/vacancies/{vacancy_id}/similar_vacancies")
-    suspend fun searchSimilarVacancy(@Path("vacancy_id") id: String): VacancySearchResponse
+    suspend fun searchSimilarVacancies(@Path("vacancy_id") id: String): VacancySearchResponse
 
-    @Headers(
-        "Authorization: Bearer ${BuildConfig.HH_ACCESS_TOKEN}",
-        "HH-User-Agent: Application Мои_hh_вакансии (danila.filin@gmail.com)"
-    )
+    @Headers(TOKEN_BEARER_STRING, USER_AGENT_STRING)
+    @GET("/countries")
+    suspend fun getCountries(): AreaResponse
+
+    @Headers(TOKEN_BEARER_STRING, USER_AGENT_STRING)
     @GET("/areas")
-    suspend fun getAllArea(): AreaResponse
+    suspend fun getAllAreas(): AreaResponse
 
-    @Headers(
-        "Authorization: Bearer ${BuildConfig.HH_ACCESS_TOKEN}",
-        "HH-User-Agent: Application Мои_hh_вакансии (danila.filin@gmail.com)"
-    )
+    @Headers(TOKEN_BEARER_STRING, USER_AGENT_STRING)
     @GET("/industries")
-    suspend fun getAllIndustry(): IndustryResponse
+    suspend fun getAllIndustries(): List<IndustryDto>
+
+    companion object {
+        private const val USER_AGENT_STRING = "HH-User-Agent: my_hh_vacancies (danila.filin@gmail.com)"
+        private const val TOKEN_BEARER_STRING = "Authorization: Bearer ${BuildConfig.HH_ACCESS_TOKEN}"
+    }
+
 }
+

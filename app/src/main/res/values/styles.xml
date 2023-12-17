@@ -3,9 +3,11 @@
 
     <style name="topToolbar">
         <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_height">@dimen/size_48</item>
         <item name="android:layout_gravity">center_vertical</item>
-        <item name="android:titleMarginStart">@dimen/space_16</item>
+        <item name="android:titleMarginStart">@dimen/space_0</item>
+        <item name="android:layout_marginEnd">@dimen/space_8</item>
+        <item name="contentInsetStartWithNavigation">@dimen/space_0</item>
         <item name="android:layout_marginVertical">@dimen/space_8</item>
     </style>
 
@@ -14,13 +16,28 @@
         <item name="android:fontFamily">@font/ys_display_medium</item>
         <item name="android:titleTextColor">?attr/colorSecondary</item>
     </style>
-
     <!-- common -->
+    <style name="placeholderImage">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <style name="placeholderText">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:fontFamily">@font/ys_display_medium</item>
+        <item name="android:textColor">?attr/colorSecondary</item>
+        <item name="android:textSize">@dimen/font_22</item>
+        <item name="android:layout_marginTop">@dimen/space_16</item>
+        <item name="android:textAlignment">center</item>
+    </style>
+
     <style name="progressBar">
         <item name="android:layout_width">@dimen/size_48</item>
         <item name="android:layout_height">@dimen/size_48</item>
         <item name="android:indeterminateTint">?attr/colorPrimary</item>
     </style>
+
     <style name="blueElements">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
@@ -29,14 +46,19 @@
         <item name="android:gravity">center</item>
         <item name="android:textColor">?attr/colorOnPrimary</item>
     </style>
+
     <style name="blueNotifications" parent="blueElements">
+        <item name="android:minHeight">0dp</item>
+        <item name="android:minWidth">0dp</item>
         <item name="android:fontFamily">@font/ys_display_regular</item>
-        <item name="android:paddingVertical">@dimen/space_4</item>
+        <item name="android:letterSpacing">0</item>
     </style>
+
     <style name="bigBlueButton" parent="blueElements">
         <item name="android:fontFamily">@font/ys_display_medium</item>
         <item name="android:paddingVertical">@dimen/space_20</item>
     </style>
+
     <style name="resetTextView">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
@@ -46,6 +68,7 @@
         <item name="android:textColor">@color/red</item>
         <item name="android:textSize">@dimen/font_16</item>
     </style>
+
     <style name="editText">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
@@ -65,7 +88,6 @@
         <item name="android:inputType">text</item>
         <item name="android:singleLine">true</item>
     </style>
-
     <!-- bottom navigation -->
     <style name="divider">
         <item name="android:background">@color/light_gray</item>
@@ -77,22 +99,22 @@
         <item name="android:background">@color/white_day_night</item>
         <item name="backgroundTint">@null</item>
         <item name="android:fontFamily">@font/ys_display_regular</item>
-        <item name="itemTextAppearanceActive">@style/BottomNavigationView.Active</item>
-        <item name="itemTextAppearanceInactive">@style/BottomNavigationView</item>
+        <item name="itemTextAppearanceActive">@style/bottomNavigationView.active</item>
+        <item name="itemTextAppearanceInactive">@style/bottomNavigationView</item>
         <item name="itemTextAppearanceActiveBoldEnabled">false</item>
         <item name="itemIconTint">@color/bottom_navigation_colors</item>
         <item name="itemTextColor">@color/bottom_navigation_colors</item>
         <item name="enforceTextAppearance">true</item>
         <item name="enforceMaterialTheme">true</item>
     </style>
-		<style name="BottomNavigationView" parent="@style/TextAppearance.AppCompat.Caption">
+
+    <style name="bottomNavigationView" parent="@style/TextAppearance.AppCompat.Caption">
         <item name="android:textSize">@dimen/font_12</item>
     </style>
 
-    <style name="BottomNavigationView.Active" parent="@style/TextAppearance.AppCompat.Caption">
+    <style name="bottomNavigationView.active" parent="@style/TextAppearance.AppCompat.Caption">
         <item name="android:textSize">@dimen/font_12</item>
     </style>
-
     <!--filter fragment -->
     <style name="textInputLayout">
         <item name="android:layout_width">match_parent</item>
@@ -103,12 +125,15 @@
         <item name="boxStrokeWidthFocused">0dp</item>
         <item name="android:textColorHint">@color/gray</item>
     </style>
+
     <style name="hintStyleForTextInputLayout">
         <item name="android:textSize">@dimen/font_12</item>
     </style>
+
     <style name="hintStyleForTextInputEditText">
         <item name="android:textSize">@dimen/font_16</item>
     </style>
+
     <style name="textInputEditText">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
@@ -120,16 +145,111 @@
         <item name="android:singleLine">true</item>
         <item name="android:imeOptions">actionDone</item>
         <item name="android:textColor">@color/black_universal</item>
+        <item name="android:background">@drawable/background_light_gray_rounded</item>
     </style>
-
-
-  	<!-- team fragment -->
-    <style name="team_textview">
+    <!-- team fragment -->
+    <style name="teamTextview">
         <item name="android:layout_marginStart">@dimen/space_16</item>
         <item name="android:layout_marginEnd">@dimen/space_16</item>
         <item name="android:textSize">@dimen/font_16</item>
         <item name="fontFamily">@font/ys_display_medium</item>
         <item name="android:textColor">?attr/colorSecondary</item>
     </style>
+    <!-- favorite fragment -->
+    <style name="recycleView">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/size_0</item>
+        <item name="android:layout_marginTop">@dimen/space_8</item>
+    </style>
+    <!-- industry item -->
+    <style name="Widget.App.RadioButton" parent="Widget.Material3.CompoundButton.RadioButton">
+        <item name="buttonTint">@color/blue</item>
+    </style>
+    <!-- vacancy fragment -->
+    <style name="vacancyGuideline">
+        <item name="android:layout_width">@dimen/size_0</item>
+        <item name="android:layout_height">@dimen/size_0</item>
+        <item name="android:orientation">vertical</item>
+    </style>
 
+    <style name="vacancyTextView">
+        <item name="android:layout_width">@dimen/size_0</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">?attr/colorSecondary</item>
+        <item name="android:textSize">@dimen/font_16</item>
+        <item name="android:fontFamily">@font/ys_display_regular</item>
+    </style>
+
+    <style name="vacancyTextViewMarginTop4" parent="vacancyTextView">
+        <item name="android:layout_marginTop">@dimen/space_4</item>
+    </style>
+
+    <style name="vacancyTextViewMarginTop16" parent="vacancyTextView">
+        <item name="android:layout_marginTop">@dimen/space_16</item>
+    </style>
+
+    <style name="vacancyTextViewMarginTop24" parent="vacancyTextView">
+        <item name="android:layout_marginTop">@dimen/space_24</item>
+    </style>
+    <!-- TextInputLayout -->
+    <style name="Widget.EdText.TextInputLayout" parent="Widget.MaterialComponents.TextInputLayout.FilledBox">
+        <item name="cornerSize">6dp</item>
+        <item name="boxStrokeWidth">0dp</item>
+        <item name="colorControlHighlight">@color/white_day_night</item>
+    </style>
+    <!-- SearchInputLayout -->
+    <style name="Widget.App.SearchInputLayout" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="materialThemeOverlay">@style/ThemeOverlay.AppX.TextInputLayout</item>
+        <item name="shapeAppearance">@style/ShapeAppearance.App.SmallComponent</item>
+        <item name="boxBackgroundColor">@color/search_field_color</item>
+        <item name="boxStrokeWidth">0dp</item>
+        <item name="boxStrokeWidthFocused">0dp</item>
+        <item name="placeholderTextColor">@color/search_hint_day_night</item>
+        <item name="placeholderTextAppearance">@style/TextAppearance.App.Subtitle1</item>
+        <item name="endIconTint">@color/black_universal</item>
+        <item name="cursorColor">?attr/colorPrimary</item>
+    </style>
+
+    <style name="ThemeOverlay.AppX.TextInputLayout" parent="">
+        <item name="textAppearanceSubtitle1">@style/TextAppearance.App.Subtitle1</item>
+        <item name="imageButtonStyle">@style/Widget.App.TextField.ImageButton</item>
+        <item name="editTextStyle">@style/Widget.App.TextInputEditText</item>
+    </style>
+
+    <style name="TextAppearance.App.Subtitle1" parent="TextAppearance.MaterialComponents.Subtitle1">
+        <item name="fontFamily">@font/ys_display_regular</item>
+        <item name="android:fontFamily">@font/ys_display_regular</item>
+        <item name="android:textSize">@dimen/font_16</item>
+    </style>
+
+    <style name="Widget.App.TextField.ImageButton" parent="Widget.AppCompat.ImageButton">
+        <item name="android:paddingRight">@dimen/space_8</item>
+    </style>
+
+    <style name="Widget.App.TextInputEditText" parent="Widget.MaterialComponents.TextInputEditText.OutlinedBox">
+        <item name="android:textAppearance">@style/TextAppearance.App.Subtitle1</item>
+        <item name="android:textColor">@color/black_universal</item>
+        <item name="android:imeOptions">actionSearch</item>
+        <item name="android:inputType">text</item>
+    </style>
+
+    <style name="ShapeAppearance.App.SmallComponent" parent="ShapeAppearance.MaterialComponents.SmallComponent">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">@dimen/size_12</item>
+    </style>
+
+    <style name="bigWhiteButton" parent="whiteElements">
+        <item name="android:fontFamily">@font/ys_display_medium</item>
+        <item name="android:paddingVertical">@dimen/space_20</item>
+    </style>
+
+    <style name="whiteElements" parent="Widget.AppCompat.Button.Borderless.Colored">
+        <item name="android:fontFamily">@font/ys_display_medium</item>
+        <item name="android:paddingVertical">@dimen/space_20</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">@dimen/font_16</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textColor">?attr/colorOnPrimary</item>
+    </style>
 </resources>

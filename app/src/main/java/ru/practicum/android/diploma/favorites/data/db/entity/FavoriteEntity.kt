@@ -6,7 +6,7 @@ import androidx.room.PrimaryKey
 
 @Entity("favorites_vacancies")
 data class FavoriteEntity(
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = false)
     val id: String,
     @ColumnInfo("name_vacancies")
     val nameVacancies: String,
@@ -19,11 +19,11 @@ data class FavoriteEntity(
     @ColumnInfo("city")
     val city: String,
     @ColumnInfo("experience")
-    val experience: String,
+    val experience: String?,
     @ColumnInfo("schedule")
-    val schedule: String,
+    val schedule: String?,
     @ColumnInfo("employment")
-    val employment: String,
+    val employment: String?,
     @ColumnInfo("description")
     val description: String?,
     @ColumnInfo("key_skills")
@@ -36,7 +36,10 @@ data class FavoriteEntity(
     val contactPhone: String?,
     @ColumnInfo("comment")
     val comment: String?,
+    @ColumnInfo("add_time")
+    val addTime: Long,
+    @ColumnInfo("vacancy_url")
+    val vacancyUrl: String
 )
-
 
 

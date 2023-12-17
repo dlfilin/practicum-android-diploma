@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -6,45 +5,96 @@
     android:layout_height="match_parent"
     tools:context=".search.ui.SearchFragment">
 
-    <TextView
-        android:id="@+id/name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/search_title_tv"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/searchLayoutField"
+        style="@style/Widget.App.SearchInputLayout"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:layout_marginHorizontal="@dimen/space_16"
+        android:layout_marginVertical="@dimen/space_8"
+        app:endIconDrawable="@drawable/ic_search"
+        app:endIconMode="custom"
+        app:expandedHintEnabled="false"
+        app:hintEnabled="false"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:placeholderText="@string/hint_search_vacancy_et">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/searchEditText"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <Button
+        android:id="@+id/vacanciesFound"
+        style="@style/blueNotifications"
+        android:layout_marginTop="@dimen/space_12"
+        android:clickable="false"
+        android:textAllCaps="false"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/searchLayoutField"
+        tools:text="Найдено 286 вакансий"
+        tools:visibility="visible" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/vacancyListRv"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="@dimen/space_8"
+        android:layout_marginBottom="@dimen/space_16"
+        app:layout_goneMarginBottom="0dp"
+        android:orientation="vertical"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintBottom_toTopOf="@id/recyclerViewProgressBar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/vacanciesFound"
+        tools:listitem="@layout/vacancy_view_item" />
+
+    <ProgressBar
+        android:id="@+id/recyclerViewProgressBar"
+        style="@style/progressBar"
+        android:visibility="gone"
+        android:layout_marginBottom="@dimen/space_16"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        tools:visibility="visible" />
 
-    <EditText
-        android:id="@+id/searchEditText"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:hint="@string/hint_search_vacancy_et"
-        android:autofillHints="@string/hint_search_vacancy_et"
-        android:textCursorDrawable="@drawable/custom_cursor"
-        style="@style/editText" />
-
-    <Button
-        android:id="@+id/gotoFilterFragmentBtn"
-        style="@style/bigBlueButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="фильтр"
-        android:layout_marginVertical="@dimen/space_16"
+    <ProgressBar
+        android:id="@+id/mainProgressBar"
+        style="@style/progressBar"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/searchEditText" />
+        app:layout_constraintTop_toBottomOf="@+id/searchLayoutField"
+        tools:visibility="visible" />
 
-    <Button
-        android:id="@+id/gotoVacancyFragmentBtn"
-        style="@style/bigBlueButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/vacancy_detail_title_tv"
+    <ImageView
+        android:id="@+id/placeholderImage"
+        style="@style/placeholderImage"
+        android:contentDescription="@string/internet_throwable_tv"
+        android:src="@drawable/internet_throwable_placeholder"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/gotoFilterFragmentBtn"/>
+        app:layout_constraintTop_toBottomOf="@+id/searchLayoutField"
+        tools:visibility="gone" />
+
+    <TextView
+        android:id="@+id/placeholderMessage"
+        style="@style/placeholderText"
+        android:text="@string/internet_throwable_tv"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/placeholderImage"
+        tools:visibility="gone" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

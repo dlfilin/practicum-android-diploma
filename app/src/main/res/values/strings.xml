@@ -1,8 +1,10 @@
 <resources>
-    <string name="app_name">Поиск работы</string>
+    <string name="app_name">Мои hh вакансии</string>
 
     <!--    common-->
     <string name="internet_throwable_tv">Нет интернета</string>
+    <string name="toast_internet_throwable">Проверьте подключение к интернету</string>
+    <string name="toast_unknown_error">Произошла ошибка</string>
     <string name="server_throwable_tv">Ошибка сервера</string>
     <string name="load_vacancy_throwable_tv">Не удалось получить\nсписок вакансий</string>
     <!--    bottom navigation-->
@@ -12,6 +14,8 @@
     <!--    search vacancy fragment-->
     <string name="search_title_tv">Поиск вакансий</string>
     <string name="hint_search_vacancy_et">Введите запрос</string>
+    <string name="vacancy_item_title" translatable="false">%1$s, %2$s</string>
+    <string name="no_vacancies_found_title">Таких вакансий нет</string>
     <!--    filter fragment-->
     <string name="filter_settings_title_tv">Настройки фильтрации</string>
     <string name="place_of_work_btn">Место работы</string>
@@ -49,6 +53,12 @@
     <string name="phone_number_tv">Телефон</string>
     <string name="comment_tv">Комментарий</string>
     <string name="similar_vacancies_tv">Похожие вакансии</string>
+    <string name="share_vacancy">Поделиться вакансией</string>
+    <string name="add_favorite_vacancy">Добавить в избранное</string>
+    <string name="salary_not_found">Зарплата не указана</string>
+    <string name="salary_from">от %1$s %2$s</string>
+    <string name="salary_to">до %1$s %2$s</string>
+    <string name="salary_from_to">от %1$s до %2$s %3$s</string>
     <!--    similar vacancy fragment-->
     <string name="similar_vacancies_title_tv">Похожие вакансии</string>
     <!--    favorite vacancy fragment-->
@@ -61,4 +71,18 @@
     <string name="worker_2">Светлана Тимченко</string>
     <string name="worker_3">Ярослав Исмаев</string>
     <string name="worker_4">Владислав Вострокнутов</string>
+    <!--    bottom navigation-->
+    <string name="employer_logo">Логотип компании</string>
+    <!--  currency symbols-->
+    <string name="currency_symbol_azn">₼</string>
+    <string name="currency_symbol_byr">Br</string>
+    <string name="currency_symbol_eur">€</string>
+    <string name="currency_symbol_gel">₾</string>
+    <string name="currency_symbol_kgs">c</string>
+    <string name="currency_symbol_kzt">₸</string>
+    <string name="currency_symbol_rub">₽</string>
+    <string name="currency_symbol_uah">₴</string>
+    <string name="currency_symbol_usd">$</string>
+    <string name="currency_symbol_uzs">сум</string>
+
 </resources>

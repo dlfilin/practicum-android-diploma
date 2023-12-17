@@ -10,7 +10,5 @@ import ru.practicum.android.diploma.favorites.data.db.entity.FavoriteEntity
     entities = [FavoriteEntity::class],
 )
 abstract class AppDataBase : RoomDatabase() {
-
     abstract fun favoriteDao(): FavoritesDao
-
 }

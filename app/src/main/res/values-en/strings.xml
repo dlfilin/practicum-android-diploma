@@ -3,63 +3,86 @@
     <string name="app_name">Job Search</string>
 
     <!--    common-->
-    <string name="internet_throwable_tv">Нет интернета</string>
-    <string name="server_throwable_tv">Ошибка сервера</string>
-    <string name="load_vacancy_throwable_tv">Не удалось получить\nсписок вакансий</string>
+    <string name="internet_throwable_tv">No Internet connection</string>
+    <string name="toast_internet_throwable">Check your Internet connection</string>
+    <string name="toast_unknown_error">An error occurred</string>
+    <string name="server_throwable_tv">Server error</string>
+    <string name="load_vacancy_throwable_tv">Cannot get\nthe list of vacancies</string>
     <!--    bottom navigation-->
-    <string name="main_bottom_nav">Главная</string>
-    <string name="favorite_bottom_nav">Избранное</string>
-    <string name="about_bottom_nav">Команда</string>
+    <string name="main_bottom_nav">Home</string>
+    <string name="favorite_bottom_nav">Favorites</string>
+    <string name="about_bottom_nav">Team</string>
     <!--    search vacancy fragment-->
-    <string name="search_title_tv">Поиск вакансий</string>
-    <string name="hint_search_vacancy_et">Введите запрос</string>
+    <string name="search_title_tv">Vacancy search</string>
+    <string name="hint_search_vacancy_et">Enter request</string>
+    <string name="no_vacancies_found_title">No vacancies found</string>
     <!--    filter fragment-->
-    <string name="filter_settings_title_tv">Настройки фильтрации</string>
-    <string name="place_of_work_btn">Место работы</string>
-    <string name="industry_btn">Отрасль</string>
-    <string name="expected_salary_hint_et">Ожидаемая зарплата</string>
-    <string name="amount_hint_et">Введите сумму</string>
-    <string name="hide_without_salary_tv">Не показывать без зарплаты</string>
-    <string name="apply_btn">Применить</string>
-    <string name="reset_btn">Сбросить</string>
+    <string name="filter_settings_title_tv">Filter settings</string>
+    <string name="place_of_work_btn">Place of work</string>
+    <string name="industry_btn">Industry</string>
+    <string name="expected_salary_hint_et">Desired salary</string>
+    <string name="amount_hint_et">Enter the amount</string>
+    <string name="hide_without_salary_tv">Don\'t show without salary</string>
+    <string name="apply_btn">Apply</string>
+    <string name="reset_btn">Reset</string>
     <!--    choosing place of work fragment-->
-    <string name="choosing_place_of_work_title_tv">Выбор места работы</string>
-    <string name="country_btn">Страна</string>
-    <string name="area_btn">Регион</string>
-    <string name="accept_btn">Выбрать</string>
+    <string name="choosing_place_of_work_title_tv">Select place of work</string>
+    <string name="country_btn">Country</string>
+    <string name="area_btn">Region</string>
+    <string name="accept_btn">Select</string>
     <!--    choosing country fragment-->
-    <string name="choosing_country_title_tv">Выбор страны</string>
+    <string name="choosing_country_title_tv">Select country</string>
     <!--    choosing area fragment-->
-    <string name="choosing_area_title_tv">Выбор региона</string>
-    <string name="nothing_found_choosing_area_tv">Такого региона нет</string>
-    <string name="search_throwable_choosing_area_tv">Не удалось получить\nсписок</string>
+    <string name="choosing_area_title_tv">Select region</string>
+    <string name="nothing_found_choosing_area_tv">The region doesn\'t exist</string>
+    <string name="search_throwable_choosing_area_tv">Cannot get \nthe list</string>
     <!--    choosing industry fragment-->
-    <string name="choosing_industry_title_tv">Выбор отрасли</string>
-    <string name="choosing_industry_hint_tet">Введите отрасль</string>
+    <string name="choosing_industry_title_tv">Select industry</string>
+    <string name="choosing_industry_hint_tet">Enter industry</string>
     <!--    vacancy detail fragment-->
-    <string name="vacancy_detail_title_tv">Вакансия</string>
-    <string name="required_experience_tv">Требуемый опыт</string>
-    <string name="job_description_tv">Описание вакансии</string>
-    <string name="responsibilities_tv">Обязанности</string>
-    <string name="requirements_tv">Требования</string>
-    <string name="work_conditions_tv">Условия</string>
-    <string name="key_skills_tv">Ключевые навыки</string>
-    <string name="contacts_tv">Контакты</string>
-    <string name="contact_person_tv">Контактное лицо</string>
+    <string name="vacancy_detail_title_tv">Vacancy</string>
+    <string name="required_experience_tv">Required experience</string>
+    <string name="job_description_tv">Vacancy description</string>
+    <string name="responsibilities_tv">Responsibilities</string>
+    <string name="requirements_tv">Requirements</string>
+    <string name="work_conditions_tv">Conditions</string>
+    <string name="key_skills_tv">Key skills</string>
+    <string name="contacts_tv">Contacts</string>
+    <string name="contact_person_tv">Contact person</string>
     <string name="email_tv">E-mail</string>
-    <string name="phone_number_tv">Телефон</string>
-    <string name="comment_tv">Комментарий</string>
-    <string name="similar_vacancies_tv">Похожие вакансии</string>
+    <string name="phone_number_tv">Phone</string>
+    <string name="comment_tv">Comment</string>
+    <string name="similar_vacancies_tv">Similar vacancies</string>
+    <string name="share_vacancy">Share vacancy</string>
+    <string name="add_favorite_vacancy">Add to favorites</string>
+    <string name="salary_not_found">Salary is not specified</string>
+    <string name="salary_from">from %1$s %2$s</string>
+    <string name="salary_to">to %1$s %2$s</string>
+    <string name="salary_from_to">from %1$s to %2$s %3$s</string>
     <!--    similar vacancy fragment-->
-    <string name="similar_vacancies_title_tv">Похожие вакансии</string>
+    <string name="similar_vacancies_title_tv">Similar vacancies</string>
     <!--    favorite vacancy fragment-->
-    <string name="favorite_vacancy_title_tv">Избранное</string>
-    <string name="nothing_shown_vacancy_tv">Список пуст</string>
+    <string name="favorite_vacancy_title_tv">Favorites</string>
+    <string name="nothing_shown_vacancy_tv">Empty list</string>
     <!--    about fragment-->
-    <string name="about_title_tv">Команда</string>
-    <string name="workers_title_tv">Над приложением\nработали</string>
-    <string name="worker_1">Данила Филин</string>
-    <string name="worker_2">Светлана Тимченко</string>
-    <string name="worker_3">Ярослав Исмаев</string>
-    <string name="worker_4">Влад Вострокнутов</string>
+    <string name="about_title_tv">Team</string>
+    <string name="workers_title_tv">Development team</string>
+    <string name="worker_1">Danila Filin</string>
+    <string name="worker_2">Svetlana Timchenko</string>
+    <string name="worker_3">Yaroslav Ismaev</string>
+    <string name="worker_4">Vladislav Vostroknutov</string>
+    <!--    bottom navigation-->
+    <string name="employer_logo">Company logo</string>
+    <!--  currency symbols-->
+    <string name="currency_symbol_azn">₼</string>
+    <string name="currency_symbol_byr">Br</string>
+    <string name="currency_symbol_eur">€</string>
+    <string name="currency_symbol_gel">₾</string>
+    <string name="currency_symbol_kgs">c</string>
+    <string name="currency_symbol_kzt">₸</string>
+    <string name="currency_symbol_rub">₽</string>
+    <string name="currency_symbol_uah">₴</string>
+    <string name="currency_symbol_usd">$</string>
+    <string name="currency_symbol_uzs">сум</string>
+
 </resources>

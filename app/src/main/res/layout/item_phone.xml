@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/tvPhone"
+        style="@style/vacancyTextViewMarginTop16"
+        android:layout_width="wrap_content"
+        android:fontFamily="@font/ys_display_medium"
+        android:text="@string/phone_number_tv" />
+
+    <TextView
+        android:id="@+id/phoneValue"
+        style="@style/vacancyTextViewMarginTop4"
+        android:layout_width="wrap_content"
+        android:textColor="@color/blue"
+        tools:text="+7 (904) 329-27-71" />
+
+    <TextView
+        android:id="@+id/tvComment"
+        style="@style/vacancyTextViewMarginTop16"
+        android:layout_width="wrap_content"
+        android:fontFamily="@font/ys_display_medium"
+        android:visibility="gone"
+        android:text="@string/comment_tv" />
+
+    <TextView
+        android:id="@+id/phoneComment"
+        style="@style/vacancyTextViewMarginTop4"
+        android:layout_width="wrap_content"
+        android:visibility="gone"
+        tools:text="Заполнить анкету по форме можно на нашем сайте" />
+</LinearLayout>
