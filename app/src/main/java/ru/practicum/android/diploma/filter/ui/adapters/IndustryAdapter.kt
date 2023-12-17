@@ -10,14 +10,10 @@ import ru.practicum.android.diploma.databinding.ItemIndustryChooserBinding
 import ru.practicum.android.diploma.filter.presentation.models.IndustryUi
 
 class IndustryAdapter(
-    private val itemClickListener: ItemClickListener
+    private var itemClickListener: ItemClickListener
 ) : RecyclerView.Adapter<IndustryAdapter.IndustryHolder>() {
 
-    private var mSelectedItem = -1
-
-    var listItem: MutableList<IndustryUi> = ArrayList()
-    private var originalListItem: MutableList<IndustryUi> = ArrayList()
-    private val filterListItem: MutableList<IndustryUi> = ArrayList()
+    private var listItem: List<IndustryUi> = ArrayList()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): IndustryHolder {
         val view =
@@ -26,35 +22,24 @@ class IndustryAdapter(
     }
 
     override fun onBindViewHolder(holder: IndustryHolder, position: Int) {
-        holder.bind(listItem[position])
-        holder.itemView.setOnClickListener {
-            itemClickListener.onItemListener(listItem[position])
-        }
-//        holder.radioButton.isChecked = listItem[position].isChecked
-//        holder.radioButton.setOnClickListener {
-//            mSelectedItem = holder.adapterPosition
-//            val listNew = listItem.mapIndexed { index, industry ->
-//                if (index == mSelectedItem) {
-//                    industry.copy(isChecked = true)
-//                } else {
-//                    industry.copy(isChecked = false)
-//                }
-//            }
-//            updateDisplayList(listNew)
-//            onItemCheckedListener?.invoke(listNew[mSelectedItem])
-//        }
+        holder.bind(listItem[position], itemClickListener)
     }
 
     override fun getItemCount(): Int = listItem.size
 
     inner class IndustryHolder(item: View) : RecyclerView.ViewHolder(item) {
-
         private val binding = ItemIndustryChooserBinding.bind(item)
-        val radioButton = binding.radioButton
 
-        fun bind(industry: IndustryUi) = with(binding) {
+        fun bind(industry: IndustryUi, onClickListener: ItemClickListener) = with(binding) {
             industryName.text = industry.name
             radioButton.isChecked = industry.isChecked
+
+            itemView.setOnClickListener {
+                onClickListener.onItemListener(industry)
+            }
+            radioButton.setOnClickListener {
+                onClickListener.onItemListener(industry)
+            }
         }
     }
 
@@ -80,36 +65,9 @@ class IndustryAdapter(
     }
 
     fun updateData(newData: List<IndustryUi>) {
-        val diffCallback = MyDiffCallback(listItem, newData)
-        val diffResult = DiffUtil.calculateDiff(diffCallback)
-        listItem.clear()
-        listItem.addAll(newData)
+        val diffResult = DiffUtil.calculateDiff(MyDiffCallback(listItem, newData))
+        listItem = newData
         diffResult.dispatchUpdatesTo(this)
-        originalListItem.clear()
-        originalListItem.addAll(newData)
-    }
-
-    private fun updateDisplayList(updateList: List<IndustryUi>) {
-        val diffCallback = MyDiffCallback(listItem, updateList)
-        val diffResult = DiffUtil.calculateDiff(diffCallback)
-        listItem.clear()
-        listItem.addAll(updateList)
-        diffResult.dispatchUpdatesTo(this)
-
-    }
-
-    fun filter(searchQuery: String?) {
-        filterListItem.clear()
-        if (searchQuery.isNullOrBlank()) {
-            updateDisplayList(originalListItem)
-        } else {
-            for (item in originalListItem) {
-                if (item.name.contains(searchQuery, true)) {
-                    filterListItem.add(item)
-                }
-            }
-            updateDisplayList(filterListItem)
-        }
     }
 
     fun interface ItemClickListener {

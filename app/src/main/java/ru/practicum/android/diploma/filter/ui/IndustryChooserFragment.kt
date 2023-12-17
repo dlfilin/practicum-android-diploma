@@ -1,13 +1,18 @@
 package ru.practicum.android.diploma.filter.ui
 
+import android.content.Context
 import android.os.Bundle
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import androidx.core.view.isVisible
+import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
+import ru.practicum.android.diploma.common.util.debounce
 import ru.practicum.android.diploma.databinding.FragmentIndustryChooserBinding
 import ru.practicum.android.diploma.filter.presentation.IndustryChooserScreenState
 import ru.practicum.android.diploma.filter.presentation.IndustryViewModel
@@ -20,11 +25,20 @@ class IndustryChooserFragment : Fragment(R.layout.fragment_industry_chooser) {
 
     private val viewModel: IndustryViewModel by viewModel()
 
-    private val adapter = IndustryAdapter {
-        // ПОКА БЕЗ ВЫБОРА, ПО АНАЛОГИИ РЕГИОНАМ
-        // ПОТОМ СОХРАНЕНИЕ НА КНОПКУ
-        viewModel.saveFilterToPrefs(it)
-        findNavController().navigateUp()
+    private val adapter = IndustryAdapter { item ->
+        if (clickDebounce()) {
+            viewModel.industrySelected(item)
+            hideSoftKeyboard()
+        }
+    }
+
+    private var isClickAllowed = true
+    private val onTrackClickDebounce = debounce<Boolean>(
+        CLICK_DEBOUNCE_DELAY,
+        lifecycleScope,
+        false
+    ) { param ->
+        isClickAllowed = param
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -40,52 +54,37 @@ class IndustryChooserFragment : Fragment(R.layout.fragment_industry_chooser) {
             renderState(state)
         }
 
-//        binding.btApply.setOnClickListener {
-//            viewModel.saveFilterToPrefs()
-//        }
-
-//        val textWatcher = object : TextWatcher {
-//            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-//                Log.d("testTextWatcher", "$s")
-//            }
-//
-//            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-//                adapter.filter(s?.toString() ?: " ")
-//                visibleBtAdd(adapter.listItem)
-//
-//                val edText = binding.searchEditText
-//                if (!s.isNullOrEmpty()) {
-//                    edText.setCompoundDrawablesRelativeWithIntrinsicBounds(0, 0, R.drawable.ic_clear, 0)
-//                    edText.setOnTouchListener { v, event ->
-//                        val iconBoundries = edText.compoundDrawables[2].bounds.width()
-//                        if (event.action == MotionEvent.ACTION_UP &&
-//                            event.rawX >= edText.right - iconBoundries * 2
-//                        ) {
-//                            edText.setText("")
-//                        }
-//                        view.performClick()
-//                        false
-//                    }
-//                } else {
-//                    edText.setCompoundDrawablesRelativeWithIntrinsicBounds(0, 0, R.drawable.ic_search, 0)
-//                }
-//            }
-//
-//            override fun afterTextChanged(s: Editable?) {
-//                Log.d("testTextWatcher", "$s")
-//            }
-//        }
-//        binding.searchEditText.addTextChangedListener(textWatcher)
+        setListeners()
     }
 
-//    fun visibleBtAdd(list: List<Industry>) {
-//        val result = list.find { it.isChecked }
-//        if (result != null) {
-//            binding.btAdd.visibility = View.VISIBLE
-//        } else {
-//            binding.btAdd.visibility = View.GONE
-//        }
-//    }
+    private fun setListeners() {
+        binding.btApply.setOnClickListener {
+            viewModel.saveFilterToPrefs()
+            findNavController().navigateUp()
+        }
+
+        binding.searchEditText.doOnTextChanged { text, _, _, _ ->
+            if (text.isNullOrEmpty()) {
+                binding.searchLayoutField.apply {
+                    setEndIconDrawable(R.drawable.ic_search)
+                    tag = R.drawable.ic_search
+                }
+            } else {
+                binding.searchLayoutField.apply {
+                    setEndIconDrawable(R.drawable.ic_clear)
+                    tag = R.drawable.ic_clear
+                }
+            }
+            viewModel.applySearchResults(text.toString())
+        }
+
+        binding.searchLayoutField.setEndIconOnClickListener {
+            if (binding.searchLayoutField.tag == R.drawable.ic_clear) {
+                binding.searchEditText.text?.clear()
+                binding.searchEditText.requestFocus()
+            }
+        }
+    }
 
     private fun renderState(state: IndustryChooserScreenState) {
         when (state) {
@@ -96,6 +95,7 @@ class IndustryChooserFragment : Fragment(R.layout.fragment_industry_chooser) {
                 binding.placeholderMessage.isVisible = false
                 binding.btApply.isVisible = state.items.any { it.isChecked }
             }
+
             is IndustryChooserScreenState.Error -> {
                 binding.rvIndustry.isVisible = false
                 binding.placeholderImage.isVisible = true
@@ -108,5 +108,25 @@ class IndustryChooserFragment : Fragment(R.layout.fragment_industry_chooser) {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    private fun clickDebounce(): Boolean {
+        val current = isClickAllowed
+        if (isClickAllowed) {
+            isClickAllowed = false
+            onTrackClickDebounce(true)
+        }
+        return current
+    }
+
+    private fun hideSoftKeyboard() {
+        val inputMethodManager =
+            requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
+        inputMethodManager?.hideSoftInputFromWindow(binding.searchEditText.windowToken, 0)
+        binding.searchEditText.isEnabled = true
+    }
+
+    companion object {
+        private const val CLICK_DEBOUNCE_DELAY = 1000L
     }
 }
