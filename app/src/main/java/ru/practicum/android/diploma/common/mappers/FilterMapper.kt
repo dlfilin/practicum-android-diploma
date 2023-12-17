@@ -4,11 +4,13 @@ import ru.practicum.android.diploma.common.data.storage.dto.FilterParametersDto
 import ru.practicum.android.diploma.filter.data.db.entity.AreaEntity
 import ru.practicum.android.diploma.filter.data.db.entity.CountryEntity
 import ru.practicum.android.diploma.filter.data.db.entity.IndustryEntity
+import ru.practicum.android.diploma.filter.data.dto.AreaListDto
 import ru.practicum.android.diploma.filter.data.dto.AreaDto
 import ru.practicum.android.diploma.filter.data.dto.AreaResponse
 import ru.practicum.android.diploma.filter.data.dto.CountryDto
 import ru.practicum.android.diploma.filter.data.dto.CountryResponse
 import ru.practicum.android.diploma.filter.data.dto.IndustryDto
+import ru.practicum.android.diploma.filter.data.dto.IndustryListDto
 import ru.practicum.android.diploma.filter.data.dto.IndustryResponse
 import ru.practicum.android.diploma.filter.domain.models.Area
 import ru.practicum.android.diploma.filter.domain.models.Country
@@ -17,7 +19,7 @@ import ru.practicum.android.diploma.filter.domain.models.Industry
 
 class FilterMapper {
 
-    fun mapToDomainModel(dto: FilterParametersDto) = FilterParameters(
+    fun mapToDomain(dto: FilterParametersDto) = FilterParameters(
         area = mapDtoToArea(dto.area),
         country = mapDtoToCountry(dto.country),
         industry = mapDtoToIndustry(dto.industry),
@@ -33,34 +35,21 @@ class FilterMapper {
         onlyWithSalary = model.onlyWithSalary
     )
 
-    fun mapToDomainModel(dto: IndustryDto) = Industry(
+    fun mapToDomain(dto: AreaListDto) = Area(
+        id = dto.id,
+        name = dto.name,
+        parentId = dto.parentId!!
+    )
+
+    fun mapToDomain(dto: IndustryDto) = Industry(
         id = dto.id,
         name = dto.name,
     )
-    fun mapToDomainModel(dto: CountryDto) = Country(
+
+    fun mapToDomain(dto: CountryDto) = Country(
         id = dto.id,
         name = dto.name
     )
-
-    fun mapToDomainModel(dto: AreaDto) = Area(
-        id = dto.id,
-        name = dto.name,
-        parentId = dto.parentId
-    )
-
-    fun mapEntityToDomainModel(countryItem: CountryEntity): Country {
-        return Country(
-            id = countryItem.id,
-            name = countryItem.name,
-        )
-    }
-
-    fun mapEntityToDomainModel(industryItem: IndustryEntity): Industry {
-        return Industry(
-            id = industryItem.id,
-            name = industryItem.name,
-        )
-    }
 
     fun mapIndustryToEntity(industryDto: IndustryResponse): List<IndustryEntity> {
         val industryList = mutableListOf<IndustryEntity>()
@@ -92,22 +81,7 @@ class FilterMapper {
             for (item in it.areas) {
                 val area = AreaEntity(
                     id = item.id,
-                    parentId = item.parentId,
-                    name = item.name
-                )
-                areaList.add(area)
-            }
-        }
-        return areaList
-    }
-
-    fun mapResponseToDomain(areaDto: AreaResponse): List<Area> {
-        val areaList = mutableListOf<Area>()
-        areaDto.areas.forEach {
-            for (item in it.areas) {
-                val area = Area(
-                    id = item.id,
-                    parentId = item.parentId,
+                    parentId = item.parentId!!,
                     name = item.name
                 )
                 areaList.add(area)
@@ -183,4 +157,21 @@ class FilterMapper {
             null
         }
     }
+
+    fun flattenIndustries(list: List<IndustryListDto>): List<Industry> {
+        val result = mutableListOf<Industry>()
+        list.forEach { item ->
+            result += Industry(item.id, item.name)
+            result.addAll(item.industries.map { mapToDomain(it) })
+        }
+        return result.sortedBy { it.name }
+    }
+
+    tailrec fun flattenAreas(remaining: List<AreaListDto>, collected: List<AreaListDto>): List<AreaListDto> {
+        if (remaining.isEmpty()) return collected
+        val head = remaining.first()
+        val tail = remaining.drop(1)
+        return flattenAreas(head.areas.plus(tail), collected.plus(head))
+    }
+
 }
