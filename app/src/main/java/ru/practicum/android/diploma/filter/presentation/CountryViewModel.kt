@@ -11,7 +11,6 @@ import ru.practicum.android.diploma.filter.domain.models.Country
 
 class CountryViewModel(private val interactor: FilterInteractor) : ViewModel() {
 
-
     private val _state = MutableLiveData<CountryChooserScreenState>()
     val state: LiveData<CountryChooserScreenState> get() = _state
 
@@ -26,7 +25,7 @@ class CountryViewModel(private val interactor: FilterInteractor) : ViewModel() {
     private fun processResult(result: NetworkResult<List<Country>>) {
         when (result) {
             is NetworkResult.Success -> {
-                val data = result.data!!
+                val data = result.data!!.sortedBy { it.name.length }
                 _state.postValue(CountryChooserScreenState.Content(data))
 
             }
@@ -41,5 +40,4 @@ class CountryViewModel(private val interactor: FilterInteractor) : ViewModel() {
         val filter = interactor.getCurrentFilter().copy(country = country)
         interactor.updateFilter(filter)
     }
-
 }
