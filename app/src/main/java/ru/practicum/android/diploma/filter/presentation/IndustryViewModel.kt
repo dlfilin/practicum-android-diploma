@@ -35,7 +35,7 @@ class IndustryViewModel(private val interactor: FilterInteractor) : ViewModel() 
                     IndustryUi(
                         id = it.id,
                         name = it.name,
-                        isChecked = (it.id == filter.industry?.id)
+                        isChecked = it.id == filter.industry?.id
                     )
                 }
 
@@ -66,7 +66,7 @@ class IndustryViewModel(private val interactor: FilterInteractor) : ViewModel() 
             IndustryUi(
                 id = it.id,
                 name = it.name,
-                isChecked = (it.id == industry.id)
+                isChecked = it.id == industry.id
             )
         }
         _state.postValue(IndustryChooserScreenState.Content(updatedList))
