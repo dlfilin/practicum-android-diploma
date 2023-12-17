@@ -1,8 +1,10 @@
 package ru.practicum.android.diploma.filter.ui
 
+import android.content.res.ColorStateList
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
@@ -21,10 +23,15 @@ class FilterFragment : Fragment(R.layout.fragment_filter) {
     val viewModel: FilterViewModel by viewModel()
     private val directionWorkPlace = FilterFragmentDirections.actionFilterFragmentToWorkPlaceFragment()
     private val directionIndustry = FilterFragmentDirections.actionFilterFragmentToIndustryChooserFragment()
+    private var colorStateEmpty: ColorStateList? = null
+    private var colorStateFilled: ColorStateList? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentFilterBinding.bind(view)
+
+        colorStateEmpty = AppCompatResources.getColorStateList(requireContext(), R.color.salary_field_empty)
+        colorStateFilled = AppCompatResources.getColorStateList(requireContext(), R.color.salary_field_filled)
 
         setListeners()
 
@@ -120,13 +127,15 @@ class FilterFragment : Fragment(R.layout.fragment_filter) {
         var prevText = ""
         with(binding) {
             textInputEditTextSalary.doOnTextChanged { text, _, _, _ ->
-                if (!textInputEditTextSalary.text.isNullOrEmpty() && text.toString() != prevText) {
+                if (text.toString() != prevText) {
+                    if (text.isNullOrEmpty()) {
+                        textInputLayoutSalary.defaultHintTextColor = colorStateEmpty
+                    } else {
+                        textInputLayoutSalary.defaultHintTextColor = colorStateFilled
+                    }
                     prevText = text.toString()
-                    viewModel.updateSalary(text.toString())
+                    viewModel.updateSalary(prevText)
                 }
-            }
-            textInputLayoutSalary.setEndIconOnClickListener {
-                viewModel.clearSalary()
             }
         }
     }

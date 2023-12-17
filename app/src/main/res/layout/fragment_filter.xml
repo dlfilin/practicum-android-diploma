@@ -61,28 +61,24 @@
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/textInputLayoutSalary"
-        style="@style/textInputLayout"
+        style="@style/Widget.App.SalaryInputLayout"
+        android:layout_width="match_parent"
+        android:layout_height="51dp"
         android:layout_marginHorizontal="@dimen/space_16"
-        android:layout_marginVertical="@dimen/space_16"
         android:layout_marginTop="@dimen/space_24"
         android:hint="@string/expected_salary_hint_et"
         app:endIconDrawable="@drawable/ic_clear"
         app:endIconMode="clear_text"
-        app:endIconTint="@color/black_universal"
         app:expandedHintEnabled="false"
-        app:hintTextAppearance="@style/hintStyleForTextInputLayout"
-        app:hintTextColor="?attr/colorPrimary"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edIndustryLayout">
+        app:layout_constraintTop_toBottomOf="@id/edIndustryLayout"
+        app:placeholderText="@string/amount_hint_et">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/textInputEditTextSalary"
-            style="@style/textInputEditText"
-            android:autofillHints="@string/amount_hint_et"
-            android:hint="@string/amount_hint_et"
-            android:inputType="number"
-            app:hintTextAppearance="@style/hintStyleForTextInputEditText" />
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <TextView
