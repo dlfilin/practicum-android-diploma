@@ -45,6 +45,7 @@ class CountryChooserFragment : Fragment(R.layout.fragment_country_chooser) {
                 binding.placeholderImage.isVisible = false
                 binding.placeholderMessage.isVisible = false
             }
+
             is CountryChooserScreenState.Error -> {
                 binding.rvCountry.isVisible = false
                 binding.placeholderImage.isVisible = true

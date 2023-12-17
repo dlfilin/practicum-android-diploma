@@ -29,6 +29,12 @@ class WorkPlaceViewModel(private val interactor: FilterInteractor) : ViewModel()
     fun loadFilterFromPrefs() {
         val filter = interactor.getCurrentFilter()
         _state.postValue(filter)
+        // _state.postValue(checkAreaBelongsCountry(filter))
     }
 
+//    private fun checkAreaBelongsCountry(filter: FilterParameters): FilterParameters {
+//        return if (filter.country?.id != filter.area?.countryId) {
+//            filter.copy(area = null)
+//        } else filter
+//    }
 }
