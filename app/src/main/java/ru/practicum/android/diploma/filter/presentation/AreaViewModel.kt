@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import ru.practicum.android.diploma.common.util.NetworkResult
+import ru.practicum.android.diploma.common.util.debounce
 import ru.practicum.android.diploma.filter.domain.api.FilterInteractor
 import ru.practicum.android.diploma.filter.domain.models.Area
 import ru.practicum.android.diploma.filter.domain.models.Country
@@ -16,39 +17,54 @@ class AreaViewModel(private val interactor: FilterInteractor) : ViewModel() {
     private var areaList = emptyList<Area>()
     private var loadedFilter = FilterParameters()
     private var countriesList = emptyList<Country>()
-    private var countryIsNotEmpty = false
+
+    val searchDebounce = debounce<String>(
+        SEARCH_DEBOUNCE_DELAY_IN_MILLIS,
+        viewModelScope,
+        true
+    ) { changedText ->
+        filterList(changedText)
+    }
 
     private val _state = MutableLiveData<AreaChooserScreenState>(AreaChooserScreenState.Loading)
     val state: LiveData<AreaChooserScreenState> get() = _state
 
     init {
-        viewModelScope.launch {
-            interactor.getAreas().collect {
-                loadAreaProcessResult(result = it)
-            }
-        }
-
         loadedFilter = interactor.getCurrentFilter()
 
-        if (loadedFilter.country == null) {
+        if (loadedFilter.country != null) {
+            viewModelScope.launch {
+                interactor.getAreasForId(loadedFilter.country?.id ?: "").collect {
+                    loadAreaProcessResult(result = it)
+                }
+            }
+        } else {
+            viewModelScope.launch {
+                interactor.getAreas().collect {
+                    loadAreaProcessResult(result = it)
+                }
+            }
+
             viewModelScope.launch {
                 interactor.getCountries().collect {
                     loadCountriesProcessResult(result = it)
                 }
             }
-        } else {
-            countryIsNotEmpty = true
         }
     }
 
-    fun filterList(text: String) {
-        val newList = areaList.filter { area ->
-            area.name.lowercase().trim().contains(text.lowercase().trim())
-        }
-        if (newList.isEmpty()) {
-            _state.postValue(AreaChooserScreenState.Empty)
+    private fun filterList(text: String) {
+        if (text.isNotBlank()) {
+            val newList = areaList.filter { area ->
+                area.name.lowercase().trim().contains(text.lowercase().trim())
+            }
+            if (newList.isEmpty()) {
+                _state.postValue(AreaChooserScreenState.Empty)
+            } else {
+                _state.postValue(AreaChooserScreenState.Content(newList))
+            }
         } else {
-            _state.postValue(AreaChooserScreenState.Content(newList))
+            _state.postValue(AreaChooserScreenState.Content(areaList))
         }
     }
 
@@ -69,12 +85,8 @@ class AreaViewModel(private val interactor: FilterInteractor) : ViewModel() {
                 if (data.isEmpty()) {
                     _state.postValue(AreaChooserScreenState.Empty)
                 } else {
-                    areaList = if (countryIsNotEmpty) {
-                        filterAreaByCountry(data)
-                    } else {
-                        data
-                    }
-                    _state.postValue(AreaChooserScreenState.Content(areaList.sortedBy { it.name }))
+                    areaList = data
+                    _state.postValue(AreaChooserScreenState.Content(areaList))
                 }
             }
 
@@ -120,34 +132,7 @@ class AreaViewModel(private val interactor: FilterInteractor) : ViewModel() {
         return null
     }
 
-    private fun filterAreaByCountry(areas: List<Area>): List<Area> {
-//        val finalAreaList = mutableListOf<Area>()
-//        var id = loadedFilter.country?.id
-//        val areasId = mutableListOf<String>()
-//        var finalAreaSize = 0
-//
-//        while (true) {
-//            finalAreaSize = finalAreaList.size
-//            for (area in areas) {
-//                if (area.parentId == id) {
-//                    if (!finalAreaList.contains(area)) {
-//                        finalAreaList.add(area)
-//                    }
-//                }
-//            }
-//
-//            if (finalAreaSize == finalAreaList.size) {
-//                break
-//            }
-//
-//            for (item in finalAreaList) {
-//                if (!areasId.contains(item.id)) {
-//                    id = item.id
-//                    areasId.add(id)
-//                    break
-//                }
-//            }
-//        }
-        return areas
+    companion object {
+        private const val SEARCH_DEBOUNCE_DELAY_IN_MILLIS = 500L
     }
 }

@@ -5,10 +5,12 @@ import android.view.View
 import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
+import ru.practicum.android.diploma.common.util.debounce
 import ru.practicum.android.diploma.databinding.FragmentAreaChooserBinding
 import ru.practicum.android.diploma.filter.domain.models.Area
 import ru.practicum.android.diploma.filter.presentation.AreaChooserScreenState
@@ -21,10 +23,21 @@ class AreaChooserFragment : Fragment(R.layout.fragment_area_chooser) {
     private val binding get() = _binding!!
 
     private val viewModel: AreaViewModel by viewModel()
+    private var isClickAllowed = true
 
     private val adapter = AreaAdapter {
-        viewModel.saveFilterToPrefs(it)
-        findNavController().navigateUp()
+        if (clickDebounce()) {
+            viewModel.saveFilterToPrefs(it)
+            findNavController().navigateUp()
+        }
+    }
+
+    private val onAreaClickDebounce = debounce<Boolean>(
+        CLICK_DEBOUNCE_DELAY,
+        lifecycleScope,
+        false
+    ) { param ->
+        isClickAllowed = param
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -54,7 +67,7 @@ class AreaChooserFragment : Fragment(R.layout.fragment_area_chooser) {
                     tag = R.drawable.ic_clear
                 }
             }
-            viewModel.filterList(text.toString())
+            viewModel.searchDebounce(binding.searchEditText.text.toString())
         }
 
         binding.searchLayoutField.setEndIconOnClickListener {
@@ -125,9 +138,22 @@ class AreaChooserFragment : Fragment(R.layout.fragment_area_chooser) {
         binding.progressBar.isVisible = false
     }
 
+    private fun clickDebounce(): Boolean {
+        val current = isClickAllowed
+        if (isClickAllowed) {
+            isClickAllowed = false
+            onAreaClickDebounce(true)
+        }
+        return current
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    companion object {
+        private const val CLICK_DEBOUNCE_DELAY = 500L
     }
 }
 

@@ -46,6 +46,7 @@ class WorkPlaceFragment : Fragment(R.layout.fragment_work_place) {
     private fun setCountryListeners() {
         with(binding) {
             edTextNameCountryNameInput.setOnClickListener {
+                viewModel.clearArea()
                 findNavController().navigate(directionCountry)
             }
 
@@ -65,10 +66,10 @@ class WorkPlaceFragment : Fragment(R.layout.fragment_work_place) {
                 if (edCountryName.tag == R.drawable.ic_clear) {
                     viewModel.clearCountry()
                 } else {
+                    viewModel.clearArea()
                     findNavController().navigate(directionCountry)
                 }
             }
-
         }
     }
 
@@ -110,105 +111,6 @@ class WorkPlaceFragment : Fragment(R.layout.fragment_work_place) {
             btApply.isVisible = country.isNotEmpty()
         }
     }
-
-//    private fun addArrowArea() {
-//        AppCompatResources.getColorStateList(requireContext(), R.color.gray)
-//            ?.let {
-//                binding.edAreaName.setBoxStrokeColorStateList(it)
-//                binding.edAreaName.defaultHintTextColor = it
-//            }
-//        binding.edAreaName.setEndIconDrawable(R.drawable.ic_arrow_forward)
-//        binding.edTextNameAreaNameInput.setOnClickListener {
-//            findNavController().navigate(directionArea)
-//        }
-//        binding.edTextNameAreaNameInput.setOnClickListener {
-//            findNavController().navigate(directionArea)
-//        }
-//    }
-//
-//    private fun addArrowCountry() {
-//        AppCompatResources.getColorStateList(requireContext(), R.color.gray)
-//            ?.let {
-//                binding.edCountryName.setBoxStrokeColorStateList(it)
-//                binding.edCountryName.defaultHintTextColor = it
-//            }
-//        binding.edCountryName.setEndIconDrawable(R.drawable.ic_arrow_forward)
-//        binding.btAdd.visibility = View.GONE
-//        binding.gotoCountryChooserFragmentBtn.setOnClickListener {
-//            findNavController().navigate(directionCountry)
-//        }
-//        binding.edTextNameCountryNameInput.setOnClickListener {
-//            findNavController().navigate(directionCountry)
-//        }
-//    }
-//
-//    private fun addArea() {
-//        if (binding.edTextNameAreaNameInput.text.isNullOrBlank()) {
-//            addArrowArea()
-//        } else {
-//            AppCompatResources.getColorStateList(requireContext(), R.color.black_universal)
-//                ?.let {
-//                    binding.edAreaName.setBoxStrokeColorStateList(it)
-//                    binding.edAreaName.defaultHintTextColor = it
-//                }
-//            binding.edAreaName.apply {
-//                setEndIconDrawable(R.drawable.ic_clear)
-//                tag = R.drawable.ic_clear
-//            }
-//        }
-//        binding.edAreaName.setEndIconOnClickListener {
-//            if (binding.edAreaName.tag == R.drawable.ic_clear) {
-//                binding.edTextNameAreaNameInput.text?.clear()
-//                binding.edAreaName.setEndIconDrawable(R.drawable.ic_arrow_forward)
-//                AppCompatResources.getColorStateList(requireContext(), R.color.gray)
-//                    ?.let {
-//                        binding.edAreaName.setBoxStrokeColorStateList(it)
-//                        binding.edAreaName.defaultHintTextColor = it
-//                    }
-//                binding.edTextNameAreaNameInput.setOnClickListener {
-//                    findNavController().navigate(directionArea)
-//                }
-//                binding.edAreaName.setEndIconOnClickListener {
-//                    findNavController().navigate(directionArea)
-//                }
-//            }
-//        }
-//    }
-//
-//    private fun addCountry() {
-//        if (binding.edTextNameCountryNameInput.text.isNullOrBlank()) {
-//            addArrowCountry()
-//        } else {
-//            AppCompatResources.getColorStateList(requireContext(), R.color.black_universal)
-//                ?.let {
-//                    binding.edCountryName.setBoxStrokeColorStateList(it)
-//                    binding.edCountryName.defaultHintTextColor = it
-//                }
-//            binding.edCountryName.apply {
-//                setEndIconDrawable(R.drawable.ic_clear)
-//                tag = R.drawable.ic_clear
-//                binding.btAdd.visibility = View.VISIBLE
-//            }
-//        }
-//        binding.edCountryName.setEndIconOnClickListener {
-//            if (binding.edCountryName.tag == R.drawable.ic_clear) {
-//                binding.edTextNameCountryNameInput.text?.clear()
-//                binding.edCountryName.setEndIconDrawable(R.drawable.ic_arrow_forward)
-//                AppCompatResources.getColorStateList(requireContext(), R.color.gray)
-//                    ?.let {
-//                        binding.edCountryName.setBoxStrokeColorStateList(it)
-//                        binding.edCountryName.defaultHintTextColor = it
-//                    }
-//                binding.btAdd.visibility = View.GONE
-//                binding.edTextNameCountryNameInput.setOnClickListener {
-//                    findNavController().navigate(directionCountry)
-//                }
-//                binding.edCountryName.setEndIconOnClickListener {
-//                    findNavController().navigate(directionCountry)
-//                }
-//            }
-//        }
-//    }
 
     override fun onDestroyView() {
         super.onDestroyView()
