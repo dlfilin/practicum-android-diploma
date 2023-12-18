@@ -9,11 +9,12 @@ import android.widget.Toast
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
 import androidx.core.view.isVisible
-import androidx.core.widget.NestedScrollView
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.common.util.ErrorType
@@ -88,14 +89,19 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
             }
         }
 
-        binding.nestedScroll.setOnScrollChangeListener(
-            NestedScrollView.OnScrollChangeListener { v, _, scrollY, _, oldScrollY ->
-                if (v.getChildAt(v.childCount - 1) != null && scrollY > oldScrollY
-                    && scrollY >= v.getChildAt(v.childCount - 1).measuredHeight - v.measuredHeight) {
+        binding.vacancyListRv.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+                if (dy > 0) {
+                    val pos = (binding.vacancyListRv.layoutManager as LinearLayoutManager).findLastVisibleItemPosition()
+                    val itemsCount = adapter.itemCount
+                    if (pos >= itemsCount - 1) {
                         viewmodel.onLastItemReached()
+                    }
                 }
             }
-        )
+        })
+
     }
 
     private fun setRvAdapter() {
