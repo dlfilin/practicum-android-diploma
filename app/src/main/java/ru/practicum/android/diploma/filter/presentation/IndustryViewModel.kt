@@ -22,7 +22,7 @@ class IndustryViewModel(private val interactor: FilterInteractor) : ViewModel() 
     }
 
     private fun getInitialData() {
-        renderState((IndustryChooserScreenState.Loading))
+        renderState(IndustryChooserScreenState.Loading)
         viewModelScope.launch {
             interactor.getIndustries().collect {
                 processResult(result = it)
