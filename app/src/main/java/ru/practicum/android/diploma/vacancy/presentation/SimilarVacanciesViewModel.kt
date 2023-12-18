@@ -15,7 +15,7 @@ class SimilarVacanciesViewModel(
     private val searchInteractor: SearchInteractor
 ) : ViewModel() {
 
-    private val _state = MutableLiveData<SimilarVacanciesScreenState>(SimilarVacanciesScreenState.Empty)
+    private val _state = MutableLiveData<SimilarVacanciesScreenState>()
     val state: LiveData<SimilarVacanciesScreenState> get() = _state
 
     init {
