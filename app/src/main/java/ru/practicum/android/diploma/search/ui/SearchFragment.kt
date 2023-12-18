@@ -94,7 +94,8 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
                     && scrollY >= v.getChildAt(v.childCount - 1).measuredHeight - v.measuredHeight) {
                         viewmodel.onLastItemReached()
                 }
-            })
+            }
+        )
     }
 
     private fun setRvAdapter() {
