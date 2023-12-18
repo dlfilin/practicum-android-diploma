@@ -8,13 +8,20 @@ import kotlinx.coroutines.launch
 import ru.practicum.android.diploma.common.util.NetworkResult
 import ru.practicum.android.diploma.filter.domain.api.FilterInteractor
 import ru.practicum.android.diploma.filter.domain.models.Country
+import ru.practicum.android.diploma.filter.domain.models.FilterParameters
 
 class CountryViewModel(private val interactor: FilterInteractor) : ViewModel() {
+
+    private var loadedFilter = FilterParameters()
+    private var countryFromSharedPrefs: Country? = null
 
     private val _state = MutableLiveData<CountryChooserScreenState>()
     val state: LiveData<CountryChooserScreenState> get() = _state
 
     init {
+        loadedFilter = interactor.getCurrentFilter()
+        countryFromSharedPrefs = loadedFilter.country
+
         viewModelScope.launch {
             interactor.getCountries().collect {
                 processResult(result = it)
@@ -35,26 +42,25 @@ class CountryViewModel(private val interactor: FilterInteractor) : ViewModel() {
         }
     }
 
-    fun saveFilterToPrefs(country: Country) {
-        val filter = interactor.getCurrentFilter().copy(country = country)
-        interactor.updateFilter(filter)
+    fun saveFilterToPrefs(country: Country?) {
+        if (country == null) {
+            if (countryFromSharedPrefs == null) {
+                val filter = loadedFilter.copy(country = null, area = null)
+                interactor.updateFilter(filter)
+            }
+        } else {
+            if (country.id != countryFromSharedPrefs?.id) {
+                val filter = loadedFilter.copy(country = country, area = null)
+                interactor.updateFilter(filter)
+            }
+        }
     }
 
     private fun sorting(countries: List<Country>): List<Country> {
         val newList = countries.toMutableList()
-        var maxIdLength = 0
-        for (country in countries) {
-            if (country.id.length > maxIdLength) {
-                maxIdLength = country.id.length
-            }
-        }
-        for (country in countries) {
-            if (country.id.length == maxIdLength) {
-                newList.remove(country)
-                newList.add(country)
-                break
-            }
-        }
+        val others = countries.maxWith(Comparator.comparingInt { it.id.length })
+        newList.remove(others)
+        newList.add(others)
         return newList
     }
 }

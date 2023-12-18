@@ -46,7 +46,6 @@ class WorkPlaceFragment : Fragment(R.layout.fragment_work_place) {
     private fun setCountryListeners() {
         with(binding) {
             edTextNameCountryNameInput.setOnClickListener {
-                viewModel.clearArea()
                 findNavController().navigate(directionCountry)
             }
 
@@ -66,7 +65,6 @@ class WorkPlaceFragment : Fragment(R.layout.fragment_work_place) {
                 if (edCountryName.tag == R.drawable.ic_clear) {
                     viewModel.clearCountry()
                 } else {
-                    viewModel.clearArea()
                     findNavController().navigate(directionCountry)
                 }
             }

@@ -32,20 +32,15 @@ class AreaViewModel(private val interactor: FilterInteractor) : ViewModel() {
     init {
         loadedFilter = interactor.getCurrentFilter()
 
-        if (loadedFilter.country != null) {
-            viewModelScope.launch {
+        viewModelScope.launch {
+            if (loadedFilter.country != null) {
                 interactor.getAreasForId(loadedFilter.country?.id ?: "").collect {
                     loadAreaProcessResult(result = it)
                 }
-            }
-        } else {
-            viewModelScope.launch {
+            } else {
                 interactor.getAreas().collect {
                     loadAreaProcessResult(result = it)
                 }
-            }
-
-            viewModelScope.launch {
                 interactor.getCountries().collect {
                     loadCountriesProcessResult(result = it)
                 }
@@ -61,10 +56,10 @@ class AreaViewModel(private val interactor: FilterInteractor) : ViewModel() {
             if (newList.isEmpty()) {
                 _state.postValue(AreaChooserScreenState.Empty)
             } else {
-                _state.postValue(AreaChooserScreenState.Content(newList))
+                _state.postValue(AreaChooserScreenState.Content(sortAreaByCapital(newList)))
             }
         } else {
-            _state.postValue(AreaChooserScreenState.Content(areaList))
+            _state.postValue(AreaChooserScreenState.Content(sortAreaByCapital(areaList)))
         }
     }
 
@@ -86,7 +81,7 @@ class AreaViewModel(private val interactor: FilterInteractor) : ViewModel() {
                     _state.postValue(AreaChooserScreenState.Empty)
                 } else {
                     areaList = data
-                    _state.postValue(AreaChooserScreenState.Content(areaList))
+                    _state.postValue(AreaChooserScreenState.Content(sortAreaByCapital(areaList)))
                 }
             }
 
@@ -109,10 +104,7 @@ class AreaViewModel(private val interactor: FilterInteractor) : ViewModel() {
     }
 
     private fun getCountryIdFromArea(selectedArea: Area): String {
-        val countriesId = mutableListOf<String>()
-        for (country in countriesList) {
-            countriesId.add(country.id)
-        }
+        val countriesId = countriesList.map { it.id }.toMutableList()
         var parentId = selectedArea.parentId
         while (true) {
             if (countriesId.contains(parentId)) {
@@ -124,12 +116,15 @@ class AreaViewModel(private val interactor: FilterInteractor) : ViewModel() {
     }
 
     private fun getCountryById(parentId: String): Country? {
-        for (country in countriesList) {
-            if (country.id == parentId) {
-                return country
-            }
-        }
-        return null
+        return countriesList.firstOrNull { it.id == parentId }
+    }
+
+    private fun sortAreaByCapital(areaList: List<Area>): List<Area> {
+        val newList = areaList.toMutableList()
+        val others = areaList.minWith(Comparator.comparingInt { it.id.toInt() })
+        newList.remove(others)
+        newList.add(0, others)
+        return newList
     }
 
     companion object {
