@@ -11,6 +11,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.common.util.debounce
 import ru.practicum.android.diploma.databinding.FragmentCountryChooserBinding
+import ru.practicum.android.diploma.filter.domain.models.Country
 import ru.practicum.android.diploma.filter.presentation.CountryChooserScreenState
 import ru.practicum.android.diploma.filter.presentation.CountryViewModel
 import ru.practicum.android.diploma.filter.ui.adapters.CountryAdapter
@@ -22,10 +23,11 @@ class CountryChooserFragment : Fragment(R.layout.fragment_country_chooser) {
 
     private val viewModel: CountryViewModel by viewModel()
     private var isClickAllowed = true
+    private var newCountry: Country? = null
 
     private val adapter = CountryAdapter {
         if (clickDebounce()) {
-            viewModel.saveFilterToPrefs(it)
+            newCountry = it
             findNavController().navigateUp()
         }
     }
@@ -74,6 +76,11 @@ class CountryChooserFragment : Fragment(R.layout.fragment_country_chooser) {
             onCountryClickDebounce(true)
         }
         return current
+    }
+
+    override fun onPause() {
+        super.onPause()
+        viewModel.saveFilterToPrefs(newCountry)
     }
 
     override fun onDestroyView() {
