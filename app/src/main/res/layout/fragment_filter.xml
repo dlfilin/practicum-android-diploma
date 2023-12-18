@@ -10,16 +10,7 @@
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/edWorkPlaceLayout"
         style="@style/Widget.EdText.TextInputLayout"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:minHeight="@dimen/size_60"
         android:hint="@string/place_of_work_btn"
-        android:paddingStart="0dp"
-        android:paddingEnd="@dimen/space_4"
-        android:textColorHint="@color/filter_item_empty"
-        app:endIconDrawable="@drawable/ic_arrow_forward"
-        app:endIconMode="custom"
-        app:endIconTint="@color/black_day_night"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -32,7 +23,7 @@
             android:cursorVisible="false"
             android:focusable="false"
             android:fontFamily="@font/ys_display_regular"
-            android:inputType="none"
+            android:inputType="textNoSuggestions"
             android:longClickable="false"
             android:textColor="@color/black_day_night"
             android:textSize="@dimen/font_16" />
@@ -41,16 +32,7 @@
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/edIndustryLayout"
         style="@style/Widget.EdText.TextInputLayout"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:minHeight="@dimen/size_60"
         android:hint="@string/industry_btn"
-        android:paddingStart="0dp"
-        android:paddingEnd="@dimen/space_4"
-        android:textColorHint="@color/filter_item_empty"
-        app:endIconDrawable="@drawable/ic_arrow_forward"
-        app:endIconMode="custom"
-        app:endIconTint="@color/black_day_night"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/edWorkPlaceLayout">
@@ -63,7 +45,7 @@
             android:cursorVisible="false"
             android:focusable="false"
             android:fontFamily="@font/ys_display_regular"
-            android:inputType="none"
+            android:inputType="textNoSuggestions"
             android:longClickable="false"
             android:textColor="@color/black_day_night"
             android:textSize="@dimen/font_16" />
