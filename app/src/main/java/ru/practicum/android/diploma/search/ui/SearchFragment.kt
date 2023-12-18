@@ -89,14 +89,12 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         }
 
         binding.nestedScroll.setOnScrollChangeListener(
-            NestedScrollView.OnScrollChangeListener { v, scrollX, scrollY, oldScrollX, oldScrollY ->
-                if (v.getChildAt(v.childCount - 1) != null && scrollY > oldScrollY) {
-                    if (scrollY >= v.getChildAt(v.childCount - 1).measuredHeight - v.measuredHeight) {
+            NestedScrollView.OnScrollChangeListener { v, _, scrollY, _, oldScrollY ->
+                if (v.getChildAt(v.childCount - 1) != null && scrollY > oldScrollY
+                    && scrollY >= v.getChildAt(v.childCount - 1).measuredHeight - v.measuredHeight) {
                         viewmodel.onLastItemReached()
-                    }
                 }
             })
-
     }
 
     private fun setRvAdapter() {
