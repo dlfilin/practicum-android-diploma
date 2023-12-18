@@ -10,6 +10,7 @@ import ru.practicum.android.diploma.common.mappers.FilterMapper
 import ru.practicum.android.diploma.common.util.NetworkResult
 import ru.practicum.android.diploma.filter.data.dto.AreaRequest
 import ru.practicum.android.diploma.filter.data.dto.AreaResponse
+import ru.practicum.android.diploma.filter.data.dto.AreasByIdRequest
 import ru.practicum.android.diploma.filter.data.dto.CountryRequest
 import ru.practicum.android.diploma.filter.data.dto.CountryResponse
 import ru.practicum.android.diploma.filter.data.dto.IndustryRequest
@@ -78,9 +79,31 @@ class FilterRepositoryImpl(
                 val list = (result.data as AreaResponse).areas
                 val flat = filterMapper.flattenAreas(list, emptyList())
                 val data = flat
+                    .asSequence()
                     .filterNot { it.parentId == null }
                     .map { filterMapper.mapToDomain(it) }
                     .sortedBy { it.name }
+                    .toList()
+                emit(NetworkResult.Success(data))
+            }
+
+            is NetworkResult.Error -> {
+                emit(NetworkResult.Error(result.errorType!!))
+            }
+        }
+    }
+
+    override fun getAreasForId(id: String): Flow<NetworkResult<List<Area>>> = flow {
+        when (val result = networkClient.doRequest(AreasByIdRequest(id))) {
+            is NetworkResult.Success -> {
+                val list = (result.data as AreaResponse).areas
+                val flat = filterMapper.flattenAreas(list, emptyList())
+                val data = flat
+                    .asSequence()
+                    .filterNot { it.parentId == null }
+                    .map { filterMapper.mapToDomain(it) }
+                    .sortedBy { it.name }
+                    .toList()
                 emit(NetworkResult.Success(data))
             }
 

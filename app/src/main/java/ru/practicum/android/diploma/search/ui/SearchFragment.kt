@@ -9,19 +9,17 @@ import android.widget.Toast
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
 import androidx.core.view.isVisible
+import androidx.core.widget.NestedScrollView
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.common.util.ErrorType
 import ru.practicum.android.diploma.common.util.debounce
 import ru.practicum.android.diploma.databinding.FragmentSearchBinding
 import ru.practicum.android.diploma.filter.ui.FilterFragment
-import ru.practicum.android.diploma.search.domain.model.VacancyItem
 import ru.practicum.android.diploma.search.domain.model.VacancyListData
 import ru.practicum.android.diploma.search.presentation.SearchScreenState
 import ru.practicum.android.diploma.search.presentation.SearchViewModel
@@ -37,14 +35,13 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
     private var isClickAllowed = true
     private var isFilterActive = false
 
-    private val adapter = SearchAdapter(object : SearchAdapter.VacancyClickListener {
-        override fun onVacancyClick(vacancy: VacancyItem) {
-            if (clickDebounce()) {
-                val direction = SearchFragmentDirections.actionSearchFragmentToVacancyFragment(vacancy.id)
-                findNavController().navigate(direction)
-            }
+
+    private val adapter = SearchAdapter {
+        if (clickDebounce()) {
+            val direction = SearchFragmentDirections.actionSearchFragmentToVacancyFragment(it.id)
+            findNavController().navigate(direction)
         }
-    })
+    }
     private val onTrackClickDebounce = debounce<Boolean>(
         CLICK_DEBOUNCE_DELAY,
         lifecycleScope,
@@ -91,19 +88,14 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
             }
         }
 
-        binding.vacancyListRv.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                super.onScrolled(recyclerView, dx, dy)
-
-                if (dy > 0) {
-                    val pos = (binding.vacancyListRv.layoutManager as LinearLayoutManager).findLastVisibleItemPosition()
-                    val itemsCount = adapter.itemCount
-                    if (pos >= itemsCount - 1) {
+        binding.nestedScroll.setOnScrollChangeListener(
+            NestedScrollView.OnScrollChangeListener { v, _, scrollY, _, oldScrollY ->
+                if (v.getChildAt(v.childCount - 1) != null && scrollY > oldScrollY
+                    && scrollY >= v.getChildAt(v.childCount - 1).measuredHeight - v.measuredHeight) {
                         viewmodel.onLastItemReached()
-                    }
                 }
             }
-        })
+        )
     }
 
     private fun setRvAdapter() {
@@ -219,7 +211,7 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
             foundVacancyData.found
         )
         binding.vacanciesFound.text = numOfVacancy
-        adapter.submitList(foundVacancyData.items)
+        adapter.updateData(foundVacancyData.items)
         if (foundVacancyData.page == 0) binding.vacancyListRv.scrollToPosition(0)
         updateScreenViews(
             isMainProgressVisible = false,
@@ -268,6 +260,7 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
             isVacanciesFoundVisible = true,
             isNextPageLoadingVisible = isLoading
         )
+        binding.vacancyListRv.scrollToPosition(adapter.itemCount - 1)
     }
 
     private fun clickDebounce(): Boolean {

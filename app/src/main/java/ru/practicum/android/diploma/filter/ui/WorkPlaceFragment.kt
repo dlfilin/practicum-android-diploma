@@ -1,7 +1,9 @@
 package ru.practicum.android.diploma.filter.ui
 
+import android.content.res.ColorStateList
 import android.os.Bundle
 import android.view.View
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
@@ -20,11 +22,14 @@ class WorkPlaceFragment : Fragment(R.layout.fragment_work_place) {
     val viewModel: WorkPlaceViewModel by viewModel()
     private val directionArea = WorkPlaceFragmentDirections.actionWorkPlaceFragmentToAreaChooserFragment()
     private val directionCountry = WorkPlaceFragmentDirections.actionWorkPlaceFragmentToCountryChooserFragment()
+    private var filterHintStateEmpty: ColorStateList? = null
+    private var filterHintStateFilled: ColorStateList? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentWorkPlaceBinding.bind(view)
-
+        filterHintStateEmpty = AppCompatResources.getColorStateList(requireContext(), R.color.filter_item_empty)
+        filterHintStateFilled = AppCompatResources.getColorStateList(requireContext(), R.color.filter_item_filled)
 
         setListeners()
 
@@ -54,9 +59,11 @@ class WorkPlaceFragment : Fragment(R.layout.fragment_work_place) {
                 edCountryName.apply {
                     tag = if (text.isNullOrEmpty()) {
                         setEndIconDrawable(R.drawable.ic_arrow_forward)
+                        defaultHintTextColor = filterHintStateEmpty
                         R.drawable.ic_arrow_forward
                     } else {
                         setEndIconDrawable(R.drawable.ic_clear)
+                        defaultHintTextColor = filterHintStateFilled
                         R.drawable.ic_clear
                     }
                 }
@@ -83,9 +90,11 @@ class WorkPlaceFragment : Fragment(R.layout.fragment_work_place) {
                 edAreaName.apply {
                     tag = if (text.isNullOrEmpty()) {
                         setEndIconDrawable(R.drawable.ic_arrow_forward)
+                        defaultHintTextColor = filterHintStateEmpty
                         R.drawable.ic_arrow_forward
                     } else {
                         setEndIconDrawable(R.drawable.ic_clear)
+                        defaultHintTextColor = filterHintStateFilled
                         R.drawable.ic_clear
                     }
                 }

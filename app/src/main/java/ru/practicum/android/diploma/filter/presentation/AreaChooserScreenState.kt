@@ -7,5 +7,7 @@ sealed interface AreaChooserScreenState {
         val items: List<Area>,
     ) : AreaChooserScreenState
 
+    data object Empty : AreaChooserScreenState
+    data object Loading : AreaChooserScreenState
     data object Error : AreaChooserScreenState
 }

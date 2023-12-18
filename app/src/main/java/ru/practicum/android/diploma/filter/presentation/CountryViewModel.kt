@@ -25,9 +25,8 @@ class CountryViewModel(private val interactor: FilterInteractor) : ViewModel() {
     private fun processResult(result: NetworkResult<List<Country>>) {
         when (result) {
             is NetworkResult.Success -> {
-                val data = result.data!!.sortedBy { it.name.length }
+                val data = sorting(result.data!!)
                 _state.postValue(CountryChooserScreenState.Content(data))
-
             }
 
             is NetworkResult.Error -> {
@@ -39,5 +38,23 @@ class CountryViewModel(private val interactor: FilterInteractor) : ViewModel() {
     fun saveFilterToPrefs(country: Country) {
         val filter = interactor.getCurrentFilter().copy(country = country)
         interactor.updateFilter(filter)
+    }
+
+    private fun sorting(countries: List<Country>): List<Country> {
+        val newList = countries.toMutableList()
+        var maxIdLength = 0
+        for (country in countries) {
+            if (country.id.length > maxIdLength) {
+                maxIdLength = country.id.length
+            }
+        }
+        for (country in countries) {
+            if (country.id.length == maxIdLength) {
+                newList.remove(country)
+                newList.add(country)
+                break
+            }
+        }
+        return newList
     }
 }

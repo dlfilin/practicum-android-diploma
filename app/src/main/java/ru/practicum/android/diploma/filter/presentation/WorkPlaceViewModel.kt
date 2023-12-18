@@ -30,5 +30,4 @@ class WorkPlaceViewModel(private val interactor: FilterInteractor) : ViewModel()
         val filter = interactor.getCurrentFilter()
         _state.postValue(filter)
     }
-
 }
