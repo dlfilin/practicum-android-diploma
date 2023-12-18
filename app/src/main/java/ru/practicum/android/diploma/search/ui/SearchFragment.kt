@@ -1,7 +1,6 @@
 package ru.practicum.android.diploma.search.ui
 
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
@@ -89,15 +88,14 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
             }
         }
 
-        binding.nestedScroll.setOnScrollChangeListener(NestedScrollView.OnScrollChangeListener { v, scrollX, scrollY, oldScrollX, oldScrollY ->
-            if (v.getChildAt(v.childCount - 1) != null) {
-                if (scrollY > oldScrollY) {
+        binding.nestedScroll.setOnScrollChangeListener(
+            NestedScrollView.OnScrollChangeListener { v, scrollX, scrollY, oldScrollX, oldScrollY ->
+                if (v.getChildAt(v.childCount - 1) != null && scrollY > oldScrollY) {
                     if (scrollY >= v.getChildAt(v.childCount - 1).measuredHeight - v.measuredHeight) {
                         viewmodel.onLastItemReached()
                     }
                 }
-            }
-        })
+            })
 
     }
 
@@ -214,8 +212,6 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
             foundVacancyData.found
         )
         binding.vacanciesFound.text = numOfVacancy
-        Log.d("srollAdapter", "${foundVacancyData.items.size.toString()} - sizeFrag")
-        //adapter.submitList(foundVacancyData.items)
         adapter.updateData(foundVacancyData.items)
         if (foundVacancyData.page == 0) binding.vacancyListRv.scrollToPosition(0)
         updateScreenViews(

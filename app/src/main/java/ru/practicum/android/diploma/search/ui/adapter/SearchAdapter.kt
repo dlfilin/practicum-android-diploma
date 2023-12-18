@@ -57,7 +57,7 @@ class SearchAdapter(private val clickListener: VacancyClickListener) :
     }
 
     fun updateData(newData: List<VacancyItem>) {
-        val diffResult = DiffUtil.calculateDiff(MyDiffCallback(listItems, newData))
+        val diffResult = DiffUtil.calculateDiff(DiffCallback(listItems, newData))
         listItems.clear()
         listItems.addAll(newData)
         diffResult.dispatchUpdatesTo(this)
@@ -65,8 +65,9 @@ class SearchAdapter(private val clickListener: VacancyClickListener) :
 }
 
 
-private class MyDiffCallback(
-    private val oldList: List<VacancyItem>, private val newList: List<VacancyItem>
+private class DiffCallback(
+    private val oldList: List<VacancyItem>,
+    private val newList: List<VacancyItem>
 ) : DiffUtil.Callback() {
     override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
         return oldList[oldItemPosition].id == newList[newItemPosition].id
