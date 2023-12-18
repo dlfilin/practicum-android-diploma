@@ -25,8 +25,8 @@ class IndustryChooserFragment : Fragment(R.layout.fragment_industry_chooser) {
     private val viewModel: IndustryViewModel by viewModel()
 
     private val adapter = IndustryAdapter { item ->
-            viewModel.industrySelected(item)
-            hideSoftKeyboard()
+        viewModel.industrySelected(item)
+        hideSoftKeyboard()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
