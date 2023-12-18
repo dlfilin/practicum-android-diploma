@@ -12,14 +12,17 @@ import ru.practicum.android.diploma.filter.presentation.models.IndustryUi
 
 class IndustryViewModel(private val interactor: FilterInteractor) : ViewModel() {
 
-    private val _state = MutableLiveData<IndustryChooserScreenState>()
+    private val _state = MutableLiveData<IndustryChooserScreenState>(IndustryChooserScreenState.Loading)
     val state: LiveData<IndustryChooserScreenState> get() = _state
+
+    private var industriesFromApi = listOf<IndustryUi>()
 
     init {
         getInitialData()
     }
 
     private fun getInitialData() {
+        renderState(IndustryChooserScreenState.Loading)
         viewModelScope.launch {
             interactor.getIndustries().collect {
                 processResult(result = it)
@@ -39,14 +42,19 @@ class IndustryViewModel(private val interactor: FilterInteractor) : ViewModel() 
                     )
                 }
 
-                _state.postValue(IndustryChooserScreenState.Content(data))
+                industriesFromApi = data
+                renderState(IndustryChooserScreenState.Content(data))
 
             }
 
             is NetworkResult.Error -> {
-                _state.postValue(IndustryChooserScreenState.Error)
+                renderState(IndustryChooserScreenState.Error)
             }
         }
+    }
+
+    private fun renderState(state: IndustryChooserScreenState) {
+        _state.postValue(state)
     }
 
     fun saveFilterToPrefs() {
@@ -69,21 +77,24 @@ class IndustryViewModel(private val interactor: FilterInteractor) : ViewModel() 
                 isChecked = it.id == industry.id
             )
         }
-        _state.postValue(IndustryChooserScreenState.Content(updatedList))
+        renderState(IndustryChooserScreenState.Content(updatedList))
     }
 
     fun applySearchResults(search: String?) {
-        if (search.isNullOrEmpty()) {
+        if (industriesFromApi.isEmpty()) {
             getInitialData()
-        } else if (state.value is IndustryChooserScreenState.Content) {
-            val currentList = state.value as IndustryChooserScreenState.Content
-            val updatedList = mutableListOf<IndustryUi>()
-            currentList.items.map {
-                if (it.name.contains(search, true)) {
-                    updatedList.add(it)
+        } else {
+            if (search.isNullOrEmpty()) {
+                renderState(IndustryChooserScreenState.Content(industriesFromApi))
+            } else {
+                val updatedList = mutableListOf<IndustryUi>()
+                industriesFromApi.map {
+                    if (it.name.contains(search, true)) {
+                        updatedList.add(it)
+                    }
                 }
+                renderState(IndustryChooserScreenState.Content(updatedList))
             }
-            _state.postValue(IndustryChooserScreenState.Content(updatedList))
         }
     }
 }

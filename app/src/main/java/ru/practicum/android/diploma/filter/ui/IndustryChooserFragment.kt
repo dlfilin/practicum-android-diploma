@@ -16,6 +16,7 @@ import ru.practicum.android.diploma.common.util.debounce
 import ru.practicum.android.diploma.databinding.FragmentIndustryChooserBinding
 import ru.practicum.android.diploma.filter.presentation.IndustryChooserScreenState
 import ru.practicum.android.diploma.filter.presentation.IndustryViewModel
+import ru.practicum.android.diploma.filter.presentation.models.IndustryUi
 import ru.practicum.android.diploma.filter.ui.adapters.IndustryAdapter
 
 class IndustryChooserFragment : Fragment(R.layout.fragment_industry_chooser) {
@@ -88,20 +89,57 @@ class IndustryChooserFragment : Fragment(R.layout.fragment_industry_chooser) {
 
     private fun renderState(state: IndustryChooserScreenState) {
         when (state) {
-            is IndustryChooserScreenState.Content -> {
-                adapter.updateData(state.items)
-                binding.rvIndustry.isVisible = true
-                binding.placeholderImage.isVisible = false
-                binding.placeholderMessage.isVisible = false
-                binding.btApply.isVisible = state.items.any { it.isChecked }
-            }
+            is IndustryChooserScreenState.Content -> showContent(state.items)
+            is IndustryChooserScreenState.Error -> showError()
+            is IndustryChooserScreenState.Loading -> showLoading()
+        }
+    }
 
-            is IndustryChooserScreenState.Error -> {
-                binding.rvIndustry.isVisible = false
-                binding.placeholderImage.isVisible = true
-                binding.placeholderMessage.isVisible = true
-                binding.btApply.isVisible = false
-            }
+    private fun showLoading() {
+        updateScreenViews(
+            isRvIndustry = false,
+            isRecyclerViewProgressBar = true,
+            isPlaceholderImage = false,
+            isPlaceholderMessage = false,
+            isBtApply = false
+        )
+    }
+
+    private fun showError() {
+        updateScreenViews(
+            isRvIndustry = false,
+            isRecyclerViewProgressBar = false,
+            isPlaceholderImage = true,
+            isPlaceholderMessage = true,
+            isBtApply = false
+        )
+    }
+
+    private fun showContent(items: List<IndustryUi>) {
+        adapter.updateData(items)
+        binding.rvIndustry.scrollToPosition(0)
+        updateScreenViews(
+            isRvIndustry = true,
+            isRecyclerViewProgressBar = false,
+            isPlaceholderImage = false,
+            isPlaceholderMessage = false,
+            isBtApply = items.any { it.isChecked }
+        )
+    }
+
+    private fun updateScreenViews(
+        isRvIndustry: Boolean,
+        isRecyclerViewProgressBar: Boolean,
+        isPlaceholderImage: Boolean,
+        isPlaceholderMessage: Boolean,
+        isBtApply: Boolean
+    ) {
+        with(binding) {
+            rvIndustry.isVisible = isRvIndustry
+            recyclerViewProgressBar.isVisible = isRecyclerViewProgressBar
+            placeholderImage.isVisible = isPlaceholderImage
+            placeholderMessage.isVisible = isPlaceholderMessage
+            btApply.isVisible = isBtApply
         }
     }
 
