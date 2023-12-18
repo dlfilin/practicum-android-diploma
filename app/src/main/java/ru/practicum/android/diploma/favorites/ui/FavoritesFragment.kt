@@ -51,6 +51,7 @@ class FavoritesFragment : Fragment(R.layout.fragment_favorites) {
 
     private fun render(state: FavoriteState) {
         when (state) {
+            is FavoriteState.Default -> showDefault()
             is FavoriteState.Empty -> showEmpty()
             is FavoriteState.Error -> showError()
             is FavoriteState.Content -> showContent(state.vacancies)
@@ -63,6 +64,10 @@ class FavoritesFragment : Fragment(R.layout.fragment_favorites) {
             favoritesPlaceholderText.isVisible = false
             favoritesRecyclerView.isVisible = false
         }
+    }
+
+    private fun showDefault() {
+        hideAll()
     }
 
     private fun showEmpty() {
