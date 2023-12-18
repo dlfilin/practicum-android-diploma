@@ -71,7 +71,7 @@
         <item name="android:textSize">@dimen/font_16</item>
     </style>
 
-    <style name="editText">
+    <!--style name="editText">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_marginHorizontal">@dimen/space_16</item>
@@ -89,7 +89,7 @@
         <item name="android:imeOptions">actionDone</item>
         <item name="android:inputType">text</item>
         <item name="android:singleLine">true</item>
-    </style>
+    </style-->
     <!-- bottom navigation -->
     <style name="divider">
         <item name="android:background">@color/light_gray</item>
@@ -118,7 +118,7 @@
         <item name="android:textSize">@dimen/font_12</item>
     </style>
     <!--filter fragment -->
-    <style name="textInputLayout">
+    <!--style name="textInputLayout">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_marginHorizontal">@dimen/space_16</item>
@@ -126,7 +126,7 @@
         <item name="boxStrokeWidth">0dp</item>
         <item name="boxStrokeWidthFocused">0dp</item>
         <item name="android:textColorHint">@color/gray</item>
-    </style>
+    </style-->
 
     <style name="hintStyleForTextInputLayout">
         <item name="android:textSize">@dimen/font_12</item>
@@ -136,7 +136,7 @@
         <item name="android:textSize">@dimen/font_16</item>
     </style>
 
-    <style name="textInputEditText">
+    <!--style name="textInputEditText">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">match_parent</item>
         <item name="android:backgroundTint">?attr/colorOnSecondary</item>
@@ -148,7 +148,7 @@
         <item name="android:imeOptions">actionDone</item>
         <item name="android:textColor">@color/black_universal</item>
         <item name="android:background">@drawable/background_light_gray_rounded</item>
-    </style>
+    </style-->
     <!-- team fragment -->
     <style name="teamTextview">
         <item name="android:layout_marginStart">@dimen/space_16</item>
@@ -195,9 +195,18 @@
     </style>
     <!-- TextInputLayout -->
     <style name="Widget.EdText.TextInputLayout" parent="Widget.MaterialComponents.TextInputLayout.FilledBox">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:minHeight">@dimen/size_60</item>
         <item name="cornerSize">6dp</item>
         <item name="boxStrokeWidth">0dp</item>
         <item name="colorControlHighlight">@color/white_day_night</item>
+        <item name="paddingStart">@dimen/space_0</item>
+        <item name="paddingEnd">@dimen/space_4</item>
+        <item name="android:textColorHint">@color/filter_item_empty</item>
+        <item name="endIconDrawable">@drawable/ic_arrow_forward</item>
+        <item name="endIconMode">custom</item>
+        <item name="endIconTint">@color/black_day_night</item>
     </style>
     <!-- SearchInputLayout -->
     <style name="Widget.App.SearchInputLayout" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
