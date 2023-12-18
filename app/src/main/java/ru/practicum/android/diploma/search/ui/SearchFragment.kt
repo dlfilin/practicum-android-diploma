@@ -260,6 +260,7 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
             isVacanciesFoundVisible = true,
             isNextPageLoadingVisible = isLoading
         )
+        binding.vacancyListRv.scrollToPosition(adapter.itemCount - 1)
     }
 
     private fun clickDebounce(): Boolean {
