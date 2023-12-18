@@ -37,11 +37,6 @@ class FilterViewModel(private val interactor: FilterInteractor) : ViewModel() {
         _state.postValue(filter)
     }
 
-    fun clearSalary() {
-        val filter = state.value!!.copy(salary = null)
-        _state.postValue(filter)
-    }
-
     fun clearAll() {
         val filter = FilterParameters()
         _state.postValue(filter)

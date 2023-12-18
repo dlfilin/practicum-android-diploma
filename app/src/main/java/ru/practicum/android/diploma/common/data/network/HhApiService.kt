@@ -6,6 +6,7 @@ import retrofit2.http.Path
 import retrofit2.http.QueryMap
 import ru.practicum.android.diploma.BuildConfig
 import ru.practicum.android.diploma.filter.data.dto.AreaListDto
+import ru.practicum.android.diploma.filter.data.dto.AreaResponse
 import ru.practicum.android.diploma.filter.data.dto.CountryDto
 import ru.practicum.android.diploma.filter.data.dto.IndustryListDto
 import ru.practicum.android.diploma.search.data.dto.VacancySearchResponse
@@ -31,6 +32,10 @@ interface HhApiService {
     @Headers(TOKEN_BEARER_STRING, USER_AGENT_STRING)
     @GET("/areas")
     suspend fun getAllAreas(): List<AreaListDto>
+
+    @Headers(TOKEN_BEARER_STRING, USER_AGENT_STRING)
+    @GET("/areas/{area_id}")
+    suspend fun getAreasForId(@Path("area_id") id: String): AreaResponse
 
     @Headers(TOKEN_BEARER_STRING, USER_AGENT_STRING)
     @GET("/industries")

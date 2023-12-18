@@ -12,6 +12,7 @@ import ru.practicum.android.diploma.common.util.ErrorType
 import ru.practicum.android.diploma.common.util.NetworkResult
 import ru.practicum.android.diploma.filter.data.dto.AreaRequest
 import ru.practicum.android.diploma.filter.data.dto.AreaResponse
+import ru.practicum.android.diploma.filter.data.dto.AreasByIdRequest
 import ru.practicum.android.diploma.filter.data.dto.CountryRequest
 import ru.practicum.android.diploma.filter.data.dto.CountryResponse
 import ru.practicum.android.diploma.filter.data.dto.IndustryRequest
@@ -36,6 +37,7 @@ class RetrofitNetworkClient(
                     is VacancyDetailRequest -> hhApiService.getVacancyDetails(dto.vacancyId)
                     is SimilarVacancyRequest -> hhApiService.searchSimilarVacancies(dto.vacancyId)
                     is AreaRequest -> AreaResponse(hhApiService.getAllAreas())
+                    is AreasByIdRequest -> hhApiService.getAreasForId(dto.areaId)
                     is CountryRequest -> CountryResponse(hhApiService.getCountries())
                     is IndustryRequest -> IndustryResponse(hhApiService.getAllIndustries())
                     else -> Response()
