@@ -8,4 +8,5 @@ sealed interface IndustryChooserScreenState {
     ) : IndustryChooserScreenState
 
     data object Error : IndustryChooserScreenState
+    data object Loading : IndustryChooserScreenState
 }
