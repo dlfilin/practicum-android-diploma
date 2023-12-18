@@ -4,8 +4,8 @@ import ru.practicum.android.diploma.common.data.storage.dto.FilterParametersDto
 import ru.practicum.android.diploma.filter.data.db.entity.AreaEntity
 import ru.practicum.android.diploma.filter.data.db.entity.CountryEntity
 import ru.practicum.android.diploma.filter.data.db.entity.IndustryEntity
-import ru.practicum.android.diploma.filter.data.dto.AreaListDto
 import ru.practicum.android.diploma.filter.data.dto.AreaDto
+import ru.practicum.android.diploma.filter.data.dto.AreaListDto
 import ru.practicum.android.diploma.filter.data.dto.AreaResponse
 import ru.practicum.android.diploma.filter.data.dto.CountryDto
 import ru.practicum.android.diploma.filter.data.dto.CountryResponse

@@ -4,10 +4,12 @@ import android.os.Bundle
 import android.view.View
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
+import ru.practicum.android.diploma.common.util.debounce
 import ru.practicum.android.diploma.databinding.FragmentCountryChooserBinding
 import ru.practicum.android.diploma.filter.presentation.CountryChooserScreenState
 import ru.practicum.android.diploma.filter.presentation.CountryViewModel
@@ -19,10 +21,21 @@ class CountryChooserFragment : Fragment(R.layout.fragment_country_chooser) {
     private val binding get() = _binding!!
 
     private val viewModel: CountryViewModel by viewModel()
+    private var isClickAllowed = true
 
     private val adapter = CountryAdapter {
-        viewModel.saveFilterToPrefs(it)
-        findNavController().navigateUp()
+        if (clickDebounce()) {
+            viewModel.saveFilterToPrefs(it)
+            findNavController().navigateUp()
+        }
+    }
+
+    private val onCountryClickDebounce = debounce<Boolean>(
+        CLICK_DEBOUNCE_DELAY,
+        lifecycleScope,
+        false
+    ) { param ->
+        isClickAllowed = param
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -45,6 +58,7 @@ class CountryChooserFragment : Fragment(R.layout.fragment_country_chooser) {
                 binding.placeholderImage.isVisible = false
                 binding.placeholderMessage.isVisible = false
             }
+
             is CountryChooserScreenState.Error -> {
                 binding.rvCountry.isVisible = false
                 binding.placeholderImage.isVisible = true
@@ -53,8 +67,21 @@ class CountryChooserFragment : Fragment(R.layout.fragment_country_chooser) {
         }
     }
 
+    private fun clickDebounce(): Boolean {
+        val current = isClickAllowed
+        if (isClickAllowed) {
+            isClickAllowed = false
+            onCountryClickDebounce(true)
+        }
+        return current
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    companion object {
+        private const val CLICK_DEBOUNCE_DELAY = 500L
     }
 }
