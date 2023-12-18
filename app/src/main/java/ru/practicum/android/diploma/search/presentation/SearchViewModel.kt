@@ -65,23 +65,24 @@ class SearchViewModel(
         }
     }
 
-
     fun applyFilter() {
         clearPagingInfo()
         searchRequest(currentPage)
     }
 
     private fun searchRequest(page: Int) {
-        viewModelScope.launch {
-            searchInteractor.searchVacanciesPaged(
-                SearchQuery(
-                    text = latestSearchText,
-                    page = page,
-                    perPage = ITEMS_PER_PAGE
-                )
-            ).collect {
-                processResult(result = it)
-                isNextPageLoading = false
+        if (latestSearchText.isNotBlank()) {
+            viewModelScope.launch {
+                searchInteractor.searchVacanciesPaged(
+                    SearchQuery(
+                        text = latestSearchText,
+                        page = page,
+                        perPage = ITEMS_PER_PAGE
+                    )
+                ).collect {
+                    processResult(result = it)
+                    isNextPageLoading = false
+                }
             }
         }
     }
