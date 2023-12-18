@@ -1,10 +1,12 @@
 package ru.practicum.android.diploma.search.ui
 
+import android.content.Context
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
@@ -101,7 +103,6 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
                 }
             }
         })
-
     }
 
     private fun setRvAdapter() {
@@ -201,6 +202,7 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
     }
 
     private fun showInitialLoading() {
+        hideSoftKeyboard()
         updateScreenViews(
             isMainProgressVisible = true,
             isSearchRvVisible = false,
@@ -211,6 +213,7 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
     }
 
     private fun showFoundVacancy(foundVacancyData: VacancyListData) {
+        hideSoftKeyboard()
         val numOfVacancy = resources.getQuantityString(
             R.plurals.vacancy_number,
             foundVacancyData.found,
@@ -293,6 +296,13 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
             vacancyListRv.isVisible = isSearchRvVisible
             recyclerViewProgressBar.isVisible = isNextPageLoadingVisible
         }
+    }
+
+    private fun hideSoftKeyboard() {
+        val inputMethodManager =
+            requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
+        inputMethodManager?.hideSoftInputFromWindow(binding.searchEditText.windowToken, 0)
+        binding.searchEditText.isEnabled = true
     }
 
     companion object {

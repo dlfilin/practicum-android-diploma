@@ -10,7 +10,7 @@ import ru.practicum.android.diploma.favorites.domain.FavoriteInteractor
 class FavoritesViewModel(
     private val favoriteInteractor: FavoriteInteractor
 ) : ViewModel() {
-    private val favoriteState = MutableLiveData<FavoriteState>(FavoriteState.Empty)
+    private val favoriteState = MutableLiveData<FavoriteState>(FavoriteState.Default)
     fun observeFavoriteState(): LiveData<FavoriteState> = favoriteState
 
     init {
