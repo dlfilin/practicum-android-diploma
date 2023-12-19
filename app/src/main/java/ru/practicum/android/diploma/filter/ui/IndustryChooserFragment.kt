@@ -27,7 +27,9 @@ class IndustryChooserFragment : Fragment(R.layout.fragment_industry_chooser) {
     private val adapter = IndustryAdapter { item ->
         viewModel.industrySelected(item)
         hideSoftKeyboard()
+        scrollListUp = false
     }
+    private var scrollListUp = true
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -63,6 +65,7 @@ class IndustryChooserFragment : Fragment(R.layout.fragment_industry_chooser) {
                     tag = R.drawable.ic_clear
                 }
             }
+            scrollListUp = true
             viewModel.applySearchResults(text.toString())
         }
 
@@ -70,6 +73,7 @@ class IndustryChooserFragment : Fragment(R.layout.fragment_industry_chooser) {
             if (binding.searchLayoutField.tag == R.drawable.ic_clear) {
                 binding.searchEditText.text?.clear()
                 binding.searchEditText.requestFocus()
+                scrollListUp = true
             }
         }
     }
@@ -104,7 +108,8 @@ class IndustryChooserFragment : Fragment(R.layout.fragment_industry_chooser) {
 
     private fun showContent(items: List<IndustryUi>) {
         adapter.updateData(items)
-        binding.rvIndustry.scrollToPosition(0)
+        if (scrollListUp)
+            binding.rvIndustry.scrollToPosition(0)
         updateScreenViews(
             isRvIndustry = true,
             isRecyclerViewProgressBar = false,

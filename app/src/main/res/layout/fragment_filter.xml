@@ -111,7 +111,8 @@
         android:letterSpacing="0"
         android:text="@string/apply_btn"
         android:textAllCaps="false"
-        android:visibility="visible"
+        android:visibility="gone"
+        tools:visibility="visible"
         app:layout_constraintBottom_toTopOf="@id/btClear"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
@@ -127,7 +128,8 @@
         android:text="@string/reset_btn"
         android:textAllCaps="false"
         android:textColor="@color/red"
-        android:visibility="visible"
+        android:visibility="gone"
+        tools:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
