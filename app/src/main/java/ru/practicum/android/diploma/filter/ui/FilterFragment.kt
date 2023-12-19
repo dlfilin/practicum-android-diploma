@@ -7,9 +7,11 @@ import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
+import ru.practicum.android.diploma.common.util.debounce
 import ru.practicum.android.diploma.databinding.FragmentFilterBinding
 import ru.practicum.android.diploma.filter.domain.models.Area
 import ru.practicum.android.diploma.filter.domain.models.Country
@@ -22,12 +24,22 @@ class FilterFragment : Fragment(R.layout.fragment_filter) {
     private val binding get() = _binding!!
 
     val viewModel: FilterViewModel by viewModel()
+
     private val directionWorkPlace = FilterFragmentDirections.actionFilterFragmentToWorkPlaceFragment()
     private val directionIndustry = FilterFragmentDirections.actionFilterFragmentToIndustryChooserFragment()
     private var colorStateEmpty: ColorStateList? = null
     private var colorStateFilled: ColorStateList? = null
     private var filterHintStateEmpty: ColorStateList? = null
     private var filterHintStateFilled: ColorStateList? = null
+
+    private var isClickAllowed = true
+    private val onItemClickDebounce = debounce<Boolean>(
+        CLICK_DEBOUNCE_DELAY,
+        lifecycleScope,
+        false
+    ) { param ->
+        isClickAllowed = param
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -54,19 +66,25 @@ class FilterFragment : Fragment(R.layout.fragment_filter) {
 
         with(binding) {
             checkBoxSalary.setOnClickListener {
-                viewModel.onlyWithSalaryPressed(checkBoxSalary.isChecked)
+                if (clickDebounce()) {
+                    viewModel.onlyWithSalaryPressed(checkBoxSalary.isChecked)
+                }
             }
 
             btApply.setOnClickListener {
-                findNavController().previousBackStackEntry?.savedStateHandle?.set(
-                    REAPPLY_FILTER,
-                    true
-                )
-                findNavController().navigateUp()
+                if (clickDebounce()) {
+                    findNavController().previousBackStackEntry?.savedStateHandle?.set(
+                        REAPPLY_FILTER,
+                        true
+                    )
+                    findNavController().navigateUp()
+                }
             }
 
             btClear.setOnClickListener {
-                viewModel.clearAll()
+                if (clickDebounce()) {
+                    viewModel.clearAll()
+                }
             }
         }
     }
@@ -74,7 +92,9 @@ class FilterFragment : Fragment(R.layout.fragment_filter) {
     private fun setWorkPlaceListeners() {
         with(binding) {
             edWorkPlace.setOnClickListener {
-                findNavController().navigate(directionWorkPlace)
+                if (clickDebounce()) {
+                    findNavController().navigate(directionWorkPlace)
+                }
             }
 
             edWorkPlace.doOnTextChanged { text, _, _, _ ->
@@ -92,10 +112,12 @@ class FilterFragment : Fragment(R.layout.fragment_filter) {
             }
 
             edWorkPlaceLayout.setEndIconOnClickListener {
-                if (edWorkPlaceLayout.tag == R.drawable.ic_clear) {
-                    viewModel.clearWorkplace()
-                } else {
-                    findNavController().navigate(directionWorkPlace)
+                if (clickDebounce()) {
+                    if (edWorkPlaceLayout.tag == R.drawable.ic_clear) {
+                        viewModel.clearWorkplace()
+                    } else {
+                        findNavController().navigate(directionWorkPlace)
+                    }
                 }
             }
 
@@ -105,7 +127,9 @@ class FilterFragment : Fragment(R.layout.fragment_filter) {
     private fun setIndustryListeners() {
         with(binding) {
             edIndustry.setOnClickListener {
-                findNavController().navigate(directionIndustry)
+                if (clickDebounce()) {
+                    findNavController().navigate(directionIndustry)
+                }
             }
 
             edIndustry.doOnTextChanged { text, _, _, _ ->
@@ -123,10 +147,12 @@ class FilterFragment : Fragment(R.layout.fragment_filter) {
             }
 
             edIndustryLayout.setEndIconOnClickListener {
-                if (edIndustryLayout.tag == R.drawable.ic_clear) {
-                    viewModel.clearIndustry()
-                } else {
-                    findNavController().navigate(directionIndustry)
+                if (clickDebounce()) {
+                    if (edIndustryLayout.tag == R.drawable.ic_clear) {
+                        viewModel.clearIndustry()
+                    } else {
+                        findNavController().navigate(directionIndustry)
+                    }
                 }
             }
         }
@@ -177,6 +203,15 @@ class FilterFragment : Fragment(R.layout.fragment_filter) {
         return place
     }
 
+    private fun clickDebounce(): Boolean {
+        val current = isClickAllowed
+        if (isClickAllowed) {
+            isClickAllowed = false
+            onItemClickDebounce(true)
+        }
+        return current
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
@@ -189,5 +224,6 @@ class FilterFragment : Fragment(R.layout.fragment_filter) {
 
     companion object {
         const val REAPPLY_FILTER = "REAPPLY_FILTER"
+        private const val CLICK_DEBOUNCE_DELAY = 500L
     }
 }

@@ -33,11 +33,10 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
     private var _binding: FragmentSearchBinding? = null
     private val binding get() = _binding!!
     private val menuHost: MenuHost get() = requireActivity()
-    private val viewmodel by viewModel<SearchViewModel>()
+    private val viewModel by viewModel<SearchViewModel>()
 
     private var isClickAllowed = true
     private var isFilterActive = false
-
 
     private val adapter = SearchAdapter {
         if (clickDebounce()) {
@@ -45,7 +44,7 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
             findNavController().navigate(direction)
         }
     }
-    private val onTrackClickDebounce = debounce<Boolean>(
+    private val onItemClickDebounce = debounce<Boolean>(
         CLICK_DEBOUNCE_DELAY,
         lifecycleScope,
         false
@@ -82,7 +81,7 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
                     tag = R.drawable.ic_clear
                 }
             }
-            viewmodel.searchTextChanged(text.toString())
+            viewModel.searchTextChanged(text.toString())
         }
 
         binding.searchLayoutField.setEndIconOnClickListener {
@@ -98,7 +97,7 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
                     val pos = (binding.vacancyListRv.layoutManager as LinearLayoutManager).findLastVisibleItemPosition()
                     val itemsCount = adapter.itemCount
                     if (pos >= itemsCount - 1) {
-                        viewmodel.onLastItemReached()
+                        viewModel.onLastItemReached()
                     }
                 }
             }
@@ -138,19 +137,19 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
     }
 
     private fun checkFilterState() {
-        viewmodel.checkFilterState()
+        viewModel.checkFilterState()
     }
 
     private fun setObservables() {
-        viewmodel.state.observe(viewLifecycleOwner) { state ->
+        viewModel.state.observe(viewLifecycleOwner) { state ->
             renderState(state)
         }
 
-        viewmodel.isFilterActiveState.observe(viewLifecycleOwner) { isActive ->
+        viewModel.isFilterActiveState.observe(viewLifecycleOwner) { isActive ->
             renderFilterIcon(isActive)
         }
 
-        viewmodel.toastEvent.observe(viewLifecycleOwner) { error ->
+        viewModel.toastEvent.observe(viewLifecycleOwner) { error ->
             when (error) {
                 ErrorType.NO_INTERNET -> showToast(getString(R.string.toast_internet_throwable))
                 else -> showToast(getString(R.string.toast_unknown_error))
@@ -161,8 +160,7 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
             ?.savedStateHandle?.getLiveData<Boolean>(FilterFragment.REAPPLY_FILTER)
         backStackLiveData?.observe(viewLifecycleOwner) { reapplyEvent ->
             if (reapplyEvent != null) {
-                viewmodel.applyFilter()
-                showToast("REAPPLY_FILTER")
+                viewModel.applyFilter()
                 backStackLiveData.value = null
             }
         }
@@ -276,7 +274,7 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         val current = isClickAllowed
         if (isClickAllowed) {
             isClickAllowed = false
-            onTrackClickDebounce(true)
+            onItemClickDebounce(true)
         }
         return current
     }
