@@ -39,7 +39,7 @@ class VacancyViewModel(
 
                     is NetworkResult.Error -> {
                         if (result.errorType == ErrorType.NO_INTERNET) {
-                            getVacancyOffline(vacancyId)
+                            getVacancyLocal(vacancyId)
                             renderState(VacancyScreenState.Loading)
                         } else {
                             renderState(VacancyScreenState.Error)
@@ -83,7 +83,7 @@ class VacancyViewModel(
         }
     }
 
-    private suspend fun getVacancyOffline(vacancyId: String) {
+    private suspend fun getVacancyLocal(vacancyId: String) {
         viewModelScope.launch {
             val vacancy = favoriteInteractor.getById(vacancyId)
             _currentVacancy.value = vacancy
