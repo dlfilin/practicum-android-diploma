@@ -108,8 +108,9 @@ class IndustryChooserFragment : Fragment(R.layout.fragment_industry_chooser) {
 
     private fun showContent(items: List<IndustryUi>) {
         adapter.updateData(items)
-        if (scrollListUp)
+        if (scrollListUp) {
             binding.rvIndustry.scrollToPosition(0)
+        }
         updateScreenViews(
             isRvIndustry = true,
             isRecyclerViewProgressBar = false,
