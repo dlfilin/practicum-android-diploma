@@ -210,6 +210,7 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         )
     }
 
+
     private fun showFoundVacancy(foundVacancyData: VacancyListData) {
         hideSoftKeyboard()
         val numOfVacancy = resources.getQuantityString(

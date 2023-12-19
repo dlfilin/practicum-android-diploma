@@ -25,7 +25,7 @@ class SearchAdapter(private val clickListener: VacancyClickListener) :
     }
 
     override fun onBindViewHolder(holder: SearchViewHolder, position: Int) {
-        holder.bind(listItems[position])
+        holder.bind(listItems[holder.adapterPosition])
         holder.itemView.setOnClickListener { clickListener.onVacancyClick(listItems[position]) }
     }
 
@@ -57,15 +57,15 @@ class SearchAdapter(private val clickListener: VacancyClickListener) :
     }
 
     fun updateData(newData: List<VacancyItem>) {
-        val diffResult = DiffUtil.calculateDiff(DiffCallback(listItems, newData))
+        val df = DiffCallback(listItems, newData)
+        val diffResult = DiffUtil.calculateDiff(df)
         listItems.clear()
         listItems.addAll(newData)
         diffResult.dispatchUpdatesTo(this)
     }
 }
 
-
-private class DiffCallback(
+class DiffCallback(
     private val oldList: List<VacancyItem>,
     private val newList: List<VacancyItem>
 ) : DiffUtil.Callback() {
