@@ -65,7 +65,6 @@ class SimilarVacanciesFragment : Fragment(R.layout.fragment_similar_vacancies) {
             is SimilarVacanciesScreenState.Error -> showError()
             is SimilarVacanciesScreenState.InternetThrowable -> showInternetThrowable()
         }
-
     }
 
     private fun showInternetThrowable() = with(binding) {

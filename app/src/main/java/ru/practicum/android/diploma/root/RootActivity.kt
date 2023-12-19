@@ -40,7 +40,5 @@ class RootActivity : AppCompatActivity() {
                 }
             }
         }
-
     }
-
 }

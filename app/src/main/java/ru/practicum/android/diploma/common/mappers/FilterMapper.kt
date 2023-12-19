@@ -1,17 +1,11 @@
 package ru.practicum.android.diploma.common.mappers
 
 import ru.practicum.android.diploma.common.data.storage.dto.FilterParametersDto
-import ru.practicum.android.diploma.filter.data.db.entity.AreaEntity
-import ru.practicum.android.diploma.filter.data.db.entity.CountryEntity
-import ru.practicum.android.diploma.filter.data.db.entity.IndustryEntity
 import ru.practicum.android.diploma.filter.data.dto.AreaDto
 import ru.practicum.android.diploma.filter.data.dto.AreaListDto
-import ru.practicum.android.diploma.filter.data.dto.AreaResponse
 import ru.practicum.android.diploma.filter.data.dto.CountryDto
-import ru.practicum.android.diploma.filter.data.dto.CountryResponse
 import ru.practicum.android.diploma.filter.data.dto.IndustryDto
 import ru.practicum.android.diploma.filter.data.dto.IndustryListDto
-import ru.practicum.android.diploma.filter.data.dto.IndustryResponse
 import ru.practicum.android.diploma.filter.domain.models.Area
 import ru.practicum.android.diploma.filter.domain.models.Country
 import ru.practicum.android.diploma.filter.domain.models.FilterParameters
@@ -51,45 +45,6 @@ class FilterMapper {
         name = dto.name
     )
 
-    fun mapIndustryToEntity(industryDto: IndustryResponse): List<IndustryEntity> {
-        val industryList = mutableListOf<IndustryEntity>()
-        for (industryDtoItem in industryDto.industry) {
-            val industry = IndustryEntity(
-                id = industryDtoItem.id,
-                name = industryDtoItem.name,
-            )
-            industryList.add(industry)
-        }
-        return industryList
-    }
-
-    fun mapCountryToEntity(countryDto: CountryResponse): List<CountryEntity> {
-        val countryList = mutableListOf<CountryEntity>()
-        for (countryDtoItem in countryDto.areas) {
-            val country = CountryEntity(
-                id = countryDtoItem.id,
-                name = countryDtoItem.name,
-            )
-            countryList.add(country)
-        }
-        return countryList
-    }
-
-    fun mapAreaToEntity(areaDto: AreaResponse): List<AreaEntity> {
-        val areaList = mutableListOf<AreaEntity>()
-        areaDto.areas.forEach {
-            for (item in it.areas) {
-                val area = AreaEntity(
-                    id = item.id,
-                    parentId = item.parentId!!,
-                    name = item.name
-                )
-                areaList.add(area)
-            }
-        }
-        return areaList
-    }
-
     private fun mapDtoToArea(dto: AreaDto?): Area? {
         return if (dto != null) {
             Area(
@@ -102,7 +57,7 @@ class FilterMapper {
         }
     }
 
-    fun mapDtoToCountry(dto: CountryDto?): Country? {
+    private fun mapDtoToCountry(dto: CountryDto?): Country? {
         return if (dto != null) {
             Country(
                 id = dto.id,
@@ -173,5 +128,4 @@ class FilterMapper {
         val tail = remaining.drop(1)
         return flattenAreas(head.areas.plus(tail), collected.plus(head))
     }
-
 }

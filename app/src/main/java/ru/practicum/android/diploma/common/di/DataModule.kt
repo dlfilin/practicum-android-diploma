@@ -29,11 +29,11 @@ val dataModule = module {
     }
 
     single<HhApiService> {
-        val interceptop = HttpLoggingInterceptor().apply {
+        val interceptor = HttpLoggingInterceptor().apply {
             level = HttpLoggingInterceptor.Level.BODY
         }
         val client = OkHttpClient.Builder()
-            .addInterceptor(interceptop)
+            .addInterceptor(interceptor)
             .build()
 
         Retrofit.Builder()

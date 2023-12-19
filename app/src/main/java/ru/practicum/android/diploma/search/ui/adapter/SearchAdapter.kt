@@ -16,7 +16,6 @@ import ru.practicum.android.diploma.search.domain.model.VacancyItem
 class SearchAdapter(private val clickListener: VacancyClickListener) :
     RecyclerView.Adapter<SearchAdapter.SearchViewHolder>() {
 
-
     private val listItems = ArrayList<VacancyItem>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SearchViewHolder {

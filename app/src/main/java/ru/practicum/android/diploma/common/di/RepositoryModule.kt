@@ -35,6 +35,6 @@ val repositoryModule = module {
         ExternalNavigatorImpl(context = get())
     }
     single<FilterRepository> {
-        FilterRepositoryImpl(networkClient = get(), database = get(), filterStorage = get(), filterMapper = get())
+        FilterRepositoryImpl(networkClient = get(), filterStorage = get(), filterMapper = get())
     }
 }

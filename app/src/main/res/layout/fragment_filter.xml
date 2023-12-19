@@ -27,6 +27,7 @@
             android:longClickable="false"
             android:textColor="@color/black_day_night"
             android:textSize="@dimen/font_16" />
+
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
@@ -57,10 +58,10 @@
         style="@style/Widget.App.SalaryInputLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:minHeight="51dp"
         android:layout_marginHorizontal="@dimen/space_16"
         android:layout_marginTop="@dimen/space_24"
         android:hint="@string/expected_salary_hint_et"
+        android:minHeight="51dp"
         app:endIconDrawable="@drawable/ic_clear"
         app:endIconMode="clear_text"
         app:expandedHintEnabled="false"
@@ -73,6 +74,7 @@
             android:id="@+id/textInputEditTextSalary"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
+
     </com.google.android.material.textfield.TextInputLayout>
 
     <TextView

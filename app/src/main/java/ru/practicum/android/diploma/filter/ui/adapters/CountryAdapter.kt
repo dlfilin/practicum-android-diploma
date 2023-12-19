@@ -59,7 +59,6 @@ class CountryAdapter(private val itemClickListenerCountry: ItemClickListenerCoun
         override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
             return oldList[oldItemPosition] == newList[newItemPosition]
         }
-
     }
 
     fun updateData(newData: List<Country>) {
@@ -69,5 +68,4 @@ class CountryAdapter(private val itemClickListenerCountry: ItemClickListenerCoun
         listItem.addAll(newData)
         diffResult.dispatchUpdatesTo(this)
     }
-
 }

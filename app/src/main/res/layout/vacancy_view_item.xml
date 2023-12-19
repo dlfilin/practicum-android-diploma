@@ -12,9 +12,9 @@
         android:layout_width="@dimen/size_48"
         android:layout_height="@dimen/size_48"
         android:layout_gravity="center"
+        android:contentDescription="@string/employer_logo"
         android:scaleType="center"
         android:src="@drawable/vacancy_item_placeholder"
-        android:contentDescription="@string/employer_logo"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

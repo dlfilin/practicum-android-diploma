@@ -44,7 +44,6 @@ class VacancyFragment : Fragment(R.layout.fragment_vacancy) {
         }
     })
 
-    //    private lateinit var onPhoneClickDebounce: (Phone) -> Unit
     private val viewmodel by viewModel<VacancyViewModel> {
         parametersOf(args.vacancyId)
     }
@@ -135,16 +134,16 @@ class VacancyFragment : Fragment(R.layout.fragment_vacancy) {
 
             experience.text = vacancy.experience
 
-            val employmentAndSchedueString = StringBuilder()
+            val employmentAndScheduleString = StringBuilder()
                 .append(vacancy.employment)
 
             if (vacancy.employment != null && vacancy.schedule != null) {
-                employmentAndSchedueString
+                employmentAndScheduleString
                     .append(", ")
             }
-            employmentAndSchedueString
+            employmentAndScheduleString
                 .append(vacancy.schedule)
-            schedule.text = employmentAndSchedueString.toString()
+            schedule.text = employmentAndScheduleString.toString()
 
             description.text = HtmlCompat.fromHtml(
                 vacancy.description,

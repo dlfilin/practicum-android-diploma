@@ -12,7 +12,7 @@ import ru.practicum.android.diploma.filter.domain.models.Area
 class AreaAdapter(private val itemClickListener: ItemClickListener) :
     RecyclerView.Adapter<AreaAdapter.AreaHolder>() {
 
-    private var listItem: MutableList<Area> = ArrayList()
+    private val listItem: MutableList<Area> = ArrayList()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AreaHolder {
         val view = LayoutInflater.from(parent.context)
@@ -37,7 +37,6 @@ class AreaAdapter(private val itemClickListener: ItemClickListener) :
         }
     }
 
-
     private class MyDiffCallback(
         private val oldList: List<Area>,
         private val newList: List<Area>
@@ -51,7 +50,7 @@ class AreaAdapter(private val itemClickListener: ItemClickListener) :
         override fun getNewListSize(): Int = newList.size
 
         override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-            return oldList[oldItemPosition].name == newList[newItemPosition].name
+            return oldList[oldItemPosition] == newList[newItemPosition]
         }
     }
 
@@ -66,5 +65,4 @@ class AreaAdapter(private val itemClickListener: ItemClickListener) :
         listItem.addAll(newData)
         diffResult.dispatchUpdatesTo(this)
     }
-
 }
