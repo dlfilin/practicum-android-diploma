@@ -77,4 +77,18 @@ object Formatter {
         )
     }
 
+    fun formatCountryStringForFilter(country: String, area: String): String {
+        val place: String =
+            if (country != "") {
+                if (area != "") {
+                    "$country, $area"
+                } else {
+                    country
+                }
+            } else {
+                area
+            }
+        return place
+    }
+
 }
