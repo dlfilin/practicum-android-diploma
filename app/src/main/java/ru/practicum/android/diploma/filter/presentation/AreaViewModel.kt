@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import ru.practicum.android.diploma.common.util.NetworkResult
 import ru.practicum.android.diploma.common.util.debounce
@@ -60,20 +61,21 @@ class AreaViewModel(private val interactor: FilterInteractor) : ViewModel() {
         }
     }
 
-    private fun filterList(text: String) {
-        if (text.isNotBlank()) {
-            val newList = areaList.filter { area ->
-                area.name.contains(text, true)
-            }
-            if (newList.isEmpty()) {
-                _state.postValue(AreaChooserScreenState.Empty)
+    private fun filterList(text: String) =
+        viewModelScope.launch(Dispatchers.Default) {
+            if (text.isNotBlank()) {
+                val newList = areaList.filter { area ->
+                    area.name.contains(text, true)
+                }
+                if (newList.isEmpty()) {
+                    _state.postValue(AreaChooserScreenState.Empty)
+                } else {
+                    _state.postValue(AreaChooserScreenState.Content(newList))
+                }
             } else {
-                _state.postValue(AreaChooserScreenState.Content(newList))
+                _state.postValue(AreaChooserScreenState.Content(areaList))
             }
-        } else {
-            _state.postValue(AreaChooserScreenState.Content(areaList))
         }
-    }
 
     private fun loadAreaProcessResult(result: NetworkResult<List<Area>>) {
         when (result) {
