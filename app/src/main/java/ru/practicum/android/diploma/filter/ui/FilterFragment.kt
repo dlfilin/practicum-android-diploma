@@ -11,10 +11,9 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
+import ru.practicum.android.diploma.common.util.Formatter
 import ru.practicum.android.diploma.common.util.debounce
 import ru.practicum.android.diploma.databinding.FragmentFilterBinding
-import ru.practicum.android.diploma.filter.domain.models.Area
-import ru.practicum.android.diploma.filter.domain.models.Country
 import ru.practicum.android.diploma.filter.domain.models.FilterParameters
 import ru.practicum.android.diploma.filter.presentation.FilterViewModel
 
@@ -177,7 +176,9 @@ class FilterFragment : Fragment(R.layout.fragment_filter) {
 
     private fun renderScreen(filter: FilterParameters) {
         with(binding) {
-            val place = prepareCountryString(filter.country, filter.area)
+            val country = filter.country?.name ?: ""
+            val area = filter.area?.name ?: ""
+            val place = Formatter.formatCountryStringForFilter(country, area)
             val industry = filter.industry?.name ?: ""
             val salary = filter.salary?.toString() ?: ""
             edWorkPlace.setText(place)
@@ -188,19 +189,6 @@ class FilterFragment : Fragment(R.layout.fragment_filter) {
             btApply.isVisible = filter.isNotEmpty
             btClear.isVisible = filter.isNotEmpty
         }
-    }
-
-    private fun prepareCountryString(country: Country?, area: Area?): String {
-        val place: String = if (country != null) {
-            if (area != null) {
-                "${country.name}, ${area.name}"
-            } else {
-                country.name
-            }
-        } else {
-            area?.name ?: ""
-        }
-        return place
     }
 
     private fun clickDebounce(): Boolean {
