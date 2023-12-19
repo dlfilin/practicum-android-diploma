@@ -21,18 +21,19 @@ class AreaAdapter(private val itemClickListener: ItemClickListener) :
     }
 
     override fun onBindViewHolder(holder: AreaHolder, position: Int) {
-        holder.bind(listItem[position])
-        holder.itemView.setOnClickListener {
-            itemClickListener.onItemListener(listItem[position])
-        }
+        holder.bind(listItem[position], itemClickListener)
     }
 
     override fun getItemCount(): Int = listItem.size
 
     class AreaHolder(item: View) : RecyclerView.ViewHolder(item) {
         private val binding = ItemAreaCountryChooserBinding.bind(item)
-        fun bind(area: Area) = with(binding) {
+        fun bind(area: Area, onClickListener: ItemClickListener) = with(binding) {
             name.text = area.name
+
+            itemView.setOnClickListener {
+                onClickListener.onItemListener(area)
+            }
         }
     }
 
