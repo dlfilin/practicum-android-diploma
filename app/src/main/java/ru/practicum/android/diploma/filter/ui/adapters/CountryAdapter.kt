@@ -36,6 +36,10 @@ class CountryAdapter(private val itemClickListenerCountry: ItemClickListenerCoun
         }
     }
 
+    fun interface ItemClickListenerCountry {
+        fun onItemListener(item: Country)
+    }
+
     private class DiffCallback(
         private val oldList: List<Country>,
         private val newList: List<Country>

@@ -12,7 +12,7 @@ class WorkPlaceViewModel(private val interactor: FilterInteractor) : ViewModel()
     val state: LiveData<FilterParameters> get() = _state
 
     fun clearCountry() {
-        val filter = state.value!!.copy(country = null)
+        val filter = state.value!!.copy(country = null, area = null)
         _state.postValue(filter)
     }
 

@@ -27,7 +27,7 @@ class AreaChooserFragment : Fragment(R.layout.fragment_area_chooser) {
 
     private val adapter = AreaAdapter {
         if (clickDebounce()) {
-            viewModel.saveFilterToPrefs(it)
+            viewModel.areaSelected(it)
             findNavController().navigateUp()
         }
     }
@@ -67,7 +67,7 @@ class AreaChooserFragment : Fragment(R.layout.fragment_area_chooser) {
                     tag = R.drawable.ic_clear
                 }
             }
-            viewModel.searchDebounce(binding.searchEditText.text.toString())
+            viewModel.searchDebounce(text.toString())
         }
 
         binding.searchLayoutField.setEndIconOnClickListener {
@@ -122,6 +122,7 @@ class AreaChooserFragment : Fragment(R.layout.fragment_area_chooser) {
 
     private fun showFoundAreas(areas: List<Area>) {
         adapter.updateData(areas)
+        binding.rvArea.scrollToPosition(0)
         binding.rvArea.isVisible = true
         binding.placeholderImage.isVisible = false
         binding.placeholderMessage.isVisible = false

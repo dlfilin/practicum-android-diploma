@@ -12,16 +12,12 @@ import ru.practicum.android.diploma.filter.domain.models.FilterParameters
 
 class CountryViewModel(private val interactor: FilterInteractor) : ViewModel() {
 
-    private var loadedFilter = FilterParameters()
-    private var countryFromSharedPrefs: Country? = null
+    private val loadedFilter: FilterParameters = interactor.getCurrentFilter()
 
     private val _state = MutableLiveData<CountryChooserScreenState>()
     val state: LiveData<CountryChooserScreenState> get() = _state
 
     init {
-        loadedFilter = interactor.getCurrentFilter()
-        countryFromSharedPrefs = loadedFilter.country
-
         viewModelScope.launch {
             interactor.getCountries().collect {
                 processResult(result = it)
@@ -42,17 +38,9 @@ class CountryViewModel(private val interactor: FilterInteractor) : ViewModel() {
         }
     }
 
-    fun saveFilterToPrefs(country: Country?) {
-        if (country == null) {
-            if (countryFromSharedPrefs == null) {
-                val filter = loadedFilter.copy(country = null, area = null)
-                interactor.updateFilter(filter)
-            }
-        } else {
-            if (country.id != countryFromSharedPrefs?.id) {
-                val filter = loadedFilter.copy(country = country, area = null)
-                interactor.updateFilter(filter)
-            }
+    fun countrySelected(country: Country) {
+        if (country != loadedFilter.country) {
+            interactor.updateFilter(loadedFilter.copy(country = country, area = null))
         }
     }
 
