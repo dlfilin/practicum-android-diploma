@@ -44,7 +44,6 @@ class IndustryViewModel(private val interactor: FilterInteractor) : ViewModel() 
 
                 industriesFromApi = data
                 renderState(IndustryChooserScreenState.Content(data))
-
             }
 
             is NetworkResult.Error -> {

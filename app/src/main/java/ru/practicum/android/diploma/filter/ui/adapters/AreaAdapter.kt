@@ -36,7 +36,6 @@ class AreaAdapter(private val itemClickListener: ItemClickListener) :
         }
     }
 
-
     private class MyDiffCallback(
         private val oldList: List<Area>,
         private val newList: List<Area>
@@ -65,5 +64,4 @@ class AreaAdapter(private val itemClickListener: ItemClickListener) :
         listItem.addAll(newData)
         diffResult.dispatchUpdatesTo(this)
     }
-
 }

@@ -10,24 +10,10 @@ import ru.practicum.android.diploma.filter.domain.models.FilterParameters
 import ru.practicum.android.diploma.filter.domain.models.Industry
 
 class FilterInteractorImpl(private val repository: FilterRepository) : FilterInteractor {
-
-    override suspend fun getIndustryAndSaveDb() {
-        repository.getIndustryAndSaveDb()
-    }
-
-    override suspend fun getCountryAndSaveDb() {
-        repository.getCountryAndSaveDb()
-    }
-
-    override suspend fun getAreaAndSaveDb() {
-        repository.getAreaAndSaveDb()
-    }
-
     override fun getAreas(): Flow<NetworkResult<List<Area>>> = repository.getAreas()
     override fun getAreasForId(id: String): Flow<NetworkResult<List<Area>>> = repository.getAreasForId(id)
     override fun getIndustries(): Flow<NetworkResult<List<Industry>>> = repository.getIndustries()
     override fun getCountries(): Flow<NetworkResult<List<Country>>> = repository.getCountries()
-
     override fun getCurrentFilter(): FilterParameters {
         return repository.getCurrentFilter()
     }

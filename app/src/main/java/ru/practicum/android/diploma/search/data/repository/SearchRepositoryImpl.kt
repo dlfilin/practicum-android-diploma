@@ -87,5 +87,4 @@ class SearchRepositoryImpl(
         }
         return map
     }
-
 }

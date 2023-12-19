@@ -55,5 +55,4 @@ class SimilarVacanciesViewModel(
     private fun renderState(state: SimilarVacanciesScreenState) {
         _state.postValue(state)
     }
-
 }

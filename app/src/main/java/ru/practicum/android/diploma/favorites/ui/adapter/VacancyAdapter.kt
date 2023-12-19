@@ -28,16 +28,11 @@ class VacancyAdapter(
     }
 
     fun updateRecycleView(
-        newVacancyList: List<Vacancy>,
-        isPagination: Boolean = false
+        newVacancyList: List<Vacancy>
     ) {
-        if (isPagination) {
-            // здесь будем реализовывать полную версию с пейджингом
-        } else {
-            val diffResult = DiffUtil.calculateDiff(VacancyDiffCallback(vacancies, newVacancyList))
-            vacancies = newVacancyList
-            diffResult.dispatchUpdatesTo(this)
-        }
+        val diffResult = DiffUtil.calculateDiff(VacancyDiffCallback(vacancies, newVacancyList))
+        vacancies = newVacancyList
+        diffResult.dispatchUpdatesTo(this)
     }
 
     interface OnClickListener {

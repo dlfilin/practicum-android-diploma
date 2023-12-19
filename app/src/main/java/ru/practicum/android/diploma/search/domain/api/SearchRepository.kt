@@ -13,5 +13,4 @@ interface SearchRepository {
     fun getSimilarVacancies(vacancyId: String): Flow<NetworkResult<VacancyListData>>
 
     fun isFilterActive(): Boolean
-
 }

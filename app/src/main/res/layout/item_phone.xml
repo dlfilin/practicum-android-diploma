@@ -24,8 +24,8 @@
         style="@style/vacancyTextViewMarginTop16"
         android:layout_width="wrap_content"
         android:fontFamily="@font/ys_display_medium"
-        android:visibility="gone"
-        android:text="@string/comment_tv" />
+        android:text="@string/comment_tv"
+        android:visibility="gone" />
 
     <TextView
         android:id="@+id/phoneComment"
@@ -33,4 +33,5 @@
         android:layout_width="wrap_content"
         android:visibility="gone"
         tools:text="Заполнить анкету по форме можно на нашем сайте" />
+
 </LinearLayout>
