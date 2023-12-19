@@ -212,6 +212,6 @@ class FilterFragment : Fragment(R.layout.fragment_filter) {
 
     companion object {
         const val REAPPLY_FILTER = "REAPPLY_FILTER"
-        private const val CLICK_DEBOUNCE_DELAY = 500L
+        private const val CLICK_DEBOUNCE_DELAY = 200L
     }
 }
