@@ -21,9 +21,9 @@ class AreaAdapter(private val itemClickListener: ItemClickListener) :
     }
 
     override fun onBindViewHolder(holder: AreaHolder, position: Int) {
-        holder.bind(listItem[holder.adapterPosition])
+        holder.bind(listItem[position])
         holder.itemView.setOnClickListener {
-            itemClickListener.onItemListener(listItem[holder.adapterPosition])
+            itemClickListener.onItemListener(listItem[position])
         }
     }
 
