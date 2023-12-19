@@ -87,11 +87,8 @@ class IndustryViewModel(private val interactor: FilterInteractor) : ViewModel() 
             if (search.isNullOrEmpty()) {
                 renderState(IndustryChooserScreenState.Content(industriesFromApi))
             } else {
-                val updatedList = mutableListOf<IndustryUi>()
-                industriesFromApi.map {
-                    if (it.name.contains(search, true)) {
-                        updatedList.add(it)
-                    }
+                val updatedList = industriesFromApi.filter {
+                    it.name.contains(search, true)
                 }
                 renderState(IndustryChooserScreenState.Content(updatedList))
             }
