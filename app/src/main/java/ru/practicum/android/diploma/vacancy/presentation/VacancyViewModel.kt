@@ -39,7 +39,7 @@ class VacancyViewModel(
 
                     is NetworkResult.Error -> {
                         if (result.errorType == ErrorType.NO_INTERNET) {
-                            getVacancyFromDb(vacancyId)
+                            getVacancyOffline(vacancyId)
                             renderState(VacancyScreenState.Loading)
                         } else {
                             renderState(VacancyScreenState.Error)
@@ -83,12 +83,12 @@ class VacancyViewModel(
         }
     }
 
-    private suspend fun getVacancyFromDb(vacancyId: String) {
+    private suspend fun getVacancyOffline(vacancyId: String) {
         viewModelScope.launch {
-            val vacancyFromDb = favoriteInteractor.getById(vacancyId)
-            _currentVacancy.value = vacancyFromDb
-            if (vacancyFromDb != null) {
-                renderState(VacancyScreenState.Content(vacancyFromDb))
+            val vacancy = favoriteInteractor.getById(vacancyId)
+            _currentVacancy.value = vacancy
+            if (vacancy != null) {
+                renderState(VacancyScreenState.Content(vacancy))
             } else {
                 renderState(VacancyScreenState.InternetThrowable)
             }
