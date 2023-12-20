@@ -85,23 +85,17 @@ class FilterFragment : Fragment(R.layout.fragment_filter) {
                     viewModel.clearAll()
                 }
             }
+        }
+    }
 
+    private fun setWorkPlaceListeners() {
+        with(binding) {
             edWorkPlace.setOnClickListener {
                 if (clickDebounce()) {
                     findNavController().navigate(directionWorkPlace)
                 }
             }
 
-            edIndustry.setOnClickListener {
-                if (clickDebounce()) {
-                    findNavController().navigate(directionIndustry)
-                }
-            }
-        }
-    }
-
-    private fun setWorkPlaceListeners() {
-        with(binding) {
             edWorkPlace.doOnTextChanged { text, _, _, _ ->
                 edWorkPlaceLayout.apply {
                     if (text.isNullOrEmpty()) {
@@ -125,11 +119,18 @@ class FilterFragment : Fragment(R.layout.fragment_filter) {
                     }
                 }
             }
+
         }
     }
 
     private fun setIndustryListeners() {
         with(binding) {
+            edIndustry.setOnClickListener {
+                if (clickDebounce()) {
+                    findNavController().navigate(directionIndustry)
+                }
+            }
+
             edIndustry.doOnTextChanged { text, _, _, _ ->
                 edIndustryLayout.apply {
                     if (text.isNullOrEmpty()) {
