@@ -59,36 +59,29 @@ class FilterFragment : Fragment(R.layout.fragment_filter) {
     }
 
     private fun setListeners() {
+        setCommonListeners()
         setWorkPlaceListeners()
         setIndustryListeners()
         setSalaryListeners()
 
-        with(binding) {
-            checkBoxSalary.setOnClickListener {
-                if (clickDebounce()) {
-                    viewModel.onlyWithSalaryPressed(checkBoxSalary.isChecked)
-                }
+        binding.btApply.setOnClickListener {
+            if (clickDebounce()) {
+                findNavController().previousBackStackEntry?.savedStateHandle?.set(
+                    REAPPLY_FILTER,
+                    true
+                )
+                findNavController().navigateUp()
             }
+        }
 
-            btApply.setOnClickListener {
-                if (clickDebounce()) {
-                    findNavController().previousBackStackEntry?.savedStateHandle?.set(
-                        REAPPLY_FILTER,
-                        true
-                    )
-                    findNavController().navigateUp()
-                }
-            }
-
-            btClear.setOnClickListener {
-                if (clickDebounce()) {
-                    viewModel.clearAll()
-                }
+        binding.btClear.setOnClickListener {
+            if (clickDebounce()) {
+                viewModel.clearAll()
             }
         }
     }
 
-    private fun setWorkPlaceListeners() {
+    private fun setCommonListeners() {
         with(binding) {
             edWorkPlace.setOnClickListener {
                 if (clickDebounce()) {
@@ -96,6 +89,22 @@ class FilterFragment : Fragment(R.layout.fragment_filter) {
                 }
             }
 
+            edIndustry.setOnClickListener {
+                if (clickDebounce()) {
+                    findNavController().navigate(directionIndustry)
+                }
+            }
+
+            checkBoxSalary.setOnClickListener {
+                if (clickDebounce()) {
+                    viewModel.onlyWithSalaryPressed(checkBoxSalary.isChecked)
+                }
+            }
+        }
+    }
+
+    private fun setWorkPlaceListeners() {
+        with(binding) {
             edWorkPlace.doOnTextChanged { text, _, _, _ ->
                 edWorkPlaceLayout.apply {
                     if (text.isNullOrEmpty()) {
@@ -125,12 +134,6 @@ class FilterFragment : Fragment(R.layout.fragment_filter) {
 
     private fun setIndustryListeners() {
         with(binding) {
-            edIndustry.setOnClickListener {
-                if (clickDebounce()) {
-                    findNavController().navigate(directionIndustry)
-                }
-            }
-
             edIndustry.doOnTextChanged { text, _, _, _ ->
                 edIndustryLayout.apply {
                     if (text.isNullOrEmpty()) {
