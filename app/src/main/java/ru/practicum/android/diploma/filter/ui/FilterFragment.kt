@@ -63,6 +63,22 @@ class FilterFragment : Fragment(R.layout.fragment_filter) {
         setWorkPlaceListeners()
         setIndustryListeners()
         setSalaryListeners()
+
+        binding.btApply.setOnClickListener {
+            if (clickDebounce()) {
+                findNavController().previousBackStackEntry?.savedStateHandle?.set(
+                    REAPPLY_FILTER,
+                    true
+                )
+                findNavController().navigateUp()
+            }
+        }
+
+        binding.btClear.setOnClickListener {
+            if (clickDebounce()) {
+                viewModel.clearAll()
+            }
+        }
     }
 
     private fun setCommonListeners() {
@@ -82,22 +98,6 @@ class FilterFragment : Fragment(R.layout.fragment_filter) {
             checkBoxSalary.setOnClickListener {
                 if (clickDebounce()) {
                     viewModel.onlyWithSalaryPressed(checkBoxSalary.isChecked)
-                }
-            }
-
-            btApply.setOnClickListener {
-                if (clickDebounce()) {
-                    findNavController().previousBackStackEntry?.savedStateHandle?.set(
-                        REAPPLY_FILTER,
-                        true
-                    )
-                    findNavController().navigateUp()
-                }
-            }
-
-            btClear.setOnClickListener {
-                if (clickDebounce()) {
-                    viewModel.clearAll()
                 }
             }
         }
