@@ -98,4 +98,6 @@ class VacancyViewModel(
     private suspend fun isFavorite(vacancyId: String): Boolean {
         return favoriteInteractor.isFavorite(vacancyId)
     }
+
+    fun getVacancyId(): String = vacancyId
 }
