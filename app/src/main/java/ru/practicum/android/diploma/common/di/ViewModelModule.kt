@@ -9,7 +9,7 @@ import ru.practicum.android.diploma.filter.presentation.FilterViewModel
 import ru.practicum.android.diploma.filter.presentation.IndustryViewModel
 import ru.practicum.android.diploma.filter.presentation.WorkPlaceViewModel
 import ru.practicum.android.diploma.search.presentation.SearchViewModel
-import ru.practicum.android.diploma.vacancy.presentation.SimilarVacanciesViewModel
+import ru.practicum.android.diploma.search.presentation.SimilarVacanciesViewModel
 import ru.practicum.android.diploma.vacancy.presentation.VacancyViewModel
 
 val viewModelModule = module {
