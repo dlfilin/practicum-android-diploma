@@ -84,7 +84,7 @@
     </fragment>
     <fragment
         android:id="@+id/similarVacanciesFragment"
-        android:name="ru.practicum.android.diploma.vacancy.ui.SimilarVacanciesFragment"
+        android:name="ru.practicum.android.diploma.search.ui.SimilarVacanciesFragment"
         android:label="@string/similar_vacancies_title_tv"
         tools:layout="@layout/fragment_similar_vacancies" >
         <action
