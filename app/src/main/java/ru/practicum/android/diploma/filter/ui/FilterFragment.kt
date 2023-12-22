@@ -51,7 +51,7 @@ class FilterFragment : Fragment(R.layout.fragment_filter) {
 
         setListeners()
 
-        viewModel.loadFilterFromPrefs()
+        viewModel.loadFilterFromLocalStorage()
 
         viewModel.state.observe(viewLifecycleOwner) { filter ->
             renderScreen(filter)
