@@ -35,7 +35,7 @@ class AreaViewModel(private val interactor: FilterInteractor) : ViewModel() {
 
         viewModelScope.launch {
             if (loadedFilter.country != null) {
-                interactor.getAreasForId(loadedFilter.country?.id!!).collect {
+                interactor.getAreas(loadedFilter.country?.id!!).collect {
                     loadAreaProcessResult(result = it)
                 }
             } else {
