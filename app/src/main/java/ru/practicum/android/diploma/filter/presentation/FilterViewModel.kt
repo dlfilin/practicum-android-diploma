@@ -51,7 +51,7 @@ class FilterViewModel(private val interactor: FilterInteractor) : ViewModel() {
         _state.postValue(filter)
     }
 
-    fun saveFilterToPrefs() {
+    fun saveFilterToLocalStorage() {
         val filter = state.value!!
         interactor.updateFilter(filter)
     }

@@ -210,7 +210,7 @@ class FilterFragment : Fragment(R.layout.fragment_filter) {
 
     override fun onStop() {
         super.onStop()
-        viewModel.saveFilterToPrefs()
+        viewModel.saveFilterToLocalStorage()
     }
 
     companion object {
