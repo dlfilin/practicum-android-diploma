@@ -217,18 +217,18 @@
         <item name="boxStrokeWidth">0dp</item>
         <item name="boxStrokeWidthFocused">0dp</item>
         <item name="placeholderTextColor">@color/search_hint_day_night</item>
-        <item name="placeholderTextAppearance">@style/TextAppearance.App.Subtitle1</item>
+        <item name="placeholderTextAppearance">@style/TextAppearance.App.Subtitle</item>
         <item name="endIconTint">@color/black_universal</item>
         <item name="cursorColor">?attr/colorPrimary</item>
     </style>
 
     <style name="ThemeOverlay.AppX.TextInputLayout" parent="">
-        <item name="textAppearanceSubtitle1">@style/TextAppearance.App.Subtitle1</item>
+        <item name="textAppearanceSubtitle1">@style/TextAppearance.App.Subtitle</item>
         <item name="imageButtonStyle">@style/Widget.App.TextField.ImageButton</item>
         <item name="editTextStyle">@style/Widget.App.TextInputEditText</item>
     </style>
 
-    <style name="TextAppearance.App.Subtitle1" parent="TextAppearance.MaterialComponents.Subtitle1">
+    <style name="TextAppearance.App.Subtitle" parent="TextAppearance.MaterialComponents.Subtitle1">
         <item name="fontFamily">@font/ys_display_regular</item>
         <item name="android:fontFamily">@font/ys_display_regular</item>
         <item name="android:textSize">@dimen/font_16</item>
@@ -239,7 +239,7 @@
     </style>
 
     <style name="Widget.App.TextInputEditText" parent="Widget.MaterialComponents.TextInputEditText.OutlinedBox">
-        <item name="android:textAppearance">@style/TextAppearance.App.Subtitle1</item>
+        <item name="android:textAppearance">@style/TextAppearance.App.Subtitle</item>
         <item name="android:textColor">@color/black_universal</item>
         <item name="android:imeOptions">actionSearch</item>
         <item name="android:inputType">text</item>
@@ -274,7 +274,7 @@
         <item name="boxCollapsedPaddingTop">@dimen/space_8</item>
         <item name="boxBackgroundColor">@color/search_field_color</item>
         <item name="placeholderTextColor">@color/search_hint_day_night</item>
-        <item name="placeholderTextAppearance">@style/TextAppearance.App.Subtitle1</item>
+        <item name="placeholderTextAppearance">@style/TextAppearance.App.Subtitle</item>
         <item name="android:textColorHint">@color/search_hint_day_night</item>
         <item name="hintTextColor">@color/blue</item>
         <item name="hintTextAppearance">@style/Widget.App.SalaryHint</item>
@@ -285,7 +285,7 @@
     </style>
 
     <style name="ThemeOverlay.AppX.SalaryInputLayout" parent="">
-        <item name="textAppearanceSubtitle1">@style/TextAppearance.App.Subtitle1</item>
+        <item name="textAppearanceSubtitle1">@style/TextAppearance.App.Subtitle</item>
         <item name="imageButtonStyle">@style/Widget.App.TextField.ImageButton</item>
         <item name="editTextStyle">@style/Widget.App.SalaryInputEditText</item>
     </style>
@@ -298,7 +298,7 @@
     </style>
 
     <style name="Widget.App.SalaryInputEditText" parent="Widget.MaterialComponents.TextInputEditText.OutlinedBox">
-        <item name="android:textAppearance">@style/TextAppearance.App.Subtitle1</item>
+        <item name="android:textAppearance">@style/TextAppearance.App.Subtitle</item>
         <item name="android:textColor">@color/black_universal</item>
         <item name="android:imeOptions">actionDone</item>
         <item name="android:inputType">number</item>
