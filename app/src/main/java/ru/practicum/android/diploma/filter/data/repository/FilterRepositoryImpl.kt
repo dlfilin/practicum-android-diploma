@@ -3,15 +3,12 @@ package ru.practicum.android.diploma.filter.data.repository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import ru.practicum.android.diploma.common.data.network.NetworkClient
+import ru.practicum.android.diploma.common.data.network.dto.Request
 import ru.practicum.android.diploma.common.data.storage.FilterStorage
 import ru.practicum.android.diploma.common.mappers.FilterMapper
 import ru.practicum.android.diploma.common.util.NetworkResult
-import ru.practicum.android.diploma.filter.data.dto.AreaRequest
 import ru.practicum.android.diploma.filter.data.dto.AreaResponse
-import ru.practicum.android.diploma.filter.data.dto.AreasByIdRequest
-import ru.practicum.android.diploma.filter.data.dto.CountryRequest
 import ru.practicum.android.diploma.filter.data.dto.CountryResponse
-import ru.practicum.android.diploma.filter.data.dto.IndustryRequest
 import ru.practicum.android.diploma.filter.data.dto.IndustryResponse
 import ru.practicum.android.diploma.filter.domain.api.FilterRepository
 import ru.practicum.android.diploma.filter.domain.models.Area
@@ -26,7 +23,7 @@ class FilterRepositoryImpl(
 ) : FilterRepository {
 
     override fun getAreas(id: String?): Flow<NetworkResult<List<Area>>> = flow {
-        val request = id?.let { AreasByIdRequest(it) } ?: AreaRequest()
+        val request = id?.let { Request.AreasByIdRequest(it) } ?: Request.AreaRequest
         when (val result = networkClient.doRequest(request)) {
             is NetworkResult.Success -> {
                 val list = (result.data as AreaResponse).areas
@@ -47,7 +44,7 @@ class FilterRepositoryImpl(
     }
 
     override fun getCountries(): Flow<NetworkResult<List<Country>>> = flow {
-        when (val result = networkClient.doRequest(CountryRequest())) {
+        when (val result = networkClient.doRequest(Request.CountryRequest)) {
             is NetworkResult.Success -> {
                 val data = (result.data as CountryResponse).areas.map {
                     filterMapper.mapToDomain(it)
@@ -62,7 +59,7 @@ class FilterRepositoryImpl(
     }
 
     override fun getIndustries(): Flow<NetworkResult<List<Industry>>> = flow {
-        when (val result = networkClient.doRequest(IndustryRequest())) {
+        when (val result = networkClient.doRequest(Request.IndustryRequest)) {
             is NetworkResult.Success -> {
                 val list = (result.data as IndustryResponse).industry
                 val data = filterMapper.flattenIndustries(list)
