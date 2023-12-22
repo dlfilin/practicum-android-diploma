@@ -108,16 +108,17 @@ class AreaViewModel(private val interactor: FilterInteractor) : ViewModel() {
     }
 
     private fun getCountryForArea(selectedArea: Area): Country {
-        val countriesId = countriesList.map { it.id }.toMutableList()
-        var parentId = selectedArea.parentId
-        while (true) {
-            if (countriesId.contains(parentId)) {
-                break
-            } else {
-                parentId = areaList.firstOrNull { it.id == parentId }?.parentId ?: ""
-            }
-        }
+        val parentId = getParentCountryId(selectedArea)
         return getCountryById(parentId)
+    }
+
+    private fun getParentCountryId(selectedArea: Area): String {
+        val countriesId = countriesList.map { it.id }
+        var parentId = selectedArea.parentId
+        while (!countriesId.contains(parentId)) {
+            parentId = areaList.firstOrNull { it.id == parentId }?.parentId ?: ""
+        }
+        return parentId
     }
 
     private fun getCountryById(parentId: String): Country {
