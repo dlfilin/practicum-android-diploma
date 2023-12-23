@@ -40,6 +40,22 @@ class SearchRepositoryImpl(
         }
     }
 
+    override fun getSimilarVacancies(vacancyId: String): Flow<NetworkResult<VacancyListData>> = flow {
+//        val result = networkClient.doRequest(
+//            SimilarVacancyRequest(vacancyId)
+//        )
+//        when (result) {
+//            is NetworkResult.Success -> {
+//                val data = vacancyMapper.mapDtoToModel(result.data as VacancySearchResponse)
+//                emit(NetworkResult.Success(data))
+//            }
+//
+//            is NetworkResult.Error -> {
+//                emit(NetworkResult.Error(result.errorType!!))
+//            }
+//        }
+    }
+
     override fun getSimilarVacanciesPaged(
         vacancyId: String,
         paging: SearchQuery
