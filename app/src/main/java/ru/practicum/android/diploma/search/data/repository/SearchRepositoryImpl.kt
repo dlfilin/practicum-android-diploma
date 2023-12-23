@@ -41,29 +41,10 @@ class SearchRepositoryImpl(
     }
 
     override fun getSimilarVacancies(vacancyId: String): Flow<NetworkResult<VacancyListData>> = flow {
-//        val result = networkClient.doRequest(
-//            SimilarVacancyRequest(vacancyId)
-//        )
-//        when (result) {
-//            is NetworkResult.Success -> {
-//                val data = vacancyMapper.mapDtoToModel(result.data as VacancySearchResponse)
-//                emit(NetworkResult.Success(data))
-//            }
-//
-//            is NetworkResult.Error -> {
-//                emit(NetworkResult.Error(result.errorType!!))
-//            }
-//        }
-    }
-
-    override fun getSimilarVacanciesPaged(
-        vacancyId: String,
-        paging: SearchQuery
-    ): Flow<NetworkResult<VacancyListData>> = flow {
-        val filter = filterMapper.mapToDomain(filterStorage.getFilterParameters())
-        val request = SimilarVacancyRequest(vacancyId, prepareSearchQueryMap(paging, filter))
-
-        when (val result = networkClient.doRequest(request)) {
+        val result = networkClient.doRequest(
+            SimilarVacancyRequest(vacancyId)
+        )
+        when (result) {
             is NetworkResult.Success -> {
                 val data = vacancyMapper.mapDtoToModel(result.data as VacancySearchResponse)
                 emit(NetworkResult.Success(data))
@@ -84,9 +65,7 @@ class SearchRepositoryImpl(
         filter: FilterParameters
     ): Map<String, String> {
         val map: HashMap<String, String> = HashMap()
-        if (searchQuery.text != null) {
-            map["text"] = searchQuery.text!!
-        }
+        map["text"] = searchQuery.text
         map["page"] = searchQuery.page.toString()
         map["per_page"] = searchQuery.perPage.toString()
 

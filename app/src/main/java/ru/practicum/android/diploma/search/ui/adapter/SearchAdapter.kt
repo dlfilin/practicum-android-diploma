@@ -42,14 +42,9 @@ class SearchAdapter(private val clickListener: VacancyClickListener) :
                     itemView.resources.getString(R.string.vacancy_item_title, vacancy.vacancyName, vacancy.area)
                 companyName.text = vacancy.employerName
                 salary.text = Formatter.formatSalary(
-                    context = itemView.context,
-                    from = vacancy.salaryFrom,
-                    to = vacancy.salaryTo,
-                    currencyCode = vacancy.salaryCurrency
+                    itemView.context, vacancy.salaryFrom, vacancy.salaryTo, vacancy.salaryCurrency
                 )
-                Glide.with(itemView)
-                    .load(vacancy.employerLogoUrl)
-                    .placeholder(R.drawable.vacancy_item_placeholder)
+                Glide.with(itemView).load(vacancy.employerLogoUrl).placeholder(R.drawable.vacancy_item_placeholder)
                     .transform(
                         CenterInside(),
                         RoundedCorners(
