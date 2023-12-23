@@ -110,6 +110,7 @@
         android:layout_marginBottom="@dimen/space_8"
         android:letterSpacing="0"
         android:text="@string/apply_btn"
+        android:textAllCaps="false"
         android:visibility="gone"
         tools:visibility="visible"
         app:layout_constraintBottom_toTopOf="@id/btClear"
