@@ -33,7 +33,7 @@ class WorkPlaceFragment : Fragment(R.layout.fragment_work_place) {
 
         setListeners()
 
-        viewModel.loadFilterFromLocalStorage()
+        viewModel.loadFilterFromPrefs()
 
         viewModel.state.observe(viewLifecycleOwner) { filter ->
             renderScreen(filter)
@@ -127,6 +127,6 @@ class WorkPlaceFragment : Fragment(R.layout.fragment_work_place) {
 
     override fun onStop() {
         super.onStop()
-        viewModel.saveFilterToLocalStorage()
+        viewModel.saveFilterToPrefs()
     }
 }

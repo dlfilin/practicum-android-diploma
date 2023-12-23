@@ -56,7 +56,7 @@ class IndustryViewModel(private val interactor: FilterInteractor) : ViewModel() 
         _state.postValue(state)
     }
 
-    fun saveFilterToLocalStorage() {
+    fun saveFilterToPrefs() {
         val industry = (state.value as IndustryChooserScreenState.Content).items.first { it.isChecked }
         val filter = interactor.getCurrentFilter().copy(
             industry = Industry(
