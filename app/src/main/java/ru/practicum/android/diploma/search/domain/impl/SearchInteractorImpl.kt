@@ -18,13 +18,6 @@ class SearchInteractorImpl(private val repository: SearchRepository) : SearchInt
         return repository.getSimilarVacancies(vacancyId)
     }
 
-    override fun getSimilarVacanciesPaged(
-        vacancyId: String,
-        paging: SearchQuery
-    ): Flow<NetworkResult<VacancyListData>> {
-        return repository.getSimilarVacanciesPaged(vacancyId, paging)
-    }
-
     override fun isFilterActive(): Boolean {
         return repository.isFilterActive()
     }

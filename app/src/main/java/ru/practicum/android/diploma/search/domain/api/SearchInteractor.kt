@@ -12,7 +12,5 @@ interface SearchInteractor {
 
     fun getSimilarVacancies(vacancyId: String): Flow<NetworkResult<VacancyListData>>
 
-    fun getSimilarVacanciesPaged(vacancyId: String, paging: SearchQuery): Flow<NetworkResult<VacancyListData>>
-
     fun isFilterActive(): Boolean
 }
