@@ -4,6 +4,8 @@ import org.koin.dsl.module
 import ru.practicum.android.diploma.favorites.domain.FavoriteInteractor
 import ru.practicum.android.diploma.favorites.domain.impl.FavoriteInteractorImp
 import ru.practicum.android.diploma.favorites.domain.mapper.VacancyMapper
+import ru.practicum.android.diploma.filter.domain.api.FilterInteractor
+import ru.practicum.android.diploma.filter.domain.impl.FilterInteractorImpl
 import ru.practicum.android.diploma.search.domain.api.SearchInteractor
 import ru.practicum.android.diploma.search.domain.impl.SearchInteractorImpl
 import ru.practicum.android.diploma.sharing.domain.SharingInteractor
@@ -24,6 +26,9 @@ val domainModule = module {
     }
     single<SharingInteractor> {
         SharingInteractorImpl(externalNavigator = get())
+    }
+    single<FilterInteractor> {
+        FilterInteractorImpl(repository = get())
     }
 }
 

@@ -1,10 +1,12 @@
 package ru.practicum.android.diploma.search.ui
 
+import android.content.Context
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
@@ -20,7 +22,7 @@ import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.common.util.ErrorType
 import ru.practicum.android.diploma.common.util.debounce
 import ru.practicum.android.diploma.databinding.FragmentSearchBinding
-import ru.practicum.android.diploma.search.domain.model.VacancyItem
+import ru.practicum.android.diploma.filter.ui.FilterFragment
 import ru.practicum.android.diploma.search.domain.model.VacancyListData
 import ru.practicum.android.diploma.search.presentation.SearchScreenState
 import ru.practicum.android.diploma.search.presentation.SearchViewModel
@@ -31,20 +33,18 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
     private var _binding: FragmentSearchBinding? = null
     private val binding get() = _binding!!
     private val menuHost: MenuHost get() = requireActivity()
-    private val viewmodel by viewModel<SearchViewModel>()
+    private val viewModel by viewModel<SearchViewModel>()
 
     private var isClickAllowed = true
-    private var filterIsActive = false
+    private var isFilterActive = false
 
-    private val adapter = SearchAdapter(object : SearchAdapter.VacancyClickListener {
-        override fun onVacancyClick(vacancy: VacancyItem) {
-            if (clickDebounce()) {
-                val direction = SearchFragmentDirections.actionSearchFragmentToVacancyFragment(vacancy.id)
-                findNavController().navigate(direction)
-            }
+    private val adapter = SearchAdapter {
+        if (clickDebounce()) {
+            val direction = SearchFragmentDirections.actionSearchFragmentToVacancyFragment(it.id)
+            findNavController().navigate(direction)
         }
-    })
-    private val onTrackClickDebounce = debounce<Boolean>(
+    }
+    private val onItemClickDebounce = debounce<Boolean>(
         CLICK_DEBOUNCE_DELAY,
         lifecycleScope,
         false
@@ -58,13 +58,13 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
 
         setListeners()
         setRvAdapter()
+        checkFilterState()
         setToolbarMenu()
         setObservables()
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
-
         _binding = null
     }
 
@@ -81,7 +81,7 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
                     tag = R.drawable.ic_clear
                 }
             }
-            viewmodel.searchTextChanged(text.toString())
+            viewModel.searchTextChanged(text.toString())
         }
 
         binding.searchLayoutField.setEndIconOnClickListener {
@@ -93,12 +93,11 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         binding.vacancyListRv.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
-
                 if (dy > 0) {
                     val pos = (binding.vacancyListRv.layoutManager as LinearLayoutManager).findLastVisibleItemPosition()
                     val itemsCount = adapter.itemCount
                     if (pos >= itemsCount - 1) {
-                        viewmodel.onLastItemReached()
+                        viewModel.onLastItemReached()
                     }
                 }
             }
@@ -107,17 +106,16 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
 
     private fun setRvAdapter() {
         binding.vacancyListRv.adapter = adapter
+        // для приятного скроллинга
         binding.vacancyListRv.setHasFixedSize(false)
-        binding.vacancyListRv.isNestedScrollingEnabled = false
     }
 
     private fun setToolbarMenu() {
-        menuHost.invalidateMenu()
         menuHost.addMenuProvider(object : MenuProvider {
             override fun onPrepareMenu(menu: Menu) {
                 super.onPrepareMenu(menu)
                 val item = menu.findItem(R.id.open_filter)
-                val icon = if (filterIsActive) R.drawable.ic_filter_active else R.drawable.ic_filter_inactive
+                val icon = if (isFilterActive) R.drawable.ic_filter_active else R.drawable.ic_filter_inactive
                 item.setIcon(icon)
             }
 
@@ -128,6 +126,7 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
                 return when (menuItem.itemId) {
                     R.id.open_filter -> {
+                        findNavController().navigate(R.id.action_searchFragment_to_filterFragment)
                         true
                     }
 
@@ -137,21 +136,44 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         }, viewLifecycleOwner)
     }
 
+    private fun checkFilterState() {
+        viewModel.checkFilterState()
+    }
+
     private fun setObservables() {
-        viewmodel.state.observe(viewLifecycleOwner) { state ->
+        viewModel.state.observe(viewLifecycleOwner) { state ->
             renderState(state)
         }
 
-        viewmodel.toastEvent.observe(viewLifecycleOwner) { error ->
+        viewModel.isFilterActiveState.observe(viewLifecycleOwner) { isActive ->
+            renderFilterIcon(isActive)
+        }
+
+        viewModel.toastEvent.observe(viewLifecycleOwner) { error ->
             when (error) {
                 ErrorType.NO_INTERNET -> showToast(getString(R.string.toast_internet_throwable))
                 else -> showToast(getString(R.string.toast_unknown_error))
+            }
+        }
+
+        val backStackLiveData = findNavController().currentBackStackEntry
+            ?.savedStateHandle?.getLiveData<Boolean>(FilterFragment.REAPPLY_FILTER)
+        backStackLiveData?.observe(viewLifecycleOwner) { reapplyEvent ->
+            if (reapplyEvent != null) {
+                viewModel.applyFilter()
+                backStackLiveData.value = null
             }
         }
     }
 
     private fun showToast(message: String) {
         Toast.makeText(requireContext(), message, Toast.LENGTH_LONG).show()
+    }
+
+    private fun renderFilterIcon(isActive: Boolean) {
+        isFilterActive = isActive
+        // нужно дернуть тулбар в Activity, чтобы он перерисовался
+        requireActivity().invalidateOptionsMenu()
     }
 
     private fun renderState(it: SearchScreenState) {
@@ -178,6 +200,7 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
     }
 
     private fun showInitialLoading() {
+        hideSoftKeyboard()
         updateScreenViews(
             isMainProgressVisible = true,
             isSearchRvVisible = false,
@@ -187,14 +210,16 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         )
     }
 
+
     private fun showFoundVacancy(foundVacancyData: VacancyListData) {
+        hideSoftKeyboard()
         val numOfVacancy = resources.getQuantityString(
             R.plurals.vacancy_number,
             foundVacancyData.found,
             foundVacancyData.found
         )
         binding.vacanciesFound.text = numOfVacancy
-        adapter.submitList(foundVacancyData.items)
+        adapter.updateData(foundVacancyData.items)
         if (foundVacancyData.page == 0) binding.vacancyListRv.scrollToPosition(0)
         updateScreenViews(
             isMainProgressVisible = false,
@@ -243,13 +268,14 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
             isVacanciesFoundVisible = true,
             isNextPageLoadingVisible = isLoading
         )
+        binding.vacancyListRv.scrollToPosition(adapter.itemCount - 1)
     }
 
     private fun clickDebounce(): Boolean {
         val current = isClickAllowed
         if (isClickAllowed) {
             isClickAllowed = false
-            onTrackClickDebounce(true)
+            onItemClickDebounce(true)
         }
         return current
     }
@@ -269,6 +295,13 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
             vacancyListRv.isVisible = isSearchRvVisible
             recyclerViewProgressBar.isVisible = isNextPageLoadingVisible
         }
+    }
+
+    private fun hideSoftKeyboard() {
+        val inputMethodManager =
+            requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
+        inputMethodManager?.hideSoftInputFromWindow(binding.searchEditText.windowToken, 0)
+        binding.searchEditText.isEnabled = true
     }
 
     companion object {

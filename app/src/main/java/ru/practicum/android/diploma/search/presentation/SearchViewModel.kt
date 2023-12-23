@@ -9,7 +9,6 @@ import ru.practicum.android.diploma.common.util.ErrorType
 import ru.practicum.android.diploma.common.util.NetworkResult
 import ru.practicum.android.diploma.common.util.SingleLiveEvent
 import ru.practicum.android.diploma.common.util.debounce
-import ru.practicum.android.diploma.filter.domain.models.FilterParameters
 import ru.practicum.android.diploma.search.domain.api.SearchInteractor
 import ru.practicum.android.diploma.search.domain.model.SearchQuery
 import ru.practicum.android.diploma.search.domain.model.VacancyItem
@@ -22,6 +21,9 @@ class SearchViewModel(
     private val _state = MutableLiveData<SearchScreenState>(SearchScreenState.Default)
     val state: LiveData<SearchScreenState> get() = _state
 
+    private val _isFilterActiveState = MutableLiveData(false)
+    val isFilterActiveState: LiveData<Boolean> get() = _isFilterActiveState
+
     private val _toastEvent = SingleLiveEvent<ErrorType>()
     val toastEvent: LiveData<ErrorType> get() = _toastEvent
 
@@ -32,7 +34,6 @@ class SearchViewModel(
     private var vacanciesList = mutableListOf<VacancyItem>()
 
     private var latestSearchText: String = ""
-    private var filterParameters: FilterParameters = FilterParameters()
 
     private val searchDebounced = debounce<String>(
         SEARCH_DEBOUNCE_DELAY_IN_MILLIS,
@@ -40,7 +41,7 @@ class SearchViewModel(
         true
     ) { searchText ->
         if (searchText != latestSearchText) {
-            clearLastSearch()
+            clearPagingInfo()
             latestSearchText = searchText
             renderState(SearchScreenState.InitialLoading)
             searchRequest(currentPage)
@@ -49,7 +50,8 @@ class SearchViewModel(
 
     fun searchTextChanged(changedText: String) {
         if (changedText.isBlank()) {
-            clearLastSearch()
+            clearPagingInfo()
+            latestSearchText = ""
             renderState(SearchScreenState.Default)
         }
         searchDebounced(changedText)
@@ -63,18 +65,24 @@ class SearchViewModel(
         }
     }
 
+    fun applyFilter() {
+        clearPagingInfo()
+        searchRequest(currentPage)
+    }
+
     private fun searchRequest(page: Int) {
-        viewModelScope.launch {
-            searchInteractor.searchVacanciesPaged(
-                SearchQuery(
-                    text = latestSearchText,
-                    page = page,
-                    perPage = ITEMS_PER_PAGE
-                ),
-                filterParameters
-            ).collect {
-                processResult(result = it)
-                isNextPageLoading = false
+        if (latestSearchText.isNotBlank()) {
+            viewModelScope.launch {
+                searchInteractor.searchVacanciesPaged(
+                    SearchQuery(
+                        text = latestSearchText,
+                        page = page,
+                        perPage = ITEMS_PER_PAGE
+                    )
+                ).collect {
+                    processResult(result = it)
+                    isNextPageLoading = false
+                }
             }
         }
     }
@@ -112,12 +120,16 @@ class SearchViewModel(
         _state.postValue(state)
     }
 
-    private fun clearLastSearch() {
-        latestSearchText = ""
+    private fun clearPagingInfo() {
         currentPage = 0
         totalFound = 0
         maxPages = 1
         vacanciesList = mutableListOf()
+    }
+
+    fun checkFilterState() {
+        val isActive = searchInteractor.isFilterActive()
+        _isFilterActiveState.postValue(isActive)
     }
 
     companion object {

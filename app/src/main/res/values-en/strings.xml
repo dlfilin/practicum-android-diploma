@@ -34,6 +34,7 @@
     <string name="choosing_country_title_tv">Select country</string>
     <!--    choosing area fragment-->
     <string name="choosing_area_title_tv">Select region</string>
+    <string name="hint_choosing_area_et">Enter region</string>
     <string name="nothing_found_choosing_area_tv">The region doesn\'t exist</string>
     <string name="search_throwable_choosing_area_tv">Cannot get \nthe list</string>
     <!--    choosing industry fragment-->

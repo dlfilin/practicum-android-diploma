@@ -12,6 +12,7 @@ import androidx.core.view.MenuProvider
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterInside
@@ -43,7 +44,6 @@ class VacancyFragment : Fragment(R.layout.fragment_vacancy) {
         }
     })
 
-    //    private lateinit var onPhoneClickDebounce: (Phone) -> Unit
     private val viewmodel by viewModel<VacancyViewModel> {
         parametersOf(args.vacancyId)
     }
@@ -134,16 +134,16 @@ class VacancyFragment : Fragment(R.layout.fragment_vacancy) {
 
             experience.text = vacancy.experience
 
-            val employmentAndSchedueString = StringBuilder()
+            val employmentAndScheduleString = StringBuilder()
                 .append(vacancy.employment)
 
             if (vacancy.employment != null && vacancy.schedule != null) {
-                employmentAndSchedueString
+                employmentAndScheduleString
                     .append(", ")
             }
-            employmentAndSchedueString
+            employmentAndScheduleString
                 .append(vacancy.schedule)
-            schedule.text = employmentAndSchedueString.toString()
+            schedule.text = employmentAndScheduleString.toString()
 
             description.text = HtmlCompat.fromHtml(
                 vacancy.description,
@@ -285,6 +285,12 @@ class VacancyFragment : Fragment(R.layout.fragment_vacancy) {
     }
 
     private fun setListeners() {
+        binding.gotoSimilarJobsFragmentBtn.setOnClickListener {
+            val direction =
+                VacancyFragmentDirections.actionVacancyFragmentToSimilarVacanciesFragment(viewmodel.getVacancyId())
+            findNavController().navigate(direction)
+        }
+
         binding.email.setOnClickListener {
             val vacancy = viewmodel.currentVacancy.value
             if (clickDebounce() && vacancy?.contacts?.email != null) {

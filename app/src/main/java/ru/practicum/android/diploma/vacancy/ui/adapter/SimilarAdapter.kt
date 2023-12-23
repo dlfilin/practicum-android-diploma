@@ -16,7 +16,7 @@ import ru.practicum.android.diploma.search.domain.model.VacancyItem
 class SimilarAdapter(private val itemClickListener: ItemClickListener) :
     RecyclerView.Adapter<SimilarAdapter.ViewHolder>() {
 
-    val similarList = ArrayList<VacancyItem>()
+    private val similarList = ArrayList<VacancyItem>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.vacancy_view_item, parent, false)
