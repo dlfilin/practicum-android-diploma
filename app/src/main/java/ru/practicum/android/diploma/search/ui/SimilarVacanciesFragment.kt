@@ -133,16 +133,18 @@ class SimilarVacanciesFragment : Fragment(R.layout.fragment_similar_vacancies) {
 
     private fun showContent(foundVacancyData: VacancyListData, isPageLoading: Boolean) {
         adapter.updateData(foundVacancyData.items)
-        if (foundVacancyData.page == 0)
+        if (foundVacancyData.page == 0) {
             binding.rvSimilar.scrollToPosition(0)
+        }
         updateScreenViews(
             isMainProgressVisible = false,
             isSimilarRvVisible = true,
             isPlaceholderVisible = false,
             isNextPageLoadingVisible = isPageLoading
         )
-        if (isPageLoading)
+        if (isPageLoading) {
             binding.rvSimilar.scrollToPosition(adapter.itemCount - 1)
+        }
     }
 
     private fun updateScreenViews(

@@ -218,8 +218,9 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         )
         binding.vacanciesFound.text = numOfVacancy
         adapter.updateData(foundVacancyData.items)
-        if (foundVacancyData.page == 0)
+        if (foundVacancyData.page == 0) {
             binding.vacancyListRv.scrollToPosition(0)
+        }
         updateScreenViews(
             isMainProgressVisible = false,
             isSearchRvVisible = true,
@@ -227,8 +228,9 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
             isVacanciesFoundVisible = true,
             isNextPageLoadingVisible = isPageLoading
         )
-        if (isPageLoading)
+        if (isPageLoading) {
             binding.vacancyListRv.scrollToPosition(adapter.itemCount - 1)
+        }
     }
 
     private fun showEmpty() {
