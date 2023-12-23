@@ -51,12 +51,12 @@ class FilterViewModel(private val interactor: FilterInteractor) : ViewModel() {
         _state.postValue(filter)
     }
 
-    fun saveFilterToLocalStorage() {
+    fun saveFilterToPrefs() {
         val filter = state.value!!
         interactor.updateFilter(filter)
     }
 
-    fun loadFilterFromLocalStorage() {
+    fun loadFilterFromPrefs() {
         val filter = interactor.getCurrentFilter()
         _state.postValue(filter)
     }

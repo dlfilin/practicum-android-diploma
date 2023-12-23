@@ -51,7 +51,7 @@ class FilterFragment : Fragment(R.layout.fragment_filter) {
 
         setListeners()
 
-        viewModel.loadFilterFromLocalStorage()
+        viewModel.loadFilterFromPrefs()
 
         viewModel.state.observe(viewLifecycleOwner) { filter ->
             renderScreen(filter)
@@ -210,7 +210,7 @@ class FilterFragment : Fragment(R.layout.fragment_filter) {
 
     override fun onStop() {
         super.onStop()
-        viewModel.saveFilterToLocalStorage()
+        viewModel.saveFilterToPrefs()
     }
 
     companion object {
