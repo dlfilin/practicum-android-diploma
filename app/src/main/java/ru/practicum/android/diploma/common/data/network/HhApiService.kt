@@ -23,7 +23,10 @@ interface HhApiService {
 
     @Headers(TOKEN_BEARER_STRING, USER_AGENT_STRING)
     @GET("/vacancies/{vacancy_id}/similar_vacancies")
-    suspend fun searchSimilarVacancies(@Path("vacancy_id") id: String): VacancySearchResponse
+    suspend fun searchSimilarVacancies(
+        @Path("vacancy_id") id: String,
+        @QueryMap options: Map<String, String>
+    ): VacancySearchResponse
 
     @Headers(TOKEN_BEARER_STRING, USER_AGENT_STRING)
     @GET("/areas")

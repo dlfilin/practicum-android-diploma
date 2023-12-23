@@ -49,7 +49,7 @@ class IndustryChooserFragment : Fragment(R.layout.fragment_industry_chooser) {
 
     private fun setListeners() {
         binding.btApply.setOnClickListener {
-            viewModel.saveFilterToPrefs()
+            viewModel.saveFilterToLocalStorage()
             findNavController().navigateUp()
         }
 

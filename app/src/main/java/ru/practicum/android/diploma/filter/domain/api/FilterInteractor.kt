@@ -10,8 +10,7 @@ import ru.practicum.android.diploma.filter.domain.models.Industry
 interface FilterInteractor {
     fun getIndustries(): Flow<NetworkResult<List<Industry>>>
     fun getCountries(): Flow<NetworkResult<List<Country>>>
-    fun getAreas(): Flow<NetworkResult<List<Area>>>
-    fun getAreasForId(id: String): Flow<NetworkResult<List<Area>>>
+    fun getAreas(id : String? = null): Flow<NetworkResult<List<Area>>>
     fun getCurrentFilter(): FilterParameters
     fun updateFilter(filter: FilterParameters)
 }

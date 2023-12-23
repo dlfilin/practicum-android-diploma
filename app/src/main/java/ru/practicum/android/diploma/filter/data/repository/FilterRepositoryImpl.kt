@@ -24,28 +24,9 @@ class FilterRepositoryImpl(
     private val filterStorage: FilterStorage,
     private val filterMapper: FilterMapper
 ) : FilterRepository {
-    override fun getAreas(): Flow<NetworkResult<List<Area>>> = flow {
-        when (val result = networkClient.doRequest(AreaRequest())) {
-            is NetworkResult.Success -> {
-                val list = (result.data as AreaResponse).areas
-                val flat = filterMapper.flattenAreas(list, emptyList())
-                val data = flat
-                    .asSequence()
-                    .filterNot { it.parentId == null }
-                    .map { filterMapper.mapToDomain(it) }
-                    .sortedBy { it.name }
-                    .toList()
-                emit(NetworkResult.Success(data))
-            }
-
-            is NetworkResult.Error -> {
-                emit(NetworkResult.Error(result.errorType!!))
-            }
-        }
-    }
-
-    override fun getAreasForId(id: String): Flow<NetworkResult<List<Area>>> = flow {
-        when (val result = networkClient.doRequest(AreasByIdRequest(id))) {
+    override fun getAreas(id: String?): Flow<NetworkResult<List<Area>>> = flow {
+        val request = id?.let { AreasByIdRequest(it) } ?: AreaRequest()
+        when (val result = networkClient.doRequest(request)) {
             is NetworkResult.Success -> {
                 val list = (result.data as AreaResponse).areas
                 val flat = filterMapper.flattenAreas(list, emptyList())
