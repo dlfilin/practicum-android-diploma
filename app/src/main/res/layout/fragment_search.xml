@@ -10,9 +10,9 @@
         style="@style/Widget.App.SearchInputLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:minHeight="56dp"
         android:layout_marginHorizontal="@dimen/space_16"
         android:layout_marginVertical="@dimen/space_8"
-        android:minHeight="56dp"
         app:endIconDrawable="@drawable/ic_search"
         app:endIconMode="custom"
         app:expandedHintEnabled="false"
@@ -68,6 +68,7 @@
         app:layout_constraintTop_toBottomOf="@id/vacancyListRv"
         tools:visibility="visible" />
 
+
     <ProgressBar
         android:id="@+id/mainProgressBar"
         style="@style/progressBar"
@@ -90,7 +91,7 @@
             android:id="@+id/placeholderImage"
             style="@style/placeholderImage"
             android:contentDescription="@string/internet_throwable_tv"
-            android:src="@drawable/placeholder_no_internet"
+            android:src="@drawable/internet_throwable_placeholder"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
