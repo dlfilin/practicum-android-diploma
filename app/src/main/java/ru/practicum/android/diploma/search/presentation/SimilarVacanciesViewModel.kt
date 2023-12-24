@@ -69,14 +69,15 @@ class SimilarVacanciesViewModel(
                 } else {
                     vacanciesList.addAll(vacancyListData.items)
                     val data = vacancyListData.copy(items = vacanciesList)
-                    renderState(SimilarVacanciesScreenState.Content(data))
+                    renderState(SimilarVacanciesScreenState.Content(vacancyData = data, isLoading = false))
                 }
             }
 
             is NetworkResult.Error -> {
                 if (currentPage > 0) {
                     _toastEvent.postValue(result.errorType!!)
-                    renderState(SimilarVacanciesScreenState.NextPageLoading(false))
+                    val state = (state.value as SimilarVacanciesScreenState.Content).copy(isLoading = false)
+                    renderState(state)
                 } else {
                     renderState(SimilarVacanciesScreenState.Error(result.errorType!!))
                 }
@@ -90,7 +91,8 @@ class SimilarVacanciesViewModel(
 
     fun onLastItemReached() {
         if (currentPage < maxPages - 1 && !isNextPageLoading) {
-            renderState(SimilarVacanciesScreenState.NextPageLoading(true))
+            val state = (state.value as SimilarVacanciesScreenState.Content).copy(isLoading = true)
+            renderState(state)
             isNextPageLoading = true
             currentPage++
             searchRequest()

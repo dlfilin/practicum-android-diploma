@@ -82,18 +82,16 @@ class SimilarVacanciesFragment : Fragment(R.layout.fragment_similar_vacancies) {
     }
 
     private fun addRvAdapter() {
-        binding.rvSimilar.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         binding.rvSimilar.adapter = adapter
         binding.rvSimilar.setHasFixedSize(false)
     }
 
     private fun render(state: SimilarVacanciesScreenState) {
         when (state) {
-            is SimilarVacanciesScreenState.Content -> showContent(state.vacancyData)
+            is SimilarVacanciesScreenState.Content -> showContent(state.vacancyData, state.isLoading)
             is SimilarVacanciesScreenState.Loading -> showLoading()
             is SimilarVacanciesScreenState.Empty -> showEmpty()
             is SimilarVacanciesScreenState.Error -> showError(state.error)
-            is SimilarVacanciesScreenState.NextPageLoading -> showNextPageLoadingProgress(state.isLoading)
         }
     }
 
@@ -133,26 +131,20 @@ class SimilarVacanciesFragment : Fragment(R.layout.fragment_similar_vacancies) {
         )
     }
 
-    private fun showContent(foundVacancyData: VacancyListData) = with(binding) {
+    private fun showContent(foundVacancyData: VacancyListData, isPageLoading: Boolean) {
         adapter.updateData(foundVacancyData.items)
-        if (foundVacancyData.page == 0) binding.rvSimilar.scrollToPosition(0)
+        if (foundVacancyData.page == 0) {
+            binding.rvSimilar.scrollToPosition(0)
+        }
         updateScreenViews(
             isMainProgressVisible = false,
             isSimilarRvVisible = true,
             isPlaceholderVisible = false,
-            isNextPageLoadingVisible = false
+            isNextPageLoadingVisible = isPageLoading
         )
-
-    }
-
-    private fun showNextPageLoadingProgress(isLoading: Boolean) {
-        updateScreenViews(
-            isMainProgressVisible = false,
-            isSimilarRvVisible = true,
-            isPlaceholderVisible = false,
-            isNextPageLoadingVisible = isLoading
-        )
-        binding.rvSimilar.scrollToPosition(adapter.itemCount - 1)
+        if (isPageLoading) {
+            binding.rvSimilar.scrollToPosition(adapter.itemCount - 1)
+        }
     }
 
     private fun updateScreenViews(

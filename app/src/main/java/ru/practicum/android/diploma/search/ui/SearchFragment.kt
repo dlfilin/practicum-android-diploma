@@ -106,8 +106,8 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
 
     private fun setRvAdapter() {
         binding.vacancyListRv.adapter = adapter
-        // для приятного скроллинга
         binding.vacancyListRv.setHasFixedSize(false)
+        binding.vacancyListRv.itemAnimator = null
     }
 
     private fun setToolbarMenu() {
@@ -180,10 +180,9 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         when (it) {
             is SearchScreenState.Default -> showDefault()
             is SearchScreenState.InitialLoading -> showInitialLoading()
-            is SearchScreenState.Content -> showFoundVacancy(it.vacancyData)
+            is SearchScreenState.Content -> showFoundVacancy(it.vacancyData, it.isLoading)
             is SearchScreenState.Empty -> showEmpty()
             is SearchScreenState.Error -> showError(it.error)
-            is SearchScreenState.NextPageLoading -> showNextPageLoadingProgress(it.isLoading)
         }
     }
 
@@ -210,8 +209,7 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         )
     }
 
-
-    private fun showFoundVacancy(foundVacancyData: VacancyListData) {
+    private fun showFoundVacancy(foundVacancyData: VacancyListData, isPageLoading: Boolean) {
         hideSoftKeyboard()
         val numOfVacancy = resources.getQuantityString(
             R.plurals.vacancy_number,
@@ -220,14 +218,19 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         )
         binding.vacanciesFound.text = numOfVacancy
         adapter.updateData(foundVacancyData.items)
-        if (foundVacancyData.page == 0) binding.vacancyListRv.scrollToPosition(0)
+        if (foundVacancyData.page == 0) {
+            binding.vacancyListRv.scrollToPosition(0)
+        }
         updateScreenViews(
             isMainProgressVisible = false,
             isSearchRvVisible = true,
             isPlaceholderVisible = false,
             isVacanciesFoundVisible = true,
-            isNextPageLoadingVisible = false
+            isNextPageLoadingVisible = isPageLoading
         )
+        if (isPageLoading) {
+            binding.vacancyListRv.scrollToPosition(adapter.itemCount - 1)
+        }
     }
 
     private fun showEmpty() {
@@ -258,17 +261,6 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
             isVacanciesFoundVisible = false,
             isNextPageLoadingVisible = false
         )
-    }
-
-    private fun showNextPageLoadingProgress(isLoading: Boolean) {
-        updateScreenViews(
-            isMainProgressVisible = false,
-            isSearchRvVisible = true,
-            isPlaceholderVisible = false,
-            isVacanciesFoundVisible = true,
-            isNextPageLoadingVisible = isLoading
-        )
-        binding.vacancyListRv.scrollToPosition(adapter.itemCount - 1)
     }
 
     private fun clickDebounce(): Boolean {
