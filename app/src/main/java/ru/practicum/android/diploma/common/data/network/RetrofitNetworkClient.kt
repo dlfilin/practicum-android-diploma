@@ -7,19 +7,13 @@ import android.util.Log
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import retrofit2.HttpException
+import ru.practicum.android.diploma.common.data.network.dto.Request
 import ru.practicum.android.diploma.common.data.network.dto.Response
 import ru.practicum.android.diploma.common.util.ErrorType
 import ru.practicum.android.diploma.common.util.NetworkResult
-import ru.practicum.android.diploma.filter.data.dto.AreaRequest
 import ru.practicum.android.diploma.filter.data.dto.AreaResponse
-import ru.practicum.android.diploma.filter.data.dto.AreasByIdRequest
-import ru.practicum.android.diploma.filter.data.dto.CountryRequest
 import ru.practicum.android.diploma.filter.data.dto.CountryResponse
-import ru.practicum.android.diploma.filter.data.dto.IndustryRequest
 import ru.practicum.android.diploma.filter.data.dto.IndustryResponse
-import ru.practicum.android.diploma.search.data.dto.VacancySearchRequest
-import ru.practicum.android.diploma.vacancy.data.dto.SimilarVacancyRequest
-import ru.practicum.android.diploma.vacancy.data.dto.VacancyDetailRequest
 import java.io.IOException
 
 class RetrofitNetworkClient(
@@ -27,21 +21,12 @@ class RetrofitNetworkClient(
     private val hhApiService: HhApiService
 ) : NetworkClient {
 
-    override suspend fun doRequest(dto: Any): NetworkResult<Response> {
+    override suspend fun doRequest(dto: Request): NetworkResult<Response> {
         if (!isConnected()) return NetworkResult.Error(ErrorType.NO_INTERNET)
 
         return withContext(Dispatchers.IO) {
             try {
-                val response = when (dto) {
-                    is VacancySearchRequest -> hhApiService.searchVacancies(dto.options)
-                    is VacancyDetailRequest -> hhApiService.getVacancyDetails(dto.vacancyId)
-                    is SimilarVacancyRequest -> hhApiService.searchSimilarVacancies(dto.vacancyId, dto.options)
-                    is AreaRequest -> AreaResponse(hhApiService.getAllAreas())
-                    is AreasByIdRequest -> hhApiService.getAreasForId(dto.areaId)
-                    is CountryRequest -> CountryResponse(hhApiService.getCountries())
-                    is IndustryRequest -> IndustryResponse(hhApiService.getAllIndustries())
-                    else -> Response()
-                }
+                val response = getResponse(dto)
                 NetworkResult.Success(response)
             } catch (e1: IOException) {
                 Log.e("TAG", e1.toString())
@@ -50,6 +35,18 @@ class RetrofitNetworkClient(
                 Log.e("TAG", e2.toString())
                 NetworkResult.Error(ErrorType.NON_200_RESPONSE)
             }
+        }
+    }
+
+    private suspend fun getResponse(dto: Request): Response {
+        return when (dto) {
+            is Request.VacancySearchRequest -> hhApiService.searchVacancies(dto.options)
+            is Request.VacancyDetailRequest -> hhApiService.getVacancyDetails(dto.vacancyId)
+            is Request.SimilarVacancyRequest -> hhApiService.searchSimilarVacancies(dto.vacancyId, dto.options)
+            is Request.AreaRequest -> AreaResponse(hhApiService.getAllAreas())
+            is Request.AreasByIdRequest -> hhApiService.getAreasForId(dto.areaId)
+            is Request.CountryRequest -> CountryResponse(hhApiService.getCountries())
+            is Request.IndustryRequest -> IndustryResponse(hhApiService.getAllIndustries())
         }
     }
 

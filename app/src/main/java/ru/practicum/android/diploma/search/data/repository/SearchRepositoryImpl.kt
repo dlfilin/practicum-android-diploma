@@ -3,17 +3,16 @@ package ru.practicum.android.diploma.search.data.repository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import ru.practicum.android.diploma.common.data.network.NetworkClient
+import ru.practicum.android.diploma.common.data.network.dto.Request
 import ru.practicum.android.diploma.common.data.storage.FilterStorage
 import ru.practicum.android.diploma.common.mappers.FilterMapper
 import ru.practicum.android.diploma.common.util.NetworkResult
 import ru.practicum.android.diploma.filter.domain.models.FilterParameters
-import ru.practicum.android.diploma.search.data.dto.VacancySearchRequest
 import ru.practicum.android.diploma.search.data.dto.VacancySearchResponse
 import ru.practicum.android.diploma.search.data.mapper.VacancyResponseMapper
 import ru.practicum.android.diploma.search.domain.api.SearchRepository
 import ru.practicum.android.diploma.search.domain.model.SearchQuery
 import ru.practicum.android.diploma.search.domain.model.VacancyListData
-import ru.practicum.android.diploma.vacancy.data.dto.SimilarVacancyRequest
 
 class SearchRepositoryImpl(
     private val networkClient: NetworkClient,
@@ -26,7 +25,7 @@ class SearchRepositoryImpl(
         searchQuery: SearchQuery
     ): Flow<NetworkResult<VacancyListData>> = flow {
         val filter = filterMapper.mapToDomain(filterStorage.getFilterParameters())
-        val request = VacancySearchRequest(prepareSearchQueryMap(searchQuery, filter))
+        val request = Request.VacancySearchRequest(prepareSearchQueryMap(searchQuery, filter))
 
         when (val result = networkClient.doRequest(request)) {
             is NetworkResult.Success -> {
@@ -45,7 +44,7 @@ class SearchRepositoryImpl(
         paging: SearchQuery
     ): Flow<NetworkResult<VacancyListData>> = flow {
         val filter = filterMapper.mapToDomain(filterStorage.getFilterParameters())
-        val request = SimilarVacancyRequest(vacancyId, prepareSearchQueryMap(paging, filter))
+        val request = Request.SimilarVacancyRequest(vacancyId, prepareSearchQueryMap(paging, filter))
 
         when (val result = networkClient.doRequest(request)) {
             is NetworkResult.Success -> {
