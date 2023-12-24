@@ -35,7 +35,7 @@ class RetrofitNetworkClient(
                 val response = when (dto) {
                     is VacancySearchRequest -> hhApiService.searchVacancies(dto.options)
                     is VacancyDetailRequest -> hhApiService.getVacancyDetails(dto.vacancyId)
-                    is SimilarVacancyRequest -> hhApiService.searchSimilarVacancies(dto.vacancyId)
+                    is SimilarVacancyRequest -> hhApiService.searchSimilarVacancies(dto.vacancyId, dto.options)
                     is AreaRequest -> AreaResponse(hhApiService.getAllAreas())
                     is AreasByIdRequest -> hhApiService.getAreasForId(dto.areaId)
                     is CountryRequest -> CountryResponse(hhApiService.getCountries())

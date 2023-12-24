@@ -4,23 +4,41 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".vacancy.ui.SimilarVacanciesFragment">
+    tools:context=".search.ui.SimilarVacanciesFragment">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvSimilar"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:layout_editor_absoluteY="8dp" />
+        android:layout_height="0dp"
+        android:layout_marginBottom="@dimen/space_16"
+        android:focusableInTouchMode="true"
+        android:orientation="vertical"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintBottom_toTopOf="@id/recyclerViewProgressBar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:listitem="@layout/vacancy_view_item" />
 
     <ProgressBar
-        android:id="@+id/similarProgressBar"
+        android:id="@+id/recyclerViewProgressBar"
+        style="@style/progressBar"
+        android:layout_marginBottom="@dimen/space_16"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/rvSimilar"
+        tools:visibility="visible" />
+
+    <ProgressBar
+        android:id="@+id/mainProgressBar"
         style="@style/progressBar"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:visibility="gone" />
+        tools:visibility="visible" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="wrap_content"
@@ -34,6 +52,7 @@
             android:id="@+id/placeholderImage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:contentDescription="@string/internet_throwable_tv"
             android:src="@drawable/placeholder_no_internet"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"

@@ -17,7 +17,9 @@ val domainModule = module {
     single<SearchInteractor> {
         SearchInteractorImpl(repository = get())
     }
-    factory { VacancyMapper() }
+    factory {
+        VacancyMapper(gson = get())
+    }
     single<FavoriteInteractor> {
         FavoriteInteractorImp(favoriteRepository = get(), vacancyMapper = get())
     }
