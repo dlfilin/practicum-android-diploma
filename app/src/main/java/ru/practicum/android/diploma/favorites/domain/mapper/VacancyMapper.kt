@@ -8,9 +8,7 @@ import ru.practicum.android.diploma.vacancy.domain.models.Phone
 import ru.practicum.android.diploma.vacancy.domain.models.Vacancy
 import java.util.Locale
 
-class VacancyMapper {
-
-    private val gson = Gson()
+class VacancyMapper(private val gson: Gson) {
 
     fun mapToFavorite(vacancy: Vacancy): Favorite {
         return Favorite(

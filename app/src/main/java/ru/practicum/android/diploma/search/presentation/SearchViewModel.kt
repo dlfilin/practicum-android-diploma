@@ -59,7 +59,8 @@ class SearchViewModel(
 
     fun onLastItemReached() {
         if (currentPage < maxPages - 1 && !isNextPageLoading) {
-            renderState(SearchScreenState.NextPageLoading(true))
+            val state = (state.value as SearchScreenState.Content).copy(isLoading = true)
+            renderState(state)
             isNextPageLoading = true
             searchRequest(currentPage + 1)
         }
@@ -101,14 +102,15 @@ class SearchViewModel(
                 } else {
                     vacanciesList.addAll(vacancyListData.items)
                     val data = vacancyListData.copy(items = vacanciesList)
-                    renderState(SearchScreenState.Content(data))
+                    renderState(SearchScreenState.Content(vacancyData = data, isLoading = false))
                 }
             }
 
             is NetworkResult.Error -> {
                 if (currentPage > 0) {
                     _toastEvent.postValue(result.errorType!!)
-                    renderState(SearchScreenState.NextPageLoading(false))
+                    val state = (state.value as SearchScreenState.Content).copy(isLoading = false)
+                    renderState(state)
                 } else {
                     renderState(SearchScreenState.Error(result.errorType!!))
                 }
