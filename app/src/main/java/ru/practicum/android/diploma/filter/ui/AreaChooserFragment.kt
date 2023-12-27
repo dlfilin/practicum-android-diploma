@@ -81,7 +81,7 @@ class AreaChooserFragment : Fragment(R.layout.fragment_area_chooser) {
             renderState(state)
         }
 
-        viewModel.closeEvent.observe(viewLifecycleOwner) {close ->
+        viewModel.closeEvent.observe(viewLifecycleOwner) { close ->
             if (close) {
                 findNavController().navigateUp()
             }
